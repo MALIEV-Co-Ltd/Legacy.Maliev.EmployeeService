@@ -15,7 +15,7 @@ public sealed class RolesController(IEmployeeService service) : ControllerBase
 {
     /// <summary>Creates an employee role.</summary>
     [HttpPost]
-    [RequirePermission(EmployeePermissions.RolesCreate, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.RolesCreate)]
     public async Task<ActionResult> CreateRoleAsync(UpsertRoleRequest item, CancellationToken cancellationToken)
     {
         var role = await service.CreateRoleAsync(item, cancellationToken);
@@ -30,7 +30,7 @@ public sealed class RolesController(IEmployeeService service) : ControllerBase
 
     /// <summary>Gets one employee role.</summary>
     [HttpGet("{roleId:int}", Name = "GetRole")]
-    [RequirePermission(EmployeePermissions.RolesRead, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.RolesRead)]
     public async Task<ActionResult<RoleResponse>> GetRoleAsync(int roleId, CancellationToken cancellationToken)
     {
         var role = await service.GetRoleAsync(roleId, cancellationToken);
@@ -39,7 +39,7 @@ public sealed class RolesController(IEmployeeService service) : ControllerBase
 
     /// <summary>Gets all employee roles.</summary>
     [HttpGet]
-    [RequirePermission(EmployeePermissions.RolesRead, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.RolesRead)]
     public async Task<ActionResult<IReadOnlyList<RoleResponse>>> GetRolesAsync(CancellationToken cancellationToken)
     {
         var roles = await service.GetRolesAsync(cancellationToken);
@@ -48,7 +48,7 @@ public sealed class RolesController(IEmployeeService service) : ControllerBase
 
     /// <summary>Updates an employee role.</summary>
     [HttpPut("{roleId:int}")]
-    [RequirePermission(EmployeePermissions.RolesUpdate, ResourcePathTemplate = "/employees/roles/{roleId}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.RolesUpdate, ResourcePathTemplate = "/employees/roles/{roleId}")]
     public async Task<ActionResult> UpdateRoleAsync(int roleId, UpsertRoleRequest item, CancellationToken cancellationToken) =>
         await service.UpdateRoleAsync(roleId, item, cancellationToken) ? NoContent() : NotFound();
 }

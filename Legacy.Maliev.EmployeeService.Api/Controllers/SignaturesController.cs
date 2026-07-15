@@ -15,7 +15,7 @@ public sealed class SignaturesController(IEmployeeService service) : ControllerB
 {
     /// <summary>Creates signature object metadata for an employee.</summary>
     [HttpPost("/employees/{employeeId:int}/[controller]")]
-    [RequirePermission(EmployeePermissions.SignaturesWrite, ResourcePathTemplate = "/employees/{employeeId}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.SignaturesWrite, ResourcePathTemplate = "/employees/{employeeId}")]
     public async Task<ActionResult> CreateSignatureImageFileEntryAsync(int employeeId, [FromQuery] string bucket, [FromQuery] string objectName, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(bucket) || string.IsNullOrWhiteSpace(objectName)) return BadRequest();
@@ -31,7 +31,7 @@ public sealed class SignaturesController(IEmployeeService service) : ControllerB
 
     /// <summary>Gets signature object metadata for an employee.</summary>
     [HttpGet("{employeeId:int}", Name = "GetEmployeeSignatureImageFile")]
-    [RequirePermission(EmployeePermissions.SignaturesRead, ResourcePathTemplate = "/employees/{employeeId}/signature", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.SignaturesRead, ResourcePathTemplate = "/employees/{employeeId}/signature")]
     public async Task<ActionResult<SignatureImageFileResponse>> GetSignatureImageFileAsync(int employeeId, CancellationToken cancellationToken)
     {
         var signature = await service.GetSignatureAsync(employeeId, cancellationToken);
@@ -40,7 +40,7 @@ public sealed class SignaturesController(IEmployeeService service) : ControllerB
 
     /// <summary>Updates signature object metadata for an employee.</summary>
     [HttpPut("{employeeId:int}")]
-    [RequirePermission(EmployeePermissions.SignaturesWrite, ResourcePathTemplate = "/employees/{employeeId}/signature", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.SignaturesWrite, ResourcePathTemplate = "/employees/{employeeId}/signature")]
     public async Task<ActionResult> UpdateSignatureImageFileAsync(int employeeId, UpsertSignatureImageFileRequest item, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(item.Bucket) || string.IsNullOrWhiteSpace(item.ObjectName)) return BadRequest();
