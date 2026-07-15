@@ -1,6 +1,5 @@
 using System.Reflection;
 using Legacy.Maliev.EmployeeService.Api.Controllers;
-using Legacy.Maliev.EmployeeService.Application.Models;
 using Maliev.Aspire.ServiceDefaults.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,16 +23,11 @@ public sealed class EmployeeControllerContractTests
     [Fact]
     public void EmployeeActions_PreserveAllLegacyTemplates()
     {
-        AssertAction<EmployeesController>(nameof(EmployeesController.ValidateUserCredentialsAsync), "v1/validate", typeof(HttpPostAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.CreateEmployeeAsync), null, typeof(HttpPostAttribute));
-        AssertAction<EmployeesController>(nameof(EmployeesController.CreateIdentityAsync), "{id:int}/identity/{password?}", typeof(HttpPostAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.DeleteEmployeeAsync), "{id:int}", typeof(HttpDeleteAttribute));
-        AssertAction<EmployeesController>(nameof(EmployeesController.DeleteIdentityAsync), "{id:int}/identity", typeof(HttpDeleteAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.GetEmployeeAsync), "{employeeId:int}", typeof(HttpGetAttribute));
-        AssertAction<EmployeesController>(nameof(EmployeesController.GetIdentityAsync), "{id:int}/identity", typeof(HttpGetAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.GetPaginatedAsync), null, typeof(HttpGetAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.UpdateEmployeeAsync), "{id:int}", typeof(HttpPutAttribute));
-        AssertAction<EmployeesController>(nameof(EmployeesController.UpdateIdentityAsync), "{id:int}/identity", typeof(HttpPutAttribute));
     }
 
     [Fact]
@@ -47,23 +41,17 @@ public sealed class EmployeeControllerContractTests
     }
 
     [Fact]
-    public void CredentialValidation_IsProtectedAndLiveCritical()
+    public void EmployeeApi_DoesNotExposeIdentityOrCredentialOperations()
     {
-        var method = typeof(EmployeesController).GetMethod(nameof(EmployeesController.ValidateUserCredentialsAsync))!;
-        Assert.Null(method.GetCustomAttribute<AllowAnonymousAttribute>());
-        var permission = Assert.Single(method.GetCustomAttributes<RequirePermissionAttribute>());
-        Assert.True(permission.RequireLiveCheck);
-        Assert.True(permission.IsCritical);
-    }
+        var actions = typeof(EmployeesController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
 
-    [Fact]
-    public void IdentityCompatibilityDto_DoesNotExposeCredentialSecrets()
-    {
-        var names = typeof(EmployeeIdentityResponse).GetProperties().Select(property => property.Name).ToHashSet(StringComparer.Ordinal);
-        Assert.DoesNotContain("PasswordHash", names);
-        Assert.DoesNotContain("SecurityStamp", names);
-        Assert.DoesNotContain("AuthenticatorKey", names);
-        Assert.Contains("DatabaseID", names);
+        Assert.DoesNotContain(actions, method =>
+            method.Name.Contains("Identity", StringComparison.OrdinalIgnoreCase)
+            || method.Name.Contains("Credential", StringComparison.OrdinalIgnoreCase)
+            || method.GetCustomAttributes<HttpMethodAttribute>().Any(attribute =>
+                attribute.Template?.Contains("identity", StringComparison.OrdinalIgnoreCase) == true
+                || attribute.Template?.Contains("password", StringComparison.OrdinalIgnoreCase) == true
+                || attribute.Template?.Contains("validate", StringComparison.OrdinalIgnoreCase) == true));
     }
 
     private static int PublicActions<TController>() => typeof(TController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Length;

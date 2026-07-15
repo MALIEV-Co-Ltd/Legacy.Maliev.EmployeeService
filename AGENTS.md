@@ -2,7 +2,7 @@
 
 ## Boundaries
 
-- Preserve the 24 approved employee, address, role, signature, and identity routes,
+- Preserve the approved employee, address, role, and signature routes,
   query names, sort values, PascalCase JSON, null omission, and named routes.
 - EmployeeService owns `Employee`, `Address`, `Role`, and `SignatureImageFile` only.
   `EmployeeIdentity`, credentials, tokens, sessions, and recovery data belong to
@@ -20,8 +20,8 @@
   Cloud SQL, or other paid infrastructure.
 - Keep logs at Warning by default and never log employee PII, credentials, tokens,
   request bodies, signature object URLs, or headers.
-- Treat all staff routes as authenticated and permission-protected. Credential and
-  identity mutations require live checks; destructive operations are critical.
+- Treat all staff routes as authenticated and permission-protected. Destructive
+  profile operations require live checks and are critical.
 
 ## Validation and commits
 

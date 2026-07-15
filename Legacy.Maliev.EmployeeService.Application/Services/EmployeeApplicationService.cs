@@ -3,11 +3,10 @@ using Legacy.Maliev.EmployeeService.Application.Models;
 
 namespace Legacy.Maliev.EmployeeService.Application.Services;
 
-/// <summary>Coordinates employee persistence, caching and AuthService identity operations.</summary>
+/// <summary>Coordinates employee profile persistence and cache invalidation.</summary>
 public sealed class EmployeeApplicationService(
     IEmployeeRepository repository,
-    IEmployeeCache cache,
-    IEmployeeIdentityDirectory identities) : IEmployeeService
+    IEmployeeCache cache) : IEmployeeService
 {
     /// <inheritdoc />
     public async Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken)
@@ -154,34 +153,6 @@ public sealed class EmployeeApplicationService(
     /// <inheritdoc />
     public Task<bool> DeleteSignatureAsync(int employeeId, CancellationToken cancellationToken) =>
         repository.DeleteSignatureAsync(employeeId, cancellationToken);
-
-    /// <inheritdoc />
-    public Task<IdentityOperationResult> ValidateCredentialsAsync(UserValidationRequest request, CancellationToken cancellationToken) =>
-        identities.ValidateCredentialsAsync(request, cancellationToken);
-
-    /// <inheritdoc />
-    public async Task<IdentityOperationResult> CreateIdentityAsync(int employeeId, EmployeeIdentityRequest request, string? legacyPassword, CancellationToken cancellationToken) =>
-        await repository.GetEmployeeAsync(employeeId, cancellationToken) is null
-            ? new IdentityOperationResult(false, Errors: ["Employee not found"])
-            : await identities.CreateAsync(employeeId, request, legacyPassword, cancellationToken);
-
-    /// <inheritdoc />
-    public async Task<EmployeeIdentityResponse?> GetIdentityAsync(int employeeId, CancellationToken cancellationToken) =>
-        await repository.GetEmployeeAsync(employeeId, cancellationToken) is null
-            ? null
-            : await identities.GetAsync(employeeId, cancellationToken);
-
-    /// <inheritdoc />
-    public async Task<IdentityOperationResult> UpdateIdentityAsync(int employeeId, EmployeeIdentityRequest request, CancellationToken cancellationToken) =>
-        await repository.GetEmployeeAsync(employeeId, cancellationToken) is null
-            ? new IdentityOperationResult(false, Errors: ["Employee not found"])
-            : await identities.UpdateAsync(employeeId, request, cancellationToken);
-
-    /// <inheritdoc />
-    public async Task<IdentityOperationResult> DeleteIdentityAsync(int employeeId, CancellationToken cancellationToken) =>
-        await repository.GetEmployeeAsync(employeeId, cancellationToken) is null
-            ? new IdentityOperationResult(false, Errors: ["Employee not found"])
-            : await identities.DeleteAsync(employeeId, cancellationToken);
 
     private Task InvalidateEmployeesAsync(IReadOnlyList<int> employeeIds, CancellationToken cancellationToken) =>
         Task.WhenAll(employeeIds.Select(employeeId => cache.RemoveAsync(employeeId, cancellationToken)));
