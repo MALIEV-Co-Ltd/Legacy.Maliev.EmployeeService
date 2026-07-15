@@ -9,6 +9,7 @@ namespace Legacy.Maliev.EmployeeService.Tests.Controllers;
 
 public sealed class EmployeeControllerContractTests
 {
+    private static readonly Type[] ControllerTypes = [typeof(EmployeesController), typeof(AddressesController), typeof(RolesController), typeof(SignaturesController)];
     [Theory]
     [InlineData(typeof(EmployeesController), "[controller]")]
     [InlineData(typeof(AddressesController), "employees/[controller]")]
@@ -52,6 +53,26 @@ public sealed class EmployeeControllerContractTests
                 attribute.Template?.Contains("identity", StringComparison.OrdinalIgnoreCase) == true
                 || attribute.Template?.Contains("password", StringComparison.OrdinalIgnoreCase) == true
                 || attribute.Template?.Contains("validate", StringComparison.OrdinalIgnoreCase) == true));
+    }
+
+    [Fact]
+    public void SignedPermissionClaims_AreAuthoritativeExceptForCriticalDestructiveActions()
+    {
+        var actions = ControllerTypes.SelectMany(controller =>
+            controller.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly));
+        Assert.All(actions, action =>
+        {
+            var permission = Assert.Single(action.GetCustomAttributes<RequirePermissionAttribute>());
+            if (action.GetCustomAttribute<HttpDeleteAttribute>() is not null)
+            {
+                Assert.True(permission.RequireLiveCheck);
+                Assert.True(permission.IsCritical);
+            }
+            else
+            {
+                Assert.False(permission.RequireLiveCheck);
+            }
+        });
     }
 
     private static int PublicActions<TController>() => typeof(TController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Length;

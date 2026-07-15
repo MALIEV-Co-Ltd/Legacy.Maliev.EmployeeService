@@ -15,7 +15,7 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
 {
     /// <summary>Creates an employee address.</summary>
     [HttpPost]
-    [RequirePermission(EmployeePermissions.AddressesCreate, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.AddressesCreate)]
     public async Task<ActionResult> CreateAddressAsync(UpsertAddressRequest item, CancellationToken cancellationToken)
     {
         var address = await service.CreateAddressAsync(item, cancellationToken);
@@ -24,13 +24,13 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
 
     /// <summary>Deletes an employee address.</summary>
     [HttpDelete("{addressId:int}")]
-    [RequirePermission(EmployeePermissions.AddressesDelete, ResourcePathTemplate = "/employees/addresses/{addressId}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.AddressesDelete, ResourcePathTemplate = "/employees/addresses/{addressId}", RequireLiveCheck = true, IsCritical = true)]
     public async Task<ActionResult> DeleteAddressAsync(int addressId, CancellationToken cancellationToken) =>
         await service.DeleteAddressAsync(addressId, cancellationToken) ? NoContent() : NotFound();
 
     /// <summary>Gets one employee address.</summary>
     [HttpGet("{addressId:int}", Name = "GetAddress")]
-    [RequirePermission(EmployeePermissions.AddressesRead, ResourcePathTemplate = "/employees/addresses/{addressId}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.AddressesRead, ResourcePathTemplate = "/employees/addresses/{addressId}")]
     public async Task<ActionResult<AddressResponse>> GetAddressAsync(int addressId, CancellationToken cancellationToken)
     {
         var address = await service.GetAddressAsync(addressId, cancellationToken);
@@ -39,7 +39,7 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
 
     /// <summary>Gets all employee addresses.</summary>
     [HttpGet]
-    [RequirePermission(EmployeePermissions.AddressesList, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.AddressesList)]
     public async Task<ActionResult<IReadOnlyList<AddressResponse>>> GetAddressesAsync(CancellationToken cancellationToken)
     {
         var addresses = await service.GetAddressesAsync(cancellationToken);
@@ -48,7 +48,7 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
 
     /// <summary>Updates an employee address.</summary>
     [HttpPut("{addressId:int}")]
-    [RequirePermission(EmployeePermissions.AddressesUpdate, ResourcePathTemplate = "/employees/addresses/{addressId}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.AddressesUpdate, ResourcePathTemplate = "/employees/addresses/{addressId}")]
     public async Task<ActionResult> UpdateAddressAsync(int addressId, UpsertAddressRequest item, CancellationToken cancellationToken) =>
         await service.UpdateAddressAsync(addressId, item, cancellationToken) ? NoContent() : NotFound();
 }

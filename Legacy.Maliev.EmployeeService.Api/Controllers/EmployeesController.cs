@@ -15,7 +15,7 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
 {
     /// <summary>Creates an employee.</summary>
     [HttpPost]
-    [RequirePermission(EmployeePermissions.EmployeesCreate, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.EmployeesCreate)]
     public async Task<IActionResult> CreateEmployeeAsync(UpsertEmployeeRequest item, CancellationToken cancellationToken)
     {
         if (!Valid(item)) return BadRequest("Employee data is required");
@@ -31,7 +31,7 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
 
     /// <summary>Gets an employee by legacy identifier.</summary>
     [HttpGet("{employeeId:int}", Name = "GetEmployee")]
-    [RequirePermission(EmployeePermissions.EmployeesRead, ResourcePathTemplate = "/employees/{employeeId}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.EmployeesRead, ResourcePathTemplate = "/employees/{employeeId}")]
     public async Task<ActionResult<EmployeeResponse>> GetEmployeeAsync(int employeeId, CancellationToken cancellationToken)
     {
         var employee = await service.GetEmployeeAsync(employeeId, cancellationToken);
@@ -40,7 +40,7 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
 
     /// <summary>Gets a bounded employee page.</summary>
     [HttpGet]
-    [RequirePermission(EmployeePermissions.EmployeesList, RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.EmployeesList)]
     public async Task<ActionResult<PaginatedResponse<EmployeeResponse>>> GetPaginatedAsync(
         [FromQuery] EmployeeSortType? sort,
         [FromQuery] string? search,
@@ -54,7 +54,7 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
 
     /// <summary>Updates an employee.</summary>
     [HttpPut("{id:int}")]
-    [RequirePermission(EmployeePermissions.EmployeesUpdate, ResourcePathTemplate = "/employees/{id}", RequireLiveCheck = true)]
+    [RequirePermission(EmployeePermissions.EmployeesUpdate, ResourcePathTemplate = "/employees/{id}")]
     public async Task<ActionResult> UpdateEmployeeAsync(int id, UpsertEmployeeRequest item, CancellationToken cancellationToken)
     {
         if (!Valid(item)) return BadRequest();
