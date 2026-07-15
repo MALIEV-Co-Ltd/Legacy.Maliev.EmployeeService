@@ -44,16 +44,6 @@ public interface IEmployeeService
     Task<bool> UpdateSignatureAsync(int employeeId, UpsertSignatureImageFileRequest request, CancellationToken cancellationToken);
     /// <summary>Deletes signature metadata for one employee.</summary>
     Task<bool> DeleteSignatureAsync(int employeeId, CancellationToken cancellationToken);
-    /// <summary>Validates employee credentials through AuthService.</summary>
-    Task<IdentityOperationResult> ValidateCredentialsAsync(UserValidationRequest request, CancellationToken cancellationToken);
-    /// <summary>Creates an AuthService-owned employee identity.</summary>
-    Task<IdentityOperationResult> CreateIdentityAsync(int employeeId, EmployeeIdentityRequest request, string? legacyPassword, CancellationToken cancellationToken);
-    /// <summary>Gets an AuthService-owned employee identity.</summary>
-    Task<EmployeeIdentityResponse?> GetIdentityAsync(int employeeId, CancellationToken cancellationToken);
-    /// <summary>Updates an AuthService-owned employee identity.</summary>
-    Task<IdentityOperationResult> UpdateIdentityAsync(int employeeId, EmployeeIdentityRequest request, CancellationToken cancellationToken);
-    /// <summary>Deletes an AuthService-owned employee identity.</summary>
-    Task<IdentityOperationResult> DeleteIdentityAsync(int employeeId, CancellationToken cancellationToken);
 }
 
 /// <summary>Employee PostgreSQL persistence boundary.</summary>
@@ -112,19 +102,4 @@ public interface IEmployeeCache
     Task SetAsync(EmployeeResponse employee, CancellationToken cancellationToken);
     /// <summary>Removes a cached employee projection.</summary>
     Task RemoveAsync(int id, CancellationToken cancellationToken);
-}
-
-/// <summary>AuthService-owned employee identity operations.</summary>
-public interface IEmployeeIdentityDirectory
-{
-    /// <summary>Validates credentials without account enumeration.</summary>
-    Task<IdentityOperationResult> ValidateCredentialsAsync(UserValidationRequest request, CancellationToken cancellationToken);
-    /// <summary>Creates an employee identity.</summary>
-    Task<IdentityOperationResult> CreateAsync(int employeeId, EmployeeIdentityRequest request, string? legacyPassword, CancellationToken cancellationToken);
-    /// <summary>Gets an employee identity.</summary>
-    Task<EmployeeIdentityResponse?> GetAsync(int employeeId, CancellationToken cancellationToken);
-    /// <summary>Updates an employee identity.</summary>
-    Task<IdentityOperationResult> UpdateAsync(int employeeId, EmployeeIdentityRequest request, CancellationToken cancellationToken);
-    /// <summary>Deletes an employee identity.</summary>
-    Task<IdentityOperationResult> DeleteAsync(int employeeId, CancellationToken cancellationToken);
 }

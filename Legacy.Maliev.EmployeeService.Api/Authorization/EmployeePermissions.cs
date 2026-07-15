@@ -37,10 +37,4 @@ public static class EmployeePermissions
     public const string SignaturesWrite = "legacy-employee.signatures.write";
     /// <summary>Deletes signature metadata.</summary>
     public const string SignaturesDelete = "legacy-employee.signatures.delete";
-    /// <summary>Reads safe employee identity data.</summary>
-    public const string IdentitiesRead = "legacy-employee.identities.read";
-    /// <summary>Manages employee identities.</summary>
-    public const string IdentitiesManage = "legacy-employee.identities.manage";
-    /// <summary>Performs critical live credential validation.</summary>
-    public const string CredentialsValidate = "legacy-employee.credentials.validate";
 }

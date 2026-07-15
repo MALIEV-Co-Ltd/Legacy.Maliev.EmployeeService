@@ -15,7 +15,7 @@ builder.AddJwtAuthentication();
 builder.AddStandardMiddleware(options => options.EnableRequestLogging = true);
 builder.AddStandardOpenApi(
     title: "Legacy MALIEV Employee Service API",
-    description: "Temporary .NET 10 compatibility service preserving legacy employee, address, role, signature, and identity-proxy contracts.");
+    description: "Temporary .NET 10 compatibility service preserving legacy employee, address, role, and signature contracts.");
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -24,12 +24,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DictionaryKeyPolicy = null;
 });
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddHttpClient<IEmployeeIdentityDirectory, AuthServiceEmployeeIdentityDirectory>(client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["AuthService:LegacyEmployeeIdentityBaseUrl"]
-        ?? "http://authservice/auth/v1/legacy/employees/");
-    client.Timeout = TimeSpan.FromSeconds(15);
-}).AddStandardResilienceHandler();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeCache, DistributedEmployeeCache>();
 builder.Services.AddScoped<IEmployeeService, EmployeeApplicationService>();
