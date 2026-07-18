@@ -10,7 +10,10 @@ independently.
 Dependency direction is `Api -> Application -> Domain`; PostgreSQL and Redis
 adapters live in `Data`. Scalar/OpenAPI, JWT validation, standard
 middleware, health endpoints, resilience, and structured logging come from
-`Maliev.Aspire.ServiceDefaults`.
+the public `Legacy.Maliev.ServiceDefaults` package while preserving the existing
+`Maliev.Aspire.ServiceDefaults` CLR namespace. CI and image builds also use the public
+`Legacy.Maliev.CompatibilityContracts` source repository, so the legacy service no longer depends
+on new-platform shared-library source or private package credentials.
 
 EmployeeService neither opens, migrates, nor proxies `EmployeeIdentity`. Passwords,
 password hashes, security stamps, authenticator keys, recovery material, sessions,
