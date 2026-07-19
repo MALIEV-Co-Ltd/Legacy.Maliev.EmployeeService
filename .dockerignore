@@ -1,4 +1,6 @@
 .git
+.worktrees
+.dependencies
 .github
 .vs
 .idea

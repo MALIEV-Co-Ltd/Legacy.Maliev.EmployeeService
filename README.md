@@ -52,6 +52,11 @@ WIF identity, `maliev-gitops/3-apps/_legacy-employee-service`, the AuthService
 employee-identity API, data parity/rollback evidence, signature-object
 reconciliation, and Web/Intranet consumer tests.
 
+The repository provides a gated immutable-image workflow and a namespace-confined,
+non-root base manifest for that future cutover. Runtime database, Redis, and JWT
+verification values are projected from `legacy-maliev-employee-runtime`; identity,
+credential, token, and session configuration is intentionally absent.
+
 Everything must use the existing GKE cluster and `maliev-legacy` namespace with no
 new node pool, Cloud SQL, or other paid database service.
 
