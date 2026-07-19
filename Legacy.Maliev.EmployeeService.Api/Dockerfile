@@ -1,24 +1,23 @@
-# syntax=docker/dockerfile:1.7
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /src
-ENV GITHUB_ACTIONS=false
-COPY nuget.config .
-COPY .dependencies/ .dependencies/
-COPY Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj Legacy.Maliev.EmployeeService.Api/
-COPY Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj Legacy.Maliev.EmployeeService.Application/
-COPY Legacy.Maliev.EmployeeService.Domain/Legacy.Maliev.EmployeeService.Domain.csproj Legacy.Maliev.EmployeeService.Domain/
-COPY Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj Legacy.Maliev.EmployeeService.Data/
-RUN dotnet restore Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj \
-    -p:MalievWorkspaceRoot=/src/.dependencies
+RUN apk add --no-cache git \
+    && git clone --filter=blob:none --no-checkout https://github.com/MALIEV-Co-Ltd/Legacy.Maliev.ServiceDefaults.git /dependencies/Legacy.Maliev.ServiceDefaults \
+    && git -C /dependencies/Legacy.Maliev.ServiceDefaults checkout bcab875a7f703d1d9c2d535479e93653720eb62d \
+    && git clone --filter=blob:none --no-checkout https://github.com/MALIEV-Co-Ltd/Legacy.Maliev.CompatibilityContracts.git /dependencies/Legacy.Maliev.CompatibilityContracts \
+    && git -C /dependencies/Legacy.Maliev.CompatibilityContracts checkout 95c62eb6209411f5aada443b315447a2f76ca0cd
 COPY . .
 RUN dotnet publish Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj \
-    --configuration Release --no-restore --output /app /p:UseAppHost=false \
-    -p:MalievWorkspaceRoot=/src/.dependencies
+    --configuration Release \
+    --output /app/publish \
+    --no-self-contained \
+    -p:UseLocalMalievDependencies=true \
+    -p:MalievWorkspaceRoot=/dependencies
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS runtime
 WORKDIR /app
-COPY --from=build --chown=$APP_UID:$APP_UID /app .
+ENV ASPNETCORE_HTTP_PORTS=8080 \
+    DOTNET_EnableDiagnostics=0
+COPY --from=build /app/publish .
 USER $APP_UID
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
 ENTRYPOINT ["dotnet", "Legacy.Maliev.EmployeeService.Api.dll"]

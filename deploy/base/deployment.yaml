@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: legacy-maliev-employee-service
+  namespace: maliev-legacy
+  labels:
+    app.kubernetes.io/name: legacy-maliev-employee-service
+    app.kubernetes.io/part-of: maliev-legacy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: legacy-maliev-employee-service
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: legacy-maliev-employee-service
+        app.kubernetes.io/part-of: maliev-legacy
+    spec:
+      serviceAccountName: legacy-maliev-employee
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: employee
+          image: legacy-maliev-employee-service
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: DOTNET_GCHeapHardLimit
+              value: "134217728"
+            - name: DOTNET_GCConserveMemory
+              value: "3"
+            - name: NPGSQL_GSSAPI_AUTHENTICATION
+              value: "false"
+            - name: PGGSSENCMODE
+              value: "disable"
+          envFrom:
+            - secretRef:
+                name: legacy-maliev-employee-runtime
+          readinessProbe:
+            httpGet:
+              path: /employee/readiness
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /employee/liveness
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 96Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
