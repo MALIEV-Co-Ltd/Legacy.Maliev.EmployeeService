@@ -99,6 +99,24 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
     }
 
     /// <inheritdoc />
+    public async Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken)
+    {
+        var entity = await dbContext.Employees.FindAsync([id], cancellationToken);
+        if (entity is null)
+        {
+            return false;
+        }
+
+        entity.FirstName = request.FirstName.Trim();
+        entity.LastName = request.LastName.Trim();
+        entity.PhoneNumber = request.PhoneNumber?.Trim();
+        entity.DateOfBirth = request.DateOfBirth;
+        entity.ModifiedDate = timeProvider.GetUtcNow().UtcDateTime;
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    /// <inheritdoc />
     public async Task<bool> DeleteEmployeeAsync(int id, CancellationToken cancellationToken) =>
         await dbContext.Employees.Where(value => value.Id == id).ExecuteDeleteAsync(cancellationToken) == 1;
 

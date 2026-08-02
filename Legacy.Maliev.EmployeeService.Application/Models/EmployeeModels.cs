@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Legacy.Maliev.EmployeeService.Application.Models;
 
 /// <summary>Legacy employee response with home-address and role projections.</summary>
@@ -44,6 +46,17 @@ public sealed record UpsertEmployeeRequest(
     string Email,
     DateTime? DateOfBirth,
     int? HomeAddressId);
+
+/// <summary>
+/// Employee-owned profile fields. Unknown JSON members are rejected so administrative fields
+/// cannot be smuggled into the self-service write contract.
+/// </summary>
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
+public sealed record UpdateEmployeeSelfProfileRequest(
+    string FirstName,
+    string LastName,
+    string? PhoneNumber,
+    DateTime? DateOfBirth);
 
 /// <summary>Employee address create/update request.</summary>
 public sealed record UpsertAddressRequest(

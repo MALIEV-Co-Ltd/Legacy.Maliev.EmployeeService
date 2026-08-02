@@ -11,6 +11,11 @@ public static class EmployeePermissions
     public const string EmployeesCreate = "legacy-employee.employees.create";
     /// <summary>Updates employees.</summary>
     public const string EmployeesUpdate = "legacy-employee.employees.update";
+    /// <summary>
+    /// Allows the trusted Intranet BFF to update a session-owned employee's narrow profile after
+    /// the BFF has enforced ownership from the signed legacy database identifier claim.
+    /// </summary>
+    public const string EmployeesSelfUpdate = "legacy-employee.employees.self-update";
     /// <summary>Deletes employees.</summary>
     public const string EmployeesDelete = "legacy-employee.employees.delete";
     /// <summary>Reads employee addresses.</summary>

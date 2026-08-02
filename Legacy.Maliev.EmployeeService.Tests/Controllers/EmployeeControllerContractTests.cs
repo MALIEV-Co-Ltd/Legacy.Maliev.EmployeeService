@@ -1,9 +1,14 @@
 using System.Reflection;
+using System.Text.Json;
 using Legacy.Maliev.EmployeeService.Api.Controllers;
+using Legacy.Maliev.EmployeeService.Api.Authorization;
+using Legacy.Maliev.EmployeeService.Application.Interfaces;
+using Legacy.Maliev.EmployeeService.Application.Models;
 using Maliev.Aspire.ServiceDefaults.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Moq;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Controllers;
 
@@ -29,6 +34,45 @@ public sealed class EmployeeControllerContractTests
         AssertAction<EmployeesController>(nameof(EmployeesController.GetEmployeeAsync), "{employeeId:int}", typeof(HttpGetAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.GetPaginatedAsync), null, typeof(HttpGetAttribute));
         AssertAction<EmployeesController>(nameof(EmployeesController.UpdateEmployeeAsync), "{id:int}", typeof(HttpPutAttribute));
+        AssertAction<EmployeesController>(nameof(EmployeesController.UpdateSelfProfileAsync), "{employeeId:int}/profile", typeof(HttpPutAttribute));
+    }
+
+    [Fact]
+    public void SelfProfileRequest_ExposesOnlyEmployeeOwnedFieldsAndRejectsUnknownMembers()
+    {
+        Assert.Equal(
+            ["DateOfBirth", "FirstName", "LastName", "PhoneNumber"],
+            typeof(UpdateEmployeeSelfProfileRequest).GetProperties().Select(property => property.Name).Order());
+
+        var json = """{"FirstName":"Ada","LastName":"Lovelace","PhoneNumber":"0690","DateOfBirth":"1815-12-10","RoleId":9}""";
+
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpdateEmployeeSelfProfileRequest>(json));
+    }
+
+    [Fact]
+    public void SelfProfileAction_UsesProfilePermissionAndEmployeeScopedResourcePath()
+    {
+        var action = typeof(EmployeesController).GetMethod(nameof(EmployeesController.UpdateSelfProfileAsync))!;
+        var permission = Assert.Single(action.GetCustomAttributes<RequirePermissionAttribute>());
+
+        Assert.Equal(EmployeePermissions.EmployeesSelfUpdate, permission.Permission);
+        Assert.Equal("legacy-employee.employees.self-update", permission.Permission);
+        Assert.Equal("/employees/{employeeId}/profile", permission.ResourcePathTemplate);
+        Assert.False(permission.RequireLiveCheck);
+    }
+
+    [Fact]
+    public async Task UpdateSelfProfileAsync_AuthorizedBffService_UpdatesOnlyNarrowProfile()
+    {
+        var request = ProfileRequest();
+        var service = new Mock<IEmployeeService>(MockBehavior.Strict);
+        service.Setup(value => value.UpdateSelfProfileAsync(7, request, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        var controller = new EmployeesController(service.Object);
+
+        var result = await controller.UpdateSelfProfileAsync(7, request, CancellationToken.None);
+
+        Assert.IsType<NoContentResult>(result);
+        service.VerifyAll();
     }
 
     [Fact]
@@ -76,6 +120,9 @@ public sealed class EmployeeControllerContractTests
     }
 
     private static int PublicActions<TController>() => typeof(TController).GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Length;
+
+    private static UpdateEmployeeSelfProfileRequest ProfileRequest() =>
+        new("Ada", "Lovelace", "0690", new DateTime(1815, 12, 10));
 
     private static void AssertAction<TController>(string methodName, string? template, Type attributeType)
     {
