@@ -61,9 +61,32 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
         return await service.UpdateEmployeeAsync(id, item, cancellationToken) ? NoContent() : NotFound();
     }
 
+    /// <summary>Updates the authenticated employee's own non-administrative profile fields.</summary>
+    [HttpPut("{employeeId:int}/profile")]
+    [RequirePermission(EmployeePermissions.EmployeesSelfUpdate, ResourcePathTemplate = "/employees/{employeeId}/profile")]
+    public async Task<IActionResult> UpdateSelfProfileAsync(
+        int employeeId,
+        UpdateEmployeeSelfProfileRequest item,
+        CancellationToken cancellationToken)
+    {
+        if (!Valid(item))
+        {
+            return BadRequest();
+        }
+
+        return await service.UpdateSelfProfileAsync(employeeId, item, cancellationToken) ? NoContent() : NotFound();
+    }
+
     private static bool Valid(UpsertEmployeeRequest request) =>
         !string.IsNullOrWhiteSpace(request.FirstName) &&
         !string.IsNullOrWhiteSpace(request.LastName) &&
         !string.IsNullOrWhiteSpace(request.Email) &&
         request.Email.Contains('@', StringComparison.Ordinal);
+
+    private static bool Valid(UpdateEmployeeSelfProfileRequest request) =>
+        !string.IsNullOrWhiteSpace(request.FirstName) &&
+        request.FirstName.Length <= 256 &&
+        !string.IsNullOrWhiteSpace(request.LastName) &&
+        request.LastName.Length <= 256 &&
+        request.PhoneNumber?.Length <= 256;
 }

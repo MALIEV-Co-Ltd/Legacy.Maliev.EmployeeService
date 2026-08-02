@@ -51,5 +51,22 @@ public sealed class EmployeeApplicationServiceTests
         repository.VerifyAll();
     }
 
+    [Fact]
+    public async Task UpdateSelfProfileAsync_Success_InvalidatesOnlyOwnedEmployeeCache()
+    {
+        var request = new UpdateEmployeeSelfProfileRequest("Ada", "Lovelace", "0690", new DateTime(1815, 12, 10));
+        var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        repository.Setup(value => value.UpdateSelfProfileAsync(7, request, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+        var cache = new Mock<IEmployeeCache>(MockBehavior.Strict);
+        cache.Setup(value => value.RemoveAsync(7, It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        var service = new EmployeeApplicationService(repository.Object, cache.Object);
+
+        var updated = await service.UpdateSelfProfileAsync(7, request, CancellationToken.None);
+
+        Assert.True(updated);
+        repository.VerifyAll();
+        cache.VerifyAll();
+    }
+
     private static EmployeeResponse SampleEmployee() => new(7, 2, "Ada", "Lovelace", "Ada Lovelace", null, "ada@example.com", null, null, null, null, null, null);
 }

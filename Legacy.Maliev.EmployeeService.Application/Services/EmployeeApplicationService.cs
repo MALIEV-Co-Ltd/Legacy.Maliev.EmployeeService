@@ -50,6 +50,18 @@ public sealed class EmployeeApplicationService(
     }
 
     /// <inheritdoc />
+    public async Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken)
+    {
+        var updated = await repository.UpdateSelfProfileAsync(id, request, cancellationToken);
+        if (updated)
+        {
+            await cache.RemoveAsync(id, cancellationToken);
+        }
+
+        return updated;
+    }
+
+    /// <inheritdoc />
     public async Task<bool> DeleteEmployeeAsync(int id, CancellationToken cancellationToken)
     {
         var deleted = await repository.DeleteEmployeeAsync(id, cancellationToken);

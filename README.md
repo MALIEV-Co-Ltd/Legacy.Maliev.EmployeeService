@@ -20,9 +20,19 @@ password hashes, security stamps, authenticator keys, recovery material, session
 tokens, credential validation, and identity administration are owned exclusively by
 `Legacy.Maliev.AuthService`.
 
+Employee self-profile writes use a two-stage trust boundary. The same-origin
+`Legacy.Maliev.Intranet.Bff` accepts no browser-supplied employee ID; it derives the
+target employee database ID exclusively from the signed `legacy_database_id` in the
+authenticated employee session. It then calls the narrow EmployeeService endpoint
+with its service token, which additionally carries the dedicated exact permission
+`legacy-employee.employees.self-update`. EmployeeService accepts only first name,
+last name, phone number, and date of birth; unknown JSON members are rejected and
+role, email, address, identity, and security fields remain server-owned.
+
 ## Preserved route families
 
 - `/Employees[/{id}]` and `/Employees?sort=&search=&index=&size=`
+- `PUT /Employees/{employeeId}/profile` (trusted Intranet BFF self-service only)
 - `/employees/addresses[/{addressId}]`
 - `/employees/roles[/{roleId}]`
 - `/employees/signatures[/{employeeId}]`

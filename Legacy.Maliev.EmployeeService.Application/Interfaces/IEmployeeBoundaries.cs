@@ -14,6 +14,8 @@ public interface IEmployeeService
     Task<EmployeeResponse> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an employee.</summary>
     Task<bool> UpdateEmployeeAsync(int id, UpsertEmployeeRequest request, CancellationToken cancellationToken);
+    /// <summary>Updates only employee-owned profile fields.</summary>
+    Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken);
     /// <summary>Deletes an employee.</summary>
     Task<bool> DeleteEmployeeAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets all employee addresses.</summary>
@@ -57,6 +59,8 @@ public interface IEmployeeRepository
     Task<Employee> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an employee entity.</summary>
     Task<bool> UpdateEmployeeAsync(int id, UpsertEmployeeRequest request, CancellationToken cancellationToken);
+    /// <summary>Atomically updates only employee-owned profile fields.</summary>
+    Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken);
     /// <summary>Deletes an employee entity.</summary>
     Task<bool> DeleteEmployeeAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets address projections.</summary>
