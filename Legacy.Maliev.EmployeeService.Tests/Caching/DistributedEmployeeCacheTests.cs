@@ -37,4 +37,45 @@ public sealed class DistributedEmployeeCacheTests
 
         Assert.Equal(employee, result);
     }
+
+    [Fact]
+    public async Task GetAsync_does_not_swallow_cancellation()
+    {
+        var cancellationToken = new CancellationToken(canceled: true);
+        var distributed = new Mock<IDistributedCache>();
+        distributed.Setup(value => value.GetAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException(cancellationToken));
+        var cache = new DistributedEmployeeCache(distributed.Object, NullLogger<DistributedEmployeeCache>.Instance);
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() => cache.GetAsync(42, cancellationToken));
+    }
+
+    [Fact]
+    public async Task SetAsync_does_not_swallow_cancellation()
+    {
+        var cancellationToken = new CancellationToken(canceled: true);
+        var distributed = new Mock<IDistributedCache>();
+        distributed.Setup(value => value.SetAsync(
+                It.IsAny<string>(),
+                It.IsAny<byte[]>(),
+                It.IsAny<DistributedCacheEntryOptions>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException(cancellationToken));
+        var cache = new DistributedEmployeeCache(distributed.Object, NullLogger<DistributedEmployeeCache>.Instance);
+        var employee = new EmployeeResponse(42, 2, "Ada", "Lovelace", "Ada Lovelace", null, "ada@example.com", null, null, null, null, null, null);
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() => cache.SetAsync(employee, cancellationToken));
+    }
+
+    [Fact]
+    public async Task RemoveAsync_does_not_swallow_cancellation()
+    {
+        var cancellationToken = new CancellationToken(canceled: true);
+        var distributed = new Mock<IDistributedCache>();
+        distributed.Setup(value => value.RemoveAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new OperationCanceledException(cancellationToken));
+        var cache = new DistributedEmployeeCache(distributed.Object, NullLogger<DistributedEmployeeCache>.Instance);
+
+        await Assert.ThrowsAsync<OperationCanceledException>(() => cache.RemoveAsync(42, cancellationToken));
+    }
 }
