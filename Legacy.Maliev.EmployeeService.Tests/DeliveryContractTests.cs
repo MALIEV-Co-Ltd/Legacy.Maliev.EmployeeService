@@ -90,7 +90,7 @@ public sealed class DeliveryContractTests
         Assert.Contains("Jwt__Issuer", contract, StringComparison.Ordinal);
         Assert.Contains("Jwt__Audience", contract, StringComparison.Ordinal);
         Assert.Contains("previous immutable image digest", contract, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("source SQL Server", contract, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("source legacy database", contract, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("rollback", contract, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("Jwt__PrivateKey", contract, StringComparison.Ordinal);
         Assert.DoesNotContain("AuthService__LegacyEmployeeIdentityBaseUrl", contract, StringComparison.Ordinal);

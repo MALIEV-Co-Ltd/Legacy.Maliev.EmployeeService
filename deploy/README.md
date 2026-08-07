@@ -40,7 +40,7 @@ owner-approved Workload Identity binding; no credential file may be mounted.
 
 Before promotion, record the previous immutable image digest and GitOps revision,
 capture a recoverable snapshot of the existing PostgreSQL employee database, and
-retain the source SQL Server unchanged and available under the approved read-only
+retain the source legacy database unchanged and available under the approved read-only
 rollback policy. Preserve the pre-cutover consumer routing state and the parity
 artifact. A rollback must re-pin the reviewed prior digest and restore consumer
 routing through GitOps; do not run a destructive down migration or delete promoted
