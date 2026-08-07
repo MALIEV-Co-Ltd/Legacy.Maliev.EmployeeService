@@ -59,7 +59,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
     /// <inheritdoc />
     public async Task<Employee> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken)
     {
-        var now = timeProvider.GetUtcNow().UtcDateTime;
+        var now = UtcWallClockNow();
         var entity = new Employee
         {
             RoleId = request.RoleId,
@@ -93,7 +93,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         entity.Email = request.Email.Trim();
         entity.DateOfBirth = request.DateOfBirth;
         entity.HomeAddressId = request.HomeAddressId;
-        entity.ModifiedDate = timeProvider.GetUtcNow().UtcDateTime;
+        entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
@@ -111,7 +111,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         entity.LastName = request.LastName.Trim();
         entity.PhoneNumber = request.PhoneNumber?.Trim();
         entity.DateOfBirth = request.DateOfBirth;
-        entity.ModifiedDate = timeProvider.GetUtcNow().UtcDateTime;
+        entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
@@ -131,7 +131,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
     /// <inheritdoc />
     public async Task<Address> CreateAddressAsync(UpsertAddressRequest request, CancellationToken cancellationToken)
     {
-        var now = timeProvider.GetUtcNow().UtcDateTime;
+        var now = UtcWallClockNow();
         var entity = new Address
         {
             Building = request.Building,
@@ -165,7 +165,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         entity.State = request.State;
         entity.PostalCode = request.PostalCode;
         entity.CountryId = request.CountryId;
-        entity.ModifiedDate = timeProvider.GetUtcNow().UtcDateTime;
+        entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
@@ -189,7 +189,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
     /// <inheritdoc />
     public async Task<Role> CreateRoleAsync(UpsertRoleRequest request, CancellationToken cancellationToken)
     {
-        var now = timeProvider.GetUtcNow().UtcDateTime;
+        var now = UtcWallClockNow();
         var entity = new Role { Name = request.Name, Description = request.Description, CreatedDate = now, ModifiedDate = now };
         dbContext.Roles.Add(entity);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -207,7 +207,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
 
         entity.Name = request.Name;
         entity.Description = request.Description;
-        entity.ModifiedDate = timeProvider.GetUtcNow().UtcDateTime;
+        entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
@@ -235,7 +235,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
             return null;
         }
 
-        var now = timeProvider.GetUtcNow().UtcDateTime;
+        var now = UtcWallClockNow();
         var entity = new SignatureImageFile
         {
             EmployeeId = employeeId,
@@ -261,7 +261,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         entity.EmployeeId = request.EmployeeId ?? employeeId;
         entity.Bucket = request.Bucket.Trim();
         entity.ObjectName = request.ObjectName.Trim();
-        entity.ModifiedDate = timeProvider.GetUtcNow().UtcDateTime;
+        entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
@@ -312,4 +312,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
 
     private static System.Linq.Expressions.Expression<Func<SignatureImageFile, SignatureImageFileResponse>> ToSignature() => signature =>
         new SignatureImageFileResponse(signature.Id, signature.EmployeeId, signature.Bucket, signature.ObjectName, signature.CreatedDate, signature.ModifiedDate);
+
+    private DateTime UtcWallClockNow() =>
+        DateTime.SpecifyKind(timeProvider.GetUtcNow().UtcDateTime, DateTimeKind.Unspecified);
 }
