@@ -24,7 +24,7 @@ public sealed class EmployeeSelfProfilePostgresTests : IAsyncLifetime
         var role = new Role { Name = "Director" };
         dbContext.AddRange(address, role);
         await dbContext.SaveChangesAsync();
-        var created = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+        var created = new DateTime(2020, 1, 2, 3, 4, 5, DateTimeKind.Unspecified);
         var employee = new Employee
         {
             RoleId = role.Id,
@@ -57,8 +57,12 @@ public sealed class EmployeeSelfProfilePostgresTests : IAsyncLifetime
         Assert.Equal(role.Id, persisted.RoleId);
         Assert.Equal("server-owned@maliev.com", persisted.Email);
         Assert.Equal(address.Id, persisted.HomeAddressId);
-        Assert.Equal(created, persisted.CreatedDate);
-        Assert.Equal(modified.UtcDateTime, persisted.ModifiedDate);
+        Assert.NotNull(persisted.CreatedDate);
+        Assert.NotNull(persisted.ModifiedDate);
+        Assert.Equal(DateTimeKind.Unspecified, persisted.CreatedDate.Value.Kind);
+        Assert.Equal(DateTimeKind.Unspecified, persisted.ModifiedDate.Value.Kind);
+        Assert.Equal(created, persisted.CreatedDate.Value);
+        Assert.Equal(DateTime.SpecifyKind(modified.UtcDateTime, DateTimeKind.Unspecified), persisted.ModifiedDate.Value);
     }
 
     [Fact]

@@ -71,9 +71,9 @@ public sealed class DeliveryContractTests
         Assert.Contains("dotnet/aspnet:10.0-alpine", dockerfile, StringComparison.Ordinal);
         Assert.Contains("USER $APP_UID", dockerfile, StringComparison.Ordinal);
         Assert.Contains("Legacy.Maliev.ServiceDefaults.git", dockerfile, StringComparison.Ordinal);
-        Assert.Contains("checkout bcab875a7f703d1d9c2d535479e93653720eb62d", dockerfile, StringComparison.Ordinal);
+        Assert.Contains("checkout 2833d30c492d9c40869d9bfac30e1ce9bdc11f84", dockerfile, StringComparison.Ordinal);
         Assert.Contains("Legacy.Maliev.CompatibilityContracts.git", dockerfile, StringComparison.Ordinal);
-        Assert.Contains("checkout 95c62eb6209411f5aada443b315447a2f76ca0cd", dockerfile, StringComparison.Ordinal);
+        Assert.Contains("checkout 78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7", dockerfile, StringComparison.Ordinal);
         Assert.DoesNotContain("COPY .dependencies/", dockerfile, StringComparison.Ordinal);
         Assert.DoesNotContain("MALIEV-Co-Ltd/Maliev.Aspire", dockerfile, StringComparison.Ordinal);
         Assert.DoesNotContain("MALIEV-Co-Ltd/Maliev.MessagingContracts", dockerfile, StringComparison.Ordinal);
@@ -90,7 +90,7 @@ public sealed class DeliveryContractTests
         Assert.Contains("Jwt__Issuer", contract, StringComparison.Ordinal);
         Assert.Contains("Jwt__Audience", contract, StringComparison.Ordinal);
         Assert.Contains("previous immutable image digest", contract, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("source SQL Server", contract, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("source legacy database", contract, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("rollback", contract, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("Jwt__PrivateKey", contract, StringComparison.Ordinal);
         Assert.DoesNotContain("AuthService__LegacyEmployeeIdentityBaseUrl", contract, StringComparison.Ordinal);

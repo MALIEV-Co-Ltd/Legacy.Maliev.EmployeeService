@@ -78,7 +78,14 @@ public sealed class EmployeeDbContext(DbContextOptions<EmployeeDbContext> option
     private static void ConfigureDates<TEntity>(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<TEntity> entity)
         where TEntity : class
     {
-        entity.Property<DateTime?>(nameof(Employee.CreatedDate)).HasColumnType("timestamp with time zone").HasDefaultValueSql("CURRENT_TIMESTAMP");
-        entity.Property<DateTime?>(nameof(Employee.ModifiedDate)).HasColumnType("timestamp with time zone").HasDefaultValueSql("CURRENT_TIMESTAMP");
+        // The migrated legacy schema stores UTC instants as UTC wall-clock values in
+        // PostgreSQL timestamp without time zone columns. Keep the DateTime kind
+        // Unspecified at the provider boundary and apply UTC explicitly at edges.
+        entity.Property<DateTime?>(nameof(Employee.CreatedDate))
+            .HasColumnType("timestamp without time zone")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP AT TIME ZONE 'UTC'");
+        entity.Property<DateTime?>(nameof(Employee.ModifiedDate))
+            .HasColumnType("timestamp without time zone")
+            .HasDefaultValueSql("CURRENT_TIMESTAMP AT TIME ZONE 'UTC'");
     }
 }
