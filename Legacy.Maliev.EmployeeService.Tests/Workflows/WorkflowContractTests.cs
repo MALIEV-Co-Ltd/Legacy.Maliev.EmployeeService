@@ -10,6 +10,8 @@ public sealed class WorkflowContractTests
     private static readonly string Workflow = File.ReadAllText(FindRepositoryFile(".github", "workflows", "_build-and-test.yml"));
     private static readonly string ApiProject = File.ReadAllText(
         FindRepositoryFile("Legacy.Maliev.EmployeeService.Api", "Legacy.Maliev.EmployeeService.Api.csproj"));
+    private static readonly string ApiProgram = File.ReadAllText(
+        FindRepositoryFile("Legacy.Maliev.EmployeeService.Api", "Program.cs"));
     private static readonly string DataProject = File.ReadAllText(
         FindRepositoryFile("Legacy.Maliev.EmployeeService.Data", "Legacy.Maliev.EmployeeService.Data.csproj"));
 
@@ -31,8 +33,8 @@ public sealed class WorkflowContractTests
     public void BuildAndTest_RejectsCommentedDependencySha()
     {
         AssertMutationRejected(
-            "ref: 9c4ac9d44a08bcd0aa2088348790ab863814669c",
-            "ref: main # 9c4ac9d44a08bcd0aa2088348790ab863814669c");
+            "ref: 5c5f9479313710fa576f83d3b396442997a2fcf4",
+            "ref: main # 5c5f9479313710fa576f83d3b396442997a2fcf4");
     }
 
     [Fact]
@@ -41,6 +43,16 @@ public sealed class WorkflowContractTests
         Assert.Contains("Legacy.Maliev.ServiceDefaults", ApiProject, StringComparison.Ordinal);
         Assert.DoesNotContain("Maliev.Aspire\\Maliev.Aspire.ServiceDefaults", ApiProject, StringComparison.Ordinal);
         Assert.DoesNotContain("Include=\"Maliev.Aspire.ServiceDefaults\"", ApiProject, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Api_UsesSharedFailureTracingWithoutRetiredExceptionHandler()
+    {
+        Assert.Contains("builder.AddStandardMiddleware(", ApiProgram, StringComparison.Ordinal);
+        Assert.Contains("app.UseStandardMiddleware();", ApiProgram, StringComparison.Ordinal);
+        Assert.DoesNotContain("UseExceptionHandler(", ApiProgram, StringComparison.Ordinal);
+        Assert.DoesNotContain("UseMalievProductionExceptionHandler(", ApiProgram, StringComparison.Ordinal);
+        Assert.DoesNotContain("Maliev.LoggerService", ApiProgram, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -193,7 +205,7 @@ internal static partial class WorkflowContractValidator
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["repository"] = "MALIEV-Co-Ltd/Legacy.Maliev.ServiceDefaults",
-                ["ref"] = "9c4ac9d44a08bcd0aa2088348790ab863814669c",
+                ["ref"] = "5c5f9479313710fa576f83d3b396442997a2fcf4",
                 ["path"] = ".dependencies/Legacy.Maliev.ServiceDefaults",
                 ["persist-credentials"] = "false",
             });
