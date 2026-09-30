@@ -88,5 +88,5 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
         request.FirstName.Length <= 256 &&
         !string.IsNullOrWhiteSpace(request.LastName) &&
         request.LastName.Length <= 256 &&
-        request.PhoneNumber?.Length <= 256;
+        (request.PhoneNumber is null || request.PhoneNumber.Length <= 256);
 }
