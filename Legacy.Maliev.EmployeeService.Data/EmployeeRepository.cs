@@ -25,14 +25,17 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         {
             var value = search.Trim();
             var numeric = int.TryParse(value, out var id);
-            var pattern = $"%{value}%";
+            var escaped = value.Replace("\\", "\\\\", StringComparison.Ordinal)
+                .Replace("%", "\\%", StringComparison.Ordinal)
+                .Replace("_", "\\_", StringComparison.Ordinal);
+            var pattern = $"%{escaped}%";
             query = query.Where(employee =>
-                (numeric && employee.Id == id) ||
-                EF.Functions.ILike(employee.FirstName, pattern) ||
-                EF.Functions.ILike(employee.LastName, pattern) ||
-                EF.Functions.ILike(employee.FullName, pattern) ||
-                EF.Functions.ILike(employee.Email, pattern) ||
-                (employee.PhoneNumber != null && EF.Functions.ILike(employee.PhoneNumber, pattern)));
+                numeric ? employee.Id == id :
+                EF.Functions.ILike(employee.FirstName, pattern, "\\") ||
+                EF.Functions.ILike(employee.LastName, pattern, "\\") ||
+                EF.Functions.ILike(employee.FullName, pattern, "\\") ||
+                EF.Functions.ILike(employee.Email, pattern, "\\") ||
+                (employee.PhoneNumber != null && EF.Functions.ILike(employee.PhoneNumber, pattern, "\\")));
         }
 
         query = sort switch
@@ -53,6 +56,11 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
+        if (items.Count == 0)
+        {
+            return null;
+        }
+
         return new PaginatedResponse<EmployeeResponse>(items, pageIndex, (int)Math.Ceiling(total / (double)pageSize), total);
     }
 
