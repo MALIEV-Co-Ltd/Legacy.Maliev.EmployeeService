@@ -17,6 +17,12 @@ builder.AddStandardOpenApi(
     title: "Legacy MALIEV Employee Service API",
     description: "Temporary .NET 10 compatibility service preserving legacy employee, address, role, and signature contracts.");
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    options.SerializerOptions.PropertyNamingPolicy = null;
+    options.SerializerOptions.DictionaryKeyPolicy = null;
+});
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;

@@ -9,22 +9,8 @@ public sealed class EmployeeApplicationService(
     IEmployeeCache cache) : IEmployeeService
 {
     /// <inheritdoc />
-    public async Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken)
-    {
-        var cached = await cache.GetAsync(id, cancellationToken);
-        if (cached is not null)
-        {
-            return cached;
-        }
-
-        var employee = await repository.GetEmployeeAsync(id, cancellationToken);
-        if (employee is not null)
-        {
-            await cache.SetAsync(employee, cancellationToken);
-        }
-
-        return employee;
-    }
+    public Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken) =>
+        repository.GetEmployeeAsync(id, cancellationToken);
 
     /// <inheritdoc />
     public Task<PaginatedResponse<EmployeeResponse>?> GetEmployeesAsync(EmployeeSortType? sort, string? search, int? index, int? size, CancellationToken cancellationToken) =>
