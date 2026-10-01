@@ -8,17 +8,22 @@ namespace Legacy.Maliev.EmployeeService.Tests.Application;
 public sealed class EmployeeApplicationServiceTests
 {
     [Fact]
-    public async Task GetEmployeeAsync_CacheHit_DoesNotQueryPostgreSql()
+    public async Task GetEmployeeAsync_StaleCacheCannotReplaceAuthoritativePostgreSqlResult()
     {
         var cached = SampleEmployee();
+        var fresh = cached with { FirstName = "Fresh" };
         var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        repository.Setup(value => value.GetEmployeeAsync(7, It.IsAny<CancellationToken>())).ReturnsAsync(fresh);
         var cache = new Mock<IEmployeeCache>();
         cache.Setup(value => value.GetAsync(7, It.IsAny<CancellationToken>())).ReturnsAsync(cached);
         var service = new EmployeeApplicationService(repository.Object, cache.Object);
 
         var result = await service.GetEmployeeAsync(7, CancellationToken.None);
 
-        Assert.Same(cached, result);
+        Assert.Same(fresh, result);
+        repository.Verify(value => value.GetEmployeeAsync(7, It.IsAny<CancellationToken>()), Times.Once);
+        cache.Verify(value => value.GetAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()), Times.Never);
+        cache.Verify(value => value.SetAsync(It.IsAny<Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse>(), It.IsAny<CancellationToken>()), Times.Never);
         repository.VerifyNoOtherCalls();
     }
 
