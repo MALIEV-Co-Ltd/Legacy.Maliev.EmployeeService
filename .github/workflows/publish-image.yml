@@ -19,9 +19,10 @@ jobs:
   publish:
     permissions:
       contents: read
+      actions: read
       id-token: write
     if: vars.LEGACY_DEPLOY_ENABLED == 'true'
-    uses: MALIEV-Co-Ltd/Legacy.Maliev.Workflows/.github/workflows/publish-image.yml@6017816fa67f369d785ed30794f002cfd6299af7
+    uses: MALIEV-Co-Ltd/Legacy.Maliev.Workflows/.github/workflows/publish-image.yml@503e8846390a597c267d2889b33a9c26863389b3
     with:
       image: ${{ vars.LEGACY_ARTIFACT_REGISTRY }}/legacy-maliev-employee-service
       dockerfile: Legacy.Maliev.EmployeeService.Api/Dockerfile

@@ -56,7 +56,10 @@ public sealed class DeliveryContractTests
         var workflow = File.ReadAllText(Path.Combine(FindRoot(), ".github", "workflows", "publish-image.yml"));
 
         Assert.Contains("vars.LEGACY_DEPLOY_ENABLED == 'true'", workflow, StringComparison.Ordinal);
-        Assert.Contains("Legacy.Maliev.Workflows/.github/workflows/publish-image.yml@6017816", workflow, StringComparison.Ordinal);
+        Assert.Contains("Legacy.Maliev.Workflows/.github/workflows/publish-image.yml@503e8846390a597c267d2889b33a9c26863389b3", workflow, StringComparison.Ordinal);
+        var normalizedWorkflow = workflow.Replace("\r\n", "\n", StringComparison.Ordinal);
+        Assert.Contains("\npermissions:\n  contents: read\n", normalizedWorkflow, StringComparison.Ordinal);
+        Assert.Contains("  publish:\n    permissions:\n      contents: read\n      actions: read\n      id-token: write\n", normalizedWorkflow, StringComparison.Ordinal);
         Assert.Contains("legacy-maliev-employee-service", workflow, StringComparison.Ordinal);
         Assert.Contains("legacy-production", workflow, StringComparison.Ordinal);
         Assert.DoesNotContain("kubectl apply", workflow, StringComparison.OrdinalIgnoreCase);
