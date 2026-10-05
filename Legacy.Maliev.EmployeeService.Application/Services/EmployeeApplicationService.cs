@@ -141,7 +141,8 @@ public sealed class EmployeeApplicationService(
     public async Task<SignatureImageFileResponse?> CreateSignatureAsync(int employeeId, UpsertSignatureImageFileRequest request, CancellationToken cancellationToken)
     {
         var entity = await repository.CreateSignatureAsync(employeeId, request, cancellationToken);
-        return entity is null ? null : await repository.GetSignatureAsync(employeeId, cancellationToken);
+        return entity is null ? null : new SignatureImageFileResponse(
+            entity.Id, entity.EmployeeId, entity.Bucket, entity.ObjectName, entity.CreatedDate, entity.ModifiedDate);
     }
 
     /// <inheritdoc />
