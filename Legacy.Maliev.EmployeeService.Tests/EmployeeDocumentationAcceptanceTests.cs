@@ -47,4 +47,19 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         Assert.Equal("http", bearer.GetProperty("type").GetString());
         Assert.Equal("bearer", bearer.GetProperty("scheme").GetString());
     }
+
+    [Fact]
+    public async Task Documentation_DescribesActualAddressCreationAndMutationResults()
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development"));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var document = JsonDocument.Parse(await client.GetStringAsync("/employee/openapi/v1.json"));
+        var paths = document.RootElement.GetProperty("paths");
+        var created = paths.GetProperty("/employees/Addresses").GetProperty("post").GetProperty("responses").GetProperty("201");
+        Assert.True(created.GetProperty("content").TryGetProperty("application/json", out _));
+        Assert.False(string.IsNullOrWhiteSpace(created.GetProperty("description").GetString()));
+        foreach (var method in new[] { "put", "delete" })
+            foreach (var status in new[] { "204", "404" })
+                Assert.False(string.IsNullOrWhiteSpace(paths.GetProperty("/employees/Addresses/{addressId}").GetProperty(method).GetProperty("responses").GetProperty(status).GetProperty("description").GetString()));
+    }
 }
