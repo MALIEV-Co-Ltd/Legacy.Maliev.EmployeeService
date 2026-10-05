@@ -42,6 +42,31 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
     }
 
     [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task CreateWithExistingMetadata_AcknowledgesExactlyTheNewStoredRow(int existing)
+    {
+        await SeedAsync(existing);
+        var before = await SnapshotAsync();
+        using var client = fixture.Client("legacy-employee.signatures.write", "/employees/17");
+        using var response = await client.PostAsync("/employees/17/signatures?bucket=new-bucket&objectName=new.png", null);
+        fixture.IamTransportEvidence.AssertHealthy();
+        await using var db = fixture.CreateContext();
+        var created = await db.SignatureImageFiles.SingleAsync(row => row.ObjectName == "new.png");
+        Assert.Equal(existing + 2, await db.SignatureImageFiles.CountAsync());
+        Assert.Equal(before, await SnapshotAsync(created.Id));
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        using var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.Equal(created.Id, json.RootElement.GetProperty("Id").GetInt32());
+        Assert.Equal(OwnerId, json.RootElement.GetProperty("EmployeeId").GetInt32());
+        Assert.Equal("new-bucket", json.RootElement.GetProperty("Bucket").GetString());
+        Assert.Equal("new.png", json.RootElement.GetProperty("ObjectName").GetString());
+        Assert.Equal(created.CreatedDate, json.RootElement.GetProperty("CreatedDate").GetDateTime());
+        Assert.Equal(created.ModifiedDate, json.RootElement.GetProperty("ModifiedDate").GetDateTime());
+        Assert.EndsWith("/employees/signatures/17", response.Headers.Location!.ToString(), StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Theory]
     [InlineData(false)]
     [InlineData(true)]
     public async Task UniqueEmployeeMetadata_PreservesReadAndUpdateContract(bool update)
@@ -148,14 +173,14 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
         fixture.Authorities.Clear();
     }
 
-    private async Task<string> SnapshotAsync()
+    private async Task<string> SnapshotAsync(int? excludedSignatureId = null)
     {
         await using var db = fixture.CreateContext();
         return JsonSerializer.Serialize(new
         {
             Employees = await db.Employees.AsNoTracking().OrderBy(row => row.Id)
                 .Select(row => new { row.Id, row.FirstName, row.LastName, row.Email, row.CreatedDate, row.ModifiedDate }).ToArrayAsync(),
-            Signatures = await db.SignatureImageFiles.AsNoTracking().OrderBy(row => row.Id)
+            Signatures = await db.SignatureImageFiles.AsNoTracking().Where(row => excludedSignatureId == null || row.Id != excludedSignatureId).OrderBy(row => row.Id)
                 .Select(row => new { row.Id, row.EmployeeId, row.Bucket, row.ObjectName, row.CreatedDate, row.ModifiedDate }).ToArrayAsync()
         });
     }
