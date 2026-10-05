@@ -34,7 +34,9 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         var body = await response.Content.ReadAsStringAsync();
         using var error = JsonDocument.Parse(body);
-        Assert.Equal(500, error.RootElement.GetProperty("status").GetInt32());
+        Assert.Equal(500, error.RootElement.GetProperty("statusCode").GetInt32());
+        Assert.Equal(JsonValueKind.Null, error.RootElement.GetProperty("details").ValueKind);
+        Assert.False(string.IsNullOrWhiteSpace(error.RootElement.GetProperty("traceId").GetString()));
         foreach (var privateValue in new[] { "signature-private-marker", "owner-private-marker", "Npgsql", "SingleOrDefault", "Sequence", "SignatureImageFile" })
         {
             Assert.DoesNotContain(privateValue, body, StringComparison.OrdinalIgnoreCase);
