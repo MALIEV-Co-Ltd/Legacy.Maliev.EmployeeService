@@ -78,7 +78,9 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
         var client = (factory ?? Factory).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
         if (authority == "anonymous") return client;
         var principal = "service:route-" + Guid.NewGuid().ToString("N");
-        var expectation = new RouteAuthority(permission, resource, decision);
+        // An authority-refusal scenario must also be denied by the authoritative
+        // live IAM response; a missing cached JWT permission is not a live denial.
+        var expectation = new RouteAuthority(permission, resource, authority == "missing-permission" ? "deny" : decision);
         Authorities[principal] = expectation;
         var claims = new List<Claim> { new(JwtRegisteredClaimNames.Sub, principal) };
         if (authority != "missing-permission") claims.Add(new("permissions", permission));

@@ -80,6 +80,11 @@ public sealed class EmployeeSignatureDeletionTruthHttpTests(EmployeeRouteAccepta
 
         Assert.Equal(expected, response.StatusCode);
         Assert.Equal(before, await SnapshotAsync());
+        if (authority == "missing-permission")
+        {
+            Assert.Equal("deny", fixture.Authorities.Values.Single().Decision);
+            Assert.Equal(1, fixture.Authorities.Values.Single().LiveCalls);
+        }
     }
 
     private async Task SeedAsync(int matches)
