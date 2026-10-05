@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Legacy.Maliev.EmployeeService.Api.Documentation;
 using Legacy.Maliev.EmployeeService.Application.Interfaces;
 using Legacy.Maliev.EmployeeService.Application.Services;
 using Legacy.Maliev.EmployeeService.Data;
@@ -32,6 +33,8 @@ static async Task RunHostAsync(string[] startupArgs)
     builder.AddStandardOpenApi(
         title: "Legacy MALIEV Employee Service API",
         description: "Temporary .NET 10 compatibility service preserving legacy employee, address, role, and signature contracts.");
+
+    builder.Services.AddOpenApi("v1", EmployeeOpenApi.Configure);
 
     builder.Services.ConfigureHttpJsonOptions(options =>
     {
