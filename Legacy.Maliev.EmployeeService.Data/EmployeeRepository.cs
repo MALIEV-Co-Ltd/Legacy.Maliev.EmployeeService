@@ -229,11 +229,18 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         await dbContext.Roles.Where(value => value.Id == id).ExecuteDeleteAsync(cancellationToken) == 1;
 
     /// <inheritdoc />
-    public Task<SignatureImageFileResponse?> GetSignatureAsync(int employeeId, CancellationToken cancellationToken) =>
-        dbContext.SignatureImageFiles.AsNoTracking()
+    public async Task<SignatureImageFileResponse?> GetSignatureAsync(int employeeId, CancellationToken cancellationToken)
+    {
+        var matches = await dbContext.SignatureImageFiles.AsNoTracking()
             .Where(value => value.EmployeeId == employeeId)
-            .Select(ToSignature())
-            .SingleOrDefaultAsync(cancellationToken);
+            .Select(ToSignature()).Take(2).ToListAsync(cancellationToken);
+        if (matches.Count > 1)
+        {
+            throw new System.Data.DataException("Employee signature lookup is ambiguous.");
+        }
+
+        return matches.SingleOrDefault();
+    }
 
     /// <inheritdoc />
     public async Task<SignatureImageFile?> CreateSignatureAsync(int employeeId, UpsertSignatureImageFileRequest request, CancellationToken cancellationToken)
@@ -254,13 +261,22 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         };
         dbContext.SignatureImageFiles.Add(entity);
         await dbContext.SaveChangesAsync(cancellationToken);
+        // Read the exact saved row so the acknowledgement has PostgreSQL timestamp precision.
+        await dbContext.Entry(entity).ReloadAsync(cancellationToken);
         return entity;
     }
 
     /// <inheritdoc />
     public async Task<bool> UpdateSignatureAsync(int employeeId, UpsertSignatureImageFileRequest request, CancellationToken cancellationToken)
     {
-        var entity = await dbContext.SignatureImageFiles.SingleOrDefaultAsync(value => value.EmployeeId == employeeId, cancellationToken);
+        var matches = await dbContext.SignatureImageFiles.Where(value => value.EmployeeId == employeeId)
+            .Take(2).ToListAsync(cancellationToken);
+        if (matches.Count > 1)
+        {
+            throw new System.Data.DataException("Employee signature lookup is ambiguous.");
+        }
+
+        var entity = matches.SingleOrDefault();
         if (entity is null)
         {
             return false;
