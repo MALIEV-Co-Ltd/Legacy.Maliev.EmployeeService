@@ -27,6 +27,7 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
     }
 
     /// <summary>Deletes an employee address.</summary>
+    /// <remarks>Deletion requires a fresh authorization decision for this address; cached permission claims do not authorize this critical operation.</remarks>
     /// <param name="addressId">The employee-address identifier.</param>
     /// <param name="cancellationToken">Request cancellation.</param>
     /// <response code="204">The employee address was deleted.</response>
