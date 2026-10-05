@@ -276,7 +276,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
 
     /// <inheritdoc />
     public async Task<bool> DeleteSignatureAsync(int employeeId, CancellationToken cancellationToken) =>
-        await dbContext.SignatureImageFiles.Where(value => value.EmployeeId == employeeId).ExecuteDeleteAsync(cancellationToken) == 1;
+        await dbContext.SignatureImageFiles.Where(value => value.EmployeeId == employeeId).ExecuteDeleteAsync(cancellationToken) > 0;
 
     private static IQueryable<EmployeeResponse> Project(IQueryable<Employee> query) => query.Select(employee => new EmployeeResponse(
         employee.Id,

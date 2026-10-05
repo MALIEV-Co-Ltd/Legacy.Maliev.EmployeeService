@@ -39,6 +39,11 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
     }
 
     /// <summary>Gets a bounded employee page.</summary>
+    /// <param name="sort" example="EmployeeId_Ascending">The legacy employee sort value, supplied by its existing name or numeric value.</param>
+    /// <param name="search">Text to search in the employee directory fields.</param>
+    /// <param name="index">The one-based page index; omitted values default to 1 and values below 1 use 1.</param>
+    /// <param name="size">The page size; omitted values default to 50 and supplied values are bounded from 1 to 250.</param>
+    /// <param name="cancellationToken">Request cancellation.</param>
     [HttpGet]
     [RequirePermission(EmployeePermissions.EmployeesList)]
     public async Task<ActionResult<PaginatedResponse<EmployeeResponse>>> GetPaginatedAsync(

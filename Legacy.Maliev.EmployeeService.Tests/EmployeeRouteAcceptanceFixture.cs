@@ -38,6 +38,7 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
     private readonly RSA wrongKey = RSA.Create(2048);
     private readonly string liveCredential = Guid.NewGuid().ToString("N");
     public ConcurrentDictionary<string, RouteAuthority> Authorities { get; } = new();
+    internal IamTransportContractEvidence IamTransportEvidence { get; } = new();
     public WebApplicationFactory<Program> Factory { get; private set; } = null!;
 
     public async Task InitializeAsync()
@@ -77,7 +78,9 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
         var client = (factory ?? Factory).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
         if (authority == "anonymous") return client;
         var principal = "service:route-" + Guid.NewGuid().ToString("N");
-        var expectation = new RouteAuthority(permission, resource, decision);
+        // An authority-refusal scenario must also be denied by the authoritative
+        // live IAM response; a missing cached JWT permission is not a live denial.
+        var expectation = new RouteAuthority(permission, resource, authority == "missing-permission" ? "deny" : decision);
         Authorities[principal] = expectation;
         var claims = new List<Claim> { new(JwtRegisteredClaimNames.Sub, principal) };
         if (authority != "missing-permission") claims.Add(new("permissions", permission));
@@ -94,6 +97,7 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
     {
         if (Factory is not null) await Factory.DisposeAsync();
         key.Dispose(); wrongKey.Dispose(); await redis.DisposeAsync(); await postgres.DisposeAsync();
+        IamTransportEvidence.AssertHealthy();
     }
 
     private sealed class RouteFactory(EmployeeRouteAcceptanceFixture fixture, bool withIam, string environment = "Production") : WebApplicationFactory<Program>
@@ -128,11 +132,16 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
     private sealed class StrictIamTransport(EmployeeRouteAcceptanceFixture fixture) : HttpMessageHandler
     {
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken token)
+            => await fixture.IamTransportEvidence.ObserveAsync(() => SendCheckedAsync(request, token), token);
+
+        private async Task<HttpResponseMessage> SendCheckedAsync(HttpRequestMessage request, CancellationToken token)
         {
             Assert.Equal(HttpMethod.Post, request.Method);
             Assert.Equal("/iam/v1/auth/check-permission", request.RequestUri!.AbsolutePath);
             using var body = JsonDocument.Parse(await request.Content!.ReadAsStringAsync(token));
             var json = body.RootElement;
+            Assert.Equal(new[] { "bypassCache", "permissionId", "principalId", "resourcePath" },
+                json.EnumerateObject().Select(property => property.Name).Order(StringComparer.Ordinal).ToArray());
             var principal = json.GetProperty("principalId").GetString()!;
             Assert.True(fixture.Authorities.TryGetValue(principal, out var expected));
             Assert.Equal(expected!.Permission, json.GetProperty("permissionId").GetString());
@@ -152,7 +161,15 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
             return new(HttpStatusCode.OK)
             {
                 Content = new StringContent(live && expected.Decision == "malformed" ? "not-json"
-                    : live && expected.Decision == "allow" ? "{\"allowed\":true}" : "{\"allowed\":false}", Encoding.UTF8, "application/json"),
+                    : JsonSerializer.Serialize(new
+                    {
+                        principalId = expected.ResolvedPrincipalId,
+                        permissionId = expected.Permission,
+                        resourcePath = expected.Resource,
+                        allowed = live && expected.Decision == "allow",
+                        fromCache = false,
+                        latencyMs = 0
+                    }), Encoding.UTF8, "application/json"),
             };
         }
     }
@@ -223,6 +240,7 @@ internal sealed class ScheduledRedisCache(IDistributedCache actual, CachePublish
 
 public sealed class RouteAuthority(string permission, string resource, string decision)
 {
+    public Guid ResolvedPrincipalId { get; } = Guid.NewGuid();
     public string Permission { get; } = permission;
     public string Resource { get; } = resource;
     public string Decision { get; } = decision;

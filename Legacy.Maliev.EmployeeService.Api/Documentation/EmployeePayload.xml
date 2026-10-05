@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='utf-8'?>
+<doc>
+  <members>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse">
+      <summary>Legacy employee response with home-address and role projections.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.AddressResponse">
+      <summary>Legacy employee address response.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.RoleResponse">
+      <summary>Legacy employee-role response.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.SignatureImageFileResponse">
+      <summary>Legacy signature-object metadata response.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest">
+      <summary>Employee create/update request preserving legacy property names.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest">
+      <summary>Employee address create/update request.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.UpsertRoleRequest">
+      <summary>Employee role create/update request.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.UpsertSignatureImageFileRequest">
+      <summary>Signature metadata create/update request.</summary>
+    </member>
+    <member name="T:Legacy.Maliev.EmployeeService.Application.Models.PaginatedResponse`1">
+      <summary>Preserves the legacy paginated response shape.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.Building">
+      <summary>The building text, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.AddressLine1">
+      <summary>The first address line, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.AddressLine2">
+      <summary>The second address line, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.City">
+      <summary>The city text, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.State">
+      <summary>The state or province text, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.PostalCode">
+      <summary>The postal code text, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertAddressRequest.CountryId">
+      <summary>The identifier of the existing country record.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.Id">
+      <summary>The stored employee profile identifier; this is not a credential or session identifier.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.RoleId">
+      <summary>The related role identifier, when one is assigned.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.HomeAddressId">
+      <summary>The related home-address identifier, when one is assigned.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.HomeAddress">
+      <summary>The related home-address projection, omitted when no address is assigned.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.Role">
+      <summary>The related role projection, omitted when no role is assigned.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.CreatedDate">
+      <summary>The stored creation timestamp, omitted when the legacy row has none.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.EmployeeResponse.ModifiedDate">
+      <summary>The stored modification timestamp, omitted when the legacy row has none.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.FirstName">
+      <summary>The employee given name.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.LastName">
+      <summary>The employee family name.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.Email">
+      <summary>The employee profile email address; this payload does not create an AuthService identity.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.RoleId">
+      <summary>The existing role identifier to assign, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.HomeAddressId">
+      <summary>The existing address identifier to assign, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.DateOfBirth">
+      <summary>The employee birth date, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertEmployeeRequest.PhoneNumber">
+      <summary>The employee contact telephone number, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertSignatureImageFileRequest.Bucket">
+      <summary>The storage bucket name for existing signature-object metadata; no credential material.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertSignatureImageFileRequest.ObjectName">
+      <summary>The storage object name for signature metadata; this is not a signed download URL.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.UpsertSignatureImageFileRequest.EmployeeId">
+      <summary>The employee profile identifier associated with the metadata, when supplied.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.PaginatedResponse`1.Items">
+      <summary>The employee profiles on the selected page.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.PaginatedResponse`1.PageIndex">
+      <summary>The one-based selected page index.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.PaginatedResponse`1.TotalPages">
+      <summary>The number of pages for the current query.</summary>
+    </member>
+    <member name="P:Legacy.Maliev.EmployeeService.Application.Models.PaginatedResponse`1.TotalRecords">
+      <summary>The number of matching employee profiles.</summary>
+    </member>
+  </members>
+</doc>
