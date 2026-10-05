@@ -98,4 +98,24 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         Assert.True(deletion.TryGetProperty("description", out var description), "The existing live authorization requirement must be documented.");
         Assert.Equal("Deletion requires a fresh authorization decision for this address; cached permission claims do not authorize this critical operation.", description.GetString());
     }
+
+    [Fact]
+    public async Task Documentation_ExplainsExistingDirectoryDefaultsAndQueryNames()
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development"));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var document = JsonDocument.Parse(await client.GetStringAsync("/employee/openapi/v1.json"));
+        var parameters = document.RootElement.GetProperty("paths").GetProperty("/Employees").GetProperty("get").GetProperty("parameters").EnumerateArray().ToArray();
+        foreach (var name in new[] { "sort", "search", "index", "size" })
+        {
+            var parameter = Assert.Single(parameters, item => item.GetProperty("name").GetString() == name);
+            Assert.True(parameter.TryGetProperty("description", out var description) && !string.IsNullOrWhiteSpace(description.GetString()),
+                $"Missing existing directory query guidance for {name}: {parameter}");
+        }
+        var size = Assert.Single(parameters, item => item.GetProperty("name").GetString() == "size");
+        Assert.Contains("50", size.GetProperty("description").GetString(), StringComparison.Ordinal);
+        Assert.Contains("250", size.GetProperty("description").GetString(), StringComparison.Ordinal);
+        var sort = Assert.Single(parameters, item => item.GetProperty("name").GetString() == "sort");
+        Assert.Equal("EmployeeId_Ascending", sort.GetProperty("example").GetString());
+    }
 }
