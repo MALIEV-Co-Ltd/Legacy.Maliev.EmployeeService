@@ -62,4 +62,22 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
             foreach (var status in new[] { "204", "404" })
                 Assert.False(string.IsNullOrWhiteSpace(paths.GetProperty("/employees/Addresses/{addressId}").GetProperty(method).GetProperty("responses").GetProperty(status).GetProperty("description").GetString()));
     }
+
+    [Fact]
+    public async Task Documentation_ExplainsProfileReferencesAndAddressPayload()
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development"));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var document = JsonDocument.Parse(await client.GetStringAsync("/employee/openapi/v1.json"));
+        var schemas = document.RootElement.GetProperty("components").GetProperty("schemas");
+        var address = schemas.GetProperty("UpsertAddressRequest");
+        Assert.Equal("Employee address create/update request.", address.GetProperty("description").GetString());
+        foreach (var name in new[] { "Building", "AddressLine1", "AddressLine2", "City", "State", "PostalCode", "CountryId" })
+            Assert.True(address.GetProperty("properties").GetProperty(name).TryGetProperty("description", out var description)
+                && !string.IsNullOrWhiteSpace(description.GetString()), $"Missing address field guidance for {name}: {address}");
+        var profile = schemas.GetProperty("EmployeeResponse").GetProperty("properties");
+        foreach (var name in new[] { "HomeAddress", "Role" })
+            Assert.True(profile.GetProperty(name).TryGetProperty("description", out var description)
+                && !string.IsNullOrWhiteSpace(description.GetString()), $"Missing profile reference guidance for {name}: {profile}");
+    }
 }
