@@ -87,4 +87,15 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
                 && !string.IsNullOrWhiteSpace(description.GetString()), $"Missing profile reference guidance for {name}: {profile}");
         }
     }
+
+    [Fact]
+    public async Task Documentation_ExplainsExistingLiveAuthorizationForCriticalAddressDeletion()
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development"));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var document = JsonDocument.Parse(await client.GetStringAsync("/employee/openapi/v1.json"));
+        var deletion = document.RootElement.GetProperty("paths").GetProperty("/employees/Addresses/{addressId}").GetProperty("delete");
+        Assert.True(deletion.TryGetProperty("description", out var description), "The existing live authorization requirement must be documented.");
+        Assert.Equal("Deletion requires a fresh authorization decision for this address; cached permission claims do not authorize this critical operation.", description.GetString());
+    }
 }
