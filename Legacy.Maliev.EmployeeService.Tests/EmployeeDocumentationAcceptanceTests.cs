@@ -118,4 +118,19 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         var sort = Assert.Single(parameters, item => item.GetProperty("name").GetString() == "sort");
         Assert.Equal("EmployeeId_Ascending", sort.GetProperty("example").GetString());
     }
+
+    [Fact]
+    public async Task Documentation_DescribesAddressPayloadInsteadOfCancellation()
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development"));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var document = JsonDocument.Parse(await client.GetStringAsync("/employee/openapi/v1.json"));
+        foreach (var (path, method) in new[] { ("/employees/Addresses", "post"), ("/employees/Addresses/{addressId}", "put") })
+        {
+            var body = document.RootElement.GetProperty("paths").GetProperty(path).GetProperty(method).GetProperty("requestBody");
+            Assert.True(body.TryGetProperty("description", out var description));
+            Assert.Contains("address fields", description.GetString(), StringComparison.Ordinal);
+            Assert.DoesNotContain("cancellation", description.GetString(), StringComparison.OrdinalIgnoreCase);
+        }
+    }
 }
