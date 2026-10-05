@@ -1,0 +1,50 @@
+using System.Net;
+using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
+
+namespace Legacy.Maliev.EmployeeService.Tests;
+
+public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptanceFixture fixture)
+    : IClassFixture<EmployeeRouteAcceptanceFixture>
+{
+    [Theory]
+    [InlineData("Development", true)]
+    [InlineData("Staging", true)]
+    [InlineData("Production", false)]
+    public async Task Documentation_RespectsEnvironmentBoundary(string environment, bool exposed)
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment(environment));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var response = await client.GetAsync("/employee/openapi/v1.json");
+        Assert.Equal(exposed ? HttpStatusCode.OK : HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Documentation_ConsumesMaintainedSummariesAndAdvertisesExistingBearerRequirement()
+    {
+        await using var host = fixture.Factory.WithWebHostBuilder(builder => builder.UseEnvironment("Development"));
+        using var client = host.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        using var response = await client.GetAsync("/employee/openapi/v1.json");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var count = 0;
+        foreach (var path in document.RootElement.GetProperty("paths").EnumerateObject())
+        {
+            if (!path.Name.StartsWith("/Employees", StringComparison.OrdinalIgnoreCase)
+                && !path.Name.StartsWith("/employees/addresses", StringComparison.OrdinalIgnoreCase)
+                && !path.Name.StartsWith("/employees/roles", StringComparison.OrdinalIgnoreCase)) continue;
+            foreach (var operation in path.Value.EnumerateObject().Where(item => item.Name is "get" or "post" or "put" or "delete"))
+            {
+                count++;
+                Assert.True(operation.Value.TryGetProperty("summary", out var summary) && !string.IsNullOrWhiteSpace(summary.GetString()),
+                    $"Missing maintained summary for {path.Name} {operation.Name}");
+                Assert.True(operation.Value.TryGetProperty("security", out var security) && security.GetArrayLength() > 0,
+                    $"Missing existing bearer requirement for {path.Name} {operation.Name}");
+            }
+        }
+        Assert.True(count >= 5);
+        var bearer = document.RootElement.GetProperty("components").GetProperty("securitySchemes").GetProperty("Bearer");
+        Assert.Equal("http", bearer.GetProperty("type").GetString());
+        Assert.Equal("bearer", bearer.GetProperty("scheme").GetString());
+    }
+}
