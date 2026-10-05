@@ -68,8 +68,15 @@ public sealed class EmployeeIamTransportEvidenceTests
             {
                 Content = outcome == "live-malformed"
                     ? new StringContent("not-json", Encoding.UTF8, "application/json")
-                    : JsonContent.Create(new { principalId = resolvedPrincipal, permissionId = permission,
-                        resourcePath = resource, allowed = expected, fromCache = false, latencyMs = 0 })
+                    : JsonContent.Create(new
+                    {
+                        principalId = resolvedPrincipal,
+                        permissionId = permission,
+                        resourcePath = resource,
+                        allowed = expected,
+                        fromCache = false,
+                        latencyMs = 0
+                    })
             };
         });
         using var http = new HttpClient(transport) { BaseAddress = new Uri("https://controlled-iam.example.invalid") };
