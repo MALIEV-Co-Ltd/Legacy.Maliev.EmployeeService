@@ -76,8 +76,15 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
             Assert.True(address.GetProperty("properties").GetProperty(name).TryGetProperty("description", out var description)
                 && !string.IsNullOrWhiteSpace(description.GetString()), $"Missing address field guidance for {name}: {address}");
         var profile = schemas.GetProperty("EmployeeResponse").GetProperty("properties");
-        foreach (var name in new[] { "HomeAddress", "Role" })
-            Assert.True(profile.GetProperty(name).TryGetProperty("description", out var description)
+        foreach (var (name, target) in new[] { ("HomeAddress", "AddressResponse"), ("Role", "RoleResponse") })
+        {
+            var alternatives = profile.GetProperty(name).GetProperty("oneOf").EnumerateArray().ToArray();
+            Assert.Equal(2, alternatives.Length);
+            Assert.Single(alternatives, item => item.TryGetProperty("type", out var type) && type.GetString() == "null");
+            var reference = Assert.Single(alternatives, item => item.TryGetProperty("$ref", out _));
+            Assert.Equal($"#/components/schemas/{target}", reference.GetProperty("$ref").GetString());
+            Assert.True(reference.TryGetProperty("description", out var description)
                 && !string.IsNullOrWhiteSpace(description.GetString()), $"Missing profile reference guidance for {name}: {profile}");
+        }
     }
 }
