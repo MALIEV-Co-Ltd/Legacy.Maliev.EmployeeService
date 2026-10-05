@@ -14,8 +14,8 @@ namespace Legacy.Maliev.EmployeeService.Api.Controllers;
 public sealed class AddressesController(IEmployeeService service) : ControllerBase
 {
     /// <summary>Creates an employee address.</summary>
-    /// <param name="item">The address fields and existing country identifier to store.</param>
     /// <param name="cancellationToken">Request cancellation.</param>
+    /// <param name="item">The address fields and existing country identifier to store.</param>
     /// <response code="201">The created employee address.</response>
     [HttpPost]
     [RequirePermission(EmployeePermissions.AddressesCreate)]
@@ -69,9 +69,9 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
     }
 
     /// <summary>Updates an employee address.</summary>
+    /// <param name="cancellationToken">Request cancellation.</param>
     /// <param name="addressId">The employee-address identifier.</param>
     /// <param name="item">The replacement address fields and existing country identifier.</param>
-    /// <param name="cancellationToken">Request cancellation.</param>
     /// <response code="204">The employee address was updated.</response>
     /// <response code="404">The employee address does not exist.</response>
     [HttpPut("{addressId:int}")]
