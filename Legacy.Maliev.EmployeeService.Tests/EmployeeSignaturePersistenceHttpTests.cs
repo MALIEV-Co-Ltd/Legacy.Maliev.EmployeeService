@@ -70,7 +70,10 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
         using var writer = Writer(true);
         using var updated = await writer.PutAsJsonAsync("/employees/signatures/17", new
         {
-            Id = 999999, EmployeeId = employeeId, Bucket = "replacement", ObjectName = "replacement.png",
+            Id = 999999,
+            EmployeeId = employeeId,
+            Bucket = "replacement",
+            ObjectName = "replacement.png",
             CreatedDate = new DateTime(1900, 1, 1)
         });
         Assert.Equal(HttpStatusCode.NoContent, updated.StatusCode);
@@ -109,13 +112,21 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
             new Employee { Id = 18, FirstName = "Other", LastName = "Synthetic", Email = "other@example.invalid" });
         if (signature) db.SignatureImageFiles.Add(new SignatureImageFile
         {
-            Id = 101, EmployeeId = 17, Bucket = "original", ObjectName = "original.png",
-            CreatedDate = new DateTime(2020, 1, 1), ModifiedDate = new DateTime(2020, 1, 2)
+            Id = 101,
+            EmployeeId = 17,
+            Bucket = "original",
+            ObjectName = "original.png",
+            CreatedDate = new DateTime(2020, 1, 1),
+            ModifiedDate = new DateTime(2020, 1, 2)
         });
         db.SignatureImageFiles.Add(new SignatureImageFile
         {
-            Id = 301, EmployeeId = 18, Bucket = "unrelated", ObjectName = "unrelated.png",
-            CreatedDate = new DateTime(2020, 1, 1), ModifiedDate = new DateTime(2020, 1, 2)
+            Id = 301,
+            EmployeeId = 18,
+            Bucket = "unrelated",
+            ObjectName = "unrelated.png",
+            CreatedDate = new DateTime(2020, 1, 1),
+            ModifiedDate = new DateTime(2020, 1, 2)
         });
         await db.SaveChangesAsync();
         fixture.Authorities.Clear();
