@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
@@ -67,7 +68,15 @@ public sealed class WorkflowContractTests
     [Fact]
     public void EfDesignDependency_IsOwnedByDataProjectOnly()
     {
-        Assert.DoesNotContain("Microsoft.EntityFrameworkCore.Design", ApiProject, StringComparison.Ordinal);
+        var project = XDocument.Parse(ApiProject);
+        var enabled = Assert.Single(project.Descendants("EnableEmployeeScaffoldDesignTime"));
+        Assert.Equal("false", enabled.Value);
+        Assert.Equal("'$(EnableEmployeeScaffoldDesignTime)' == ''", enabled.Attribute("Condition")?.Value);
+        var reference = Assert.Single(project.Descendants("PackageReference")
+            .Where(element => (string?)element.Attribute("Include") == "Microsoft.EntityFrameworkCore.Design"));
+        Assert.Equal("'$(EnableEmployeeScaffoldDesignTime)' == 'true'", reference.Attribute("Condition")?.Value);
+        Assert.Equal("10.0.12", reference.Attribute("Version")?.Value);
+        Assert.Equal("all", reference.Element("PrivateAssets")?.Value);
         Assert.Contains("Microsoft.EntityFrameworkCore.Design", DataProject, StringComparison.Ordinal);
     }
 

@@ -60,7 +60,7 @@ pagination fields `Items`, `PageIndex`, `TotalPages`, `TotalRecords`,
 `Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1` prepares a separate
 `EmployeeScaffoldContext` preview from an externally configured target database.
 Supply `ConnectionStrings__EmployeeDbContext` through the process environment,
-use an available `dotnet ef` tool with prebuilt API/Data output, and pass
+use an available `dotnet ef` tool with prebuilt Release API/Data output, and pass
 `-OutputDirectory` with a new absolute directory outside this repository.
 The preview selects only `Employee`, `Address`, `Role`, and `SignatureImageFile`.
 It leaves the registered runtime context and existing files unchanged and passes
@@ -71,6 +71,14 @@ and preserves its guard evidence with the ordinary validation artifacts. These
 checks do not prove real EF named-connection resolution, generated-code
 compilation, source database parity, or cutover readiness. Source SQL Server and
 legacy credential resources must never be supplied or refreshed by this tool.
+
+`EnableEmployeeScaffoldDesignTime=true` opts into a private API Design dependency
+for tooling only; the default API dependency graph remains unchanged. Build this
+mode into an external `ArtifactsPath`, retaining exact local dependency refs.
+The actual-EF hosted regression uses the existing disposable fixture and records
+sanitized generation, preview compilation, generated-model/query and cleanup
+evidence. See `docs/employee-actual-scaffold-proof-20261006.md`; until executed,
+these checks remain unaccepted and do not establish source SQL Server parity.
 
 ## Deployment gate
 

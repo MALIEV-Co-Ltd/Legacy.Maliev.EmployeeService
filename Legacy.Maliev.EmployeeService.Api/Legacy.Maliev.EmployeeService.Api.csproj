@@ -13,6 +13,7 @@
     <EmitCompilerGeneratedFiles Condition="'$(GITHUB_RUN_ID)' != ''">true</EmitCompilerGeneratedFiles>
     <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.OpenApi.Generated</InterceptorsNamespaces>
     <SharedLibraryVersion Condition="'$(SharedLibraryVersion)' == ''">1.0.*-*</SharedLibraryVersion>
+    <EnableEmployeeScaffoldDesignTime Condition="'$(EnableEmployeeScaffoldDesignTime)' == ''">false</EnableEmployeeScaffoldDesignTime>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(GITHUB_ACTIONS)' != 'true' Or '$(UseLocalMalievDependencies)' == 'true'">
@@ -26,6 +27,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Legacy.Maliev.EmployeeService.Application\Legacy.Maliev.EmployeeService.Application.csproj" />
     <ProjectReference Include="..\Legacy.Maliev.EmployeeService.Data\Legacy.Maliev.EmployeeService.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12" Condition="'$(EnableEmployeeScaffoldDesignTime)' == 'true'">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <Target Name="PreserveHostedCompilerEvidence" AfterTargets="Build"

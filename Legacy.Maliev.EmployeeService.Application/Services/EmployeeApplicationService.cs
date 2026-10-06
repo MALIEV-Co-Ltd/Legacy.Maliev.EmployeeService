@@ -9,6 +9,34 @@ public sealed class EmployeeApplicationService(
     IEmployeeCache cache) : IEmployeeService
 {
     /// <inheritdoc />
+    public async Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request,
+        string employeeVersion, string addressVersion, CancellationToken cancellationToken)
+    {
+        EmployeeHomeAddressEditResult result;
+        try { result = await repository.UpdateHomeAddressIfMatchAsync(id, request, employeeVersion, addressVersion, cancellationToken); }
+        catch (EmployeeHomeAddressCanceledException exception)
+        {
+            try { await InvalidateEmployeesAsync(exception.AffectedEmployeeIds, CancellationToken.None); }
+            catch (Exception) { }
+            throw;
+        }
+        catch (EmployeeHomeAddressUncertainException exception)
+        {
+            await InvalidateEmployeesAsync(exception.AffectedEmployeeIds, CancellationToken.None);
+            throw;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            try { await cache.RemoveAsync(id, CancellationToken.None); }
+            catch (Exception) { }
+            throw;
+        }
+        if (result.Outcome == EmployeeEditOutcome.Updated)
+            await InvalidateEmployeesAsync(result.AffectedEmployeeIds!, CancellationToken.None);
+        return result;
+    }
+
+    /// <inheritdoc />
     public Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken) =>
         repository.GetEmployeeAsync(id, cancellationToken);
 
@@ -33,6 +61,22 @@ public sealed class EmployeeApplicationService(
         }
 
         return updated;
+    }
+
+    /// <inheritdoc />
+    public async Task<EmployeeEditResult> UpdateEmployeeIfMatchAsync(int id, UpsertEmployeeRequest request, string version, CancellationToken cancellationToken)
+    {
+        EmployeeEditResult result;
+        try { result = await repository.UpdateEmployeeIfMatchAsync(id, request, version, cancellationToken); }
+        catch (Exception exception) when (exception is EmployeeEditUncertainException ||
+            exception is OperationCanceledException && cancellationToken.IsCancellationRequested)
+        {
+            try { await cache.RemoveAsync(id, CancellationToken.None); }
+            catch (Exception) when (exception is OperationCanceledException) { }
+            throw;
+        }
+        if (result.Outcome == EmployeeEditOutcome.Updated) await cache.RemoveAsync(id, CancellationToken.None);
+        return result;
     }
 
     /// <inheritdoc />
@@ -81,6 +125,23 @@ public sealed class EmployeeApplicationService(
         }
 
         return updated;
+    }
+
+    /// <inheritdoc />
+    public async Task<EmployeeEditResult> UpdateAddressIfMatchAsync(int id, UpsertAddressRequest request, string version, CancellationToken cancellationToken)
+    {
+        var employeeIds = await repository.GetEmployeeIdsForAddressAsync(id, cancellationToken);
+        EmployeeEditResult result;
+        try { result = await repository.UpdateAddressIfMatchAsync(id, request, version, cancellationToken); }
+        catch (Exception exception) when (exception is EmployeeEditUncertainException ||
+            exception is OperationCanceledException && cancellationToken.IsCancellationRequested)
+        {
+            try { await InvalidateEmployeesAsync(employeeIds, CancellationToken.None); }
+            catch (Exception) when (exception is OperationCanceledException) { }
+            throw;
+        }
+        if (result.Outcome == EmployeeEditOutcome.Updated) await InvalidateEmployeesAsync(employeeIds, CancellationToken.None);
+        return result;
     }
 
     /// <inheritdoc />

@@ -144,14 +144,21 @@ try {
         }
     }
 } finally {
-    [Environment]::SetEnvironmentVariable($connectionKey, $previous, 'Process')
-    [ordered]@{observedUtc=[DateTimeOffset]::UtcNow;scope='Actual PowerShell orchestration, recorded external CLI boundary; no EF/database execution';passed=@($script:Cases | Where-Object passed -eq $true).Count;failed=@($script:Cases | Where-Object passed -eq $false).Count;cases=$script:Cases;scaffoldScriptSha256=(Get-FileHash -LiteralPath $ScaffoldScript).Hash} |
-        ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $EvidencePath
-    $absolute = [IO.Path]::GetFullPath($fixture)
-    $temporary = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
-    if (!$absolute.StartsWith($temporary, [StringComparison]::OrdinalIgnoreCase) -or
-        [IO.Path]::GetFileName($absolute) -notmatch '^employee-scaffold-contract-[a-f0-9]{32}$') { throw 'Owned fixture cleanup boundary refused.' }
-    Remove-Item -LiteralPath $absolute -Recurse -Force
+    try {
+        [Environment]::SetEnvironmentVariable($connectionKey, $previous, 'Process')
+        [ordered]@{observedUtc=[DateTimeOffset]::UtcNow;scope='Actual PowerShell orchestration, recorded external CLI boundary; no EF/database execution';passed=@($script:Cases | Where-Object passed -eq $true).Count;failed=@($script:Cases | Where-Object passed -eq $false).Count;cases=$script:Cases;scaffoldScriptSha256=(Get-FileHash -LiteralPath $ScaffoldScript).Hash} |
+            ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $EvidencePath
+    } finally {
+        $absolute = [IO.Path]::GetFullPath($fixture)
+        $temporary = [IO.Path]::GetFullPath([IO.Path]::GetTempPath()).TrimEnd([IO.Path]::DirectorySeparatorChar, [IO.Path]::AltDirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+        if (!$absolute.StartsWith($temporary, [StringComparison]::OrdinalIgnoreCase) -or
+            [IO.Path]::GetFileName($absolute) -notmatch '^employee-scaffold-contract-[a-f0-9]{32}$') { throw 'Owned fixture cleanup boundary refused.' }
+        if (Test-Path -LiteralPath $absolute) {
+            if ((Get-Item -LiteralPath $absolute -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) { throw 'Owned fixture cleanup boundary refused.' }
+            Remove-Item -LiteralPath $absolute -Recurse -Force
+        }
+        if (Test-Path -LiteralPath $absolute) { throw 'Owned fixture cleanup did not remove the disposable directory.' }
+    }
 }
 if (@($script:Cases | Where-Object passed -eq $false).Count) { exit 1 }
 exit 0

@@ -2,12 +2,60 @@ using Legacy.Maliev.EmployeeService.Application.Interfaces;
 using Legacy.Maliev.EmployeeService.Application.Models;
 using Legacy.Maliev.EmployeeService.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Legacy.Maliev.EmployeeService.Data;
 
 /// <summary>Projection-first PostgreSQL employee repository.</summary>
 public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider timeProvider) : IEmployeeRepository
 {
+    /// <inheritdoc />
+    public Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request,
+        string employeeVersion, string addressVersion, CancellationToken cancellationToken) =>
+        dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
+        {
+            var commitAttempted = false;
+            int[] affected = [id];
+            try
+            {
+                await using var fresh = new EmployeeDbContext((DbContextOptions<EmployeeDbContext>)dbContext.GetService<IDbContextOptions>());
+                var writer = new EmployeeRepository(fresh, timeProvider);
+                await using var transaction = await fresh.Database.BeginTransactionAsync(cancellationToken);
+                var employee = await fresh.Employees.FromSqlInterpolated($"SELECT * FROM \"Employee\" WHERE \"ID\" = {id} FOR UPDATE")
+                    .SingleOrDefaultAsync(cancellationToken);
+                if (employee is null) return new EmployeeHomeAddressEditResult(EmployeeEditOutcome.NotFound);
+                var current = (await writer.GetEmployeeAsync(id, cancellationToken))!;
+                if (employee.HomeAddressId != request.AddressId ||
+                    !string.Equals(employeeVersion, EmployeeEditVersion.ForEmployee(current), StringComparison.Ordinal))
+                    return new EmployeeHomeAddressEditResult(EmployeeEditOutcome.PreconditionFailed);
+                // Ordinary profile writes must also acquire the employee row lock, so they cannot
+                // move this binding between our comparison and the address commit.
+                var address = await fresh.Addresses.FromSqlInterpolated($"SELECT * FROM \"Address\" WHERE \"ID\" = {request.AddressId} FOR UPDATE")
+                    .SingleOrDefaultAsync(cancellationToken);
+                if (address is null) return new EmployeeHomeAddressEditResult(EmployeeEditOutcome.NotFound);
+                var currentAddress = (await writer.GetAddressAsync(request.AddressId, cancellationToken))!;
+                if (!string.Equals(addressVersion, EmployeeEditVersion.ForAddress(currentAddress), StringComparison.Ordinal))
+                    return new EmployeeHomeAddressEditResult(EmployeeEditOutcome.PreconditionFailed);
+                await writer.UpdateAddressAsync(request.AddressId, request.Address(), cancellationToken);
+                await fresh.Entry(address).ReloadAsync(cancellationToken);
+                var updatedAddress = (await writer.GetAddressAsync(request.AddressId, cancellationToken))!;
+                affected = [.. (await writer.GetEmployeeIdsForAddressAsync(request.AddressId, cancellationToken)).Append(id).Distinct()];
+                commitAttempted = true;
+                await transaction.CommitAsync(cancellationToken);
+                return new EmployeeHomeAddressEditResult(EmployeeEditOutcome.Updated,
+                    EmployeeEditVersion.ForAddress(updatedAddress), employeeVersion, affected);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested && commitAttempted)
+            {
+                throw new EmployeeHomeAddressCanceledException(affected, cancellationToken);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+            catch (Exception) when (commitAttempted)
+            {
+                throw new EmployeeHomeAddressUncertainException(affected);
+            }
+        });
+
     /// <inheritdoc />
     public Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken) =>
         Project(dbContext.Employees.AsNoTracking().Where(employee => employee.Id == id)).SingleOrDefaultAsync(cancellationToken);
@@ -21,9 +69,9 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         CancellationToken cancellationToken)
     {
         IQueryable<Employee> query = dbContext.Employees.AsNoTracking();
-        if (!string.IsNullOrWhiteSpace(search))
+        if (!string.IsNullOrEmpty(search))
         {
-            var value = search.Trim();
+            var value = search;
             var numeric = int.TryParse(value, out var id);
             var escaped = value.Replace("\\", "\\\\", StringComparison.Ordinal)
                 .Replace("%", "\\%", StringComparison.Ordinal)
@@ -107,6 +155,38 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
     }
 
     /// <inheritdoc />
+    public Task<EmployeeEditResult> UpdateEmployeeIfMatchAsync(int id, UpsertEmployeeRequest request, string version, CancellationToken cancellationToken) =>
+        dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
+        {
+            var commitAttempted = false;
+            try
+            {
+                await using var fresh = new EmployeeDbContext((DbContextOptions<EmployeeDbContext>)dbContext.GetService<IDbContextOptions>());
+                var writer = new EmployeeRepository(fresh, timeProvider);
+                await using var transaction = await fresh.Database.BeginTransactionAsync(cancellationToken);
+                var entity = await fresh.Employees.FromSqlInterpolated($"SELECT * FROM \"Employee\" WHERE \"ID\" = {id} FOR UPDATE")
+                    .SingleOrDefaultAsync(cancellationToken);
+                if (entity is null) return new EmployeeEditResult(EmployeeEditOutcome.NotFound);
+                var current = (await writer.GetEmployeeAsync(id, cancellationToken))!;
+                if (!string.Equals(version, EmployeeEditVersion.ForEmployee(current), StringComparison.Ordinal))
+                    return new EmployeeEditResult(EmployeeEditOutcome.PreconditionFailed);
+                await writer.UpdateEmployeeAsync(id, request, cancellationToken);
+                // Reload PostgreSQL timestamp precision before returning a reusable version.
+                await fresh.Entry(entity).ReloadAsync(cancellationToken);
+                var updated = (await writer.GetEmployeeAsync(id, cancellationToken))!;
+                commitAttempted = true;
+                await transaction.CommitAsync(cancellationToken);
+                return new EmployeeEditResult(EmployeeEditOutcome.Updated, EmployeeEditVersion.ForEmployee(updated));
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+            catch (Exception) when (commitAttempted)
+            {
+                // Do not let retry classification turn a potentially committed write into stale412.
+                throw new EmployeeEditUncertainException();
+            }
+        });
+
+    /// <inheritdoc />
     public async Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken)
     {
         var entity = await dbContext.Employees.FindAsync([id], cancellationToken);
@@ -177,6 +257,37 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
+
+    /// <inheritdoc />
+    public Task<EmployeeEditResult> UpdateAddressIfMatchAsync(int id, UpsertAddressRequest request, string version, CancellationToken cancellationToken) =>
+        dbContext.Database.CreateExecutionStrategy().ExecuteAsync(async () =>
+        {
+            var commitAttempted = false;
+            try
+            {
+                await using var fresh = new EmployeeDbContext((DbContextOptions<EmployeeDbContext>)dbContext.GetService<IDbContextOptions>());
+                var writer = new EmployeeRepository(fresh, timeProvider);
+                await using var transaction = await fresh.Database.BeginTransactionAsync(cancellationToken);
+                var entity = await fresh.Addresses.FromSqlInterpolated($"SELECT * FROM \"Address\" WHERE \"ID\" = {id} FOR UPDATE")
+                    .SingleOrDefaultAsync(cancellationToken);
+                if (entity is null) return new EmployeeEditResult(EmployeeEditOutcome.NotFound);
+                var current = (await writer.GetAddressAsync(id, cancellationToken))!;
+                if (!string.Equals(version, EmployeeEditVersion.ForAddress(current), StringComparison.Ordinal))
+                    return new EmployeeEditResult(EmployeeEditOutcome.PreconditionFailed);
+                await writer.UpdateAddressAsync(id, request, cancellationToken);
+                await fresh.Entry(entity).ReloadAsync(cancellationToken);
+                var updated = (await writer.GetAddressAsync(id, cancellationToken))!;
+                commitAttempted = true;
+                await transaction.CommitAsync(cancellationToken);
+                return new EmployeeEditResult(EmployeeEditOutcome.Updated, EmployeeEditVersion.ForAddress(updated));
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { throw; }
+            catch (Exception) when (commitAttempted)
+            {
+                // Do not let retry classification turn a potentially committed write into stale412.
+                throw new EmployeeEditUncertainException();
+            }
+        });
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<int>> GetEmployeeIdsForAddressAsync(int id, CancellationToken cancellationToken) =>

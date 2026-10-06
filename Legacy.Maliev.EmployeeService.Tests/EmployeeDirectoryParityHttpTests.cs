@@ -7,6 +7,46 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
     : IClassFixture<EmployeeDirectoryParityFixture>
 {
     [Theory]
+    [InlineData("LastName")]
+    [InlineData("Email")]
+    [InlineData("PhoneNumber")]
+    public async Task SourceSearch_RemainingStoredTextFieldsMatchLiteralInputs(string field)
+    {
+        (string Literal, string Distractor)[] inputs =
+        [
+            ("Sales%Lead", "SalesXLead"),
+            ("Code_1", "CodeA1"),
+            ("Back\\Slash", "BackSlash"),
+            ("วิศวกร", "Engineer"),
+            ("  Engineer  ", "Engineer"),
+        ];
+        foreach (var (literal, distractor) in inputs)
+        {
+            await fixture.SeedAsync(StoredFieldRow(1, field, literal),
+                StoredFieldRow(2, field, distractor),
+                new(3, "Unrelated", "Employee", "unrelated@example.invalid"));
+            await AssertPageAsync($"search={Uri.EscapeDataString(literal)}", [1], 1, 1, 1);
+        }
+    }
+
+    [Fact]
+    public async Task SourceSearch_ComputedFullNameMatchesAcrossNameBoundary()
+    {
+        await fixture.SeedAsync(new(1, "Given", "Family", "target@example.invalid"),
+            new(2, "Given", "Other", "other@example.invalid"),
+            new(3, "Other", "Family", "third@example.invalid"));
+        await AssertPageAsync($"search={Uri.EscapeDataString("Given Family")}", [1], 1, 1, 1);
+    }
+
+    private static DirectoryRow StoredFieldRow(int id, string field, string value) => field switch
+    {
+        "LastName" => new(id, "Given", value, $"row-{id}@example.invalid"),
+        "Email" => new(id, "Given", "Family", value),
+        "PhoneNumber" => new(id, "Given", "Family", $"row-{id}@example.invalid", value),
+        _ => throw new ArgumentOutOfRangeException(nameof(field)),
+    };
+
+    [Theory]
     [InlineData("7")]
     [InlineData("007")]
     public async Task NumericSearch_SelectsOnlyExactEmployeeId(string search)
@@ -58,9 +98,10 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
     [InlineData("ENg", 1)]
     [InlineData("วิศว", 2)]
     [InlineData("  Engineer  ", 1)]
-    public async Task TextSearch_PreservesEnglishThaiAndTrimControls(string search, int id)
+    public async Task TextSearch_PreservesEnglishThaiAndSignificantPadding(string search, int id)
     {
-        await fixture.SeedAsync(new(1, "Engineer", "One", "one@example.invalid"),
+        var firstName = search == "  Engineer  " ? search : "Engineer";
+        await fixture.SeedAsync(new(1, firstName, "One", "one@example.invalid"),
             new(2, "วิศวกร", "ไทย", "two@example.invalid"));
         await AssertPageAsync($"search={Uri.EscapeDataString(search)}", [id], 1, 1, 1);
     }

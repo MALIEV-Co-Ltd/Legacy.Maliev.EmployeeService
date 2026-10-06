@@ -43,7 +43,7 @@ $arguments = @(
     '--namespace', 'Legacy.Maliev.EmployeeService.ScaffoldPreview',
     '--context-namespace', 'Legacy.Maliev.EmployeeService.ScaffoldPreview',
     '--output-dir', $destination, '--context-dir', $destination,
-    '--table', 'Employee', '--table', 'Address', '--table', 'Role', '--table', 'SignatureImageFile', '--no-onconfiguring', '--no-build'
+    '--configuration', 'Release', '--table', 'Employee', '--table', 'Address', '--table', 'Role', '--table', 'SignatureImageFile', '--no-onconfiguring', '--no-build'
 )
 try {
     $null = & dotnet @arguments 2>&1

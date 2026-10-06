@@ -6,6 +6,8 @@ namespace Legacy.Maliev.EmployeeService.Application.Interfaces;
 /// <summary>Employee application boundary.</summary>
 public interface IEmployeeService
 {
+    /// <summary>Fences the employee version, address binding and address version in one transaction.</summary>
+    Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request, string employeeVersion, string addressVersion, CancellationToken cancellationToken);
     /// <summary>Gets one employee.</summary>
     Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets a bounded employee page.</summary>
@@ -14,6 +16,8 @@ public interface IEmployeeService
     Task<EmployeeResponse> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an employee.</summary>
     Task<bool> UpdateEmployeeAsync(int id, UpsertEmployeeRequest request, CancellationToken cancellationToken);
+    /// <summary>Updates the employee only if the supplied edit version still matches.</summary>
+    Task<EmployeeEditResult> UpdateEmployeeIfMatchAsync(int id, UpsertEmployeeRequest request, string version, CancellationToken cancellationToken);
     /// <summary>Updates only employee-owned profile fields.</summary>
     Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken);
     /// <summary>Deletes an employee.</summary>
@@ -26,6 +30,8 @@ public interface IEmployeeService
     Task<AddressResponse> CreateAddressAsync(UpsertAddressRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an employee address.</summary>
     Task<bool> UpdateAddressAsync(int id, UpsertAddressRequest request, CancellationToken cancellationToken);
+    /// <summary>Updates the address only if the supplied edit version still matches.</summary>
+    Task<EmployeeEditResult> UpdateAddressIfMatchAsync(int id, UpsertAddressRequest request, string version, CancellationToken cancellationToken);
     /// <summary>Deletes an employee address.</summary>
     Task<bool> DeleteAddressAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets all employee roles.</summary>
@@ -51,6 +57,8 @@ public interface IEmployeeService
 /// <summary>Employee PostgreSQL persistence boundary.</summary>
 public interface IEmployeeRepository
 {
+    /// <summary>Locks the employee and its captured address before comparing either version or writing.</summary>
+    Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request, string employeeVersion, string addressVersion, CancellationToken cancellationToken);
     /// <summary>Gets one employee projection.</summary>
     Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets a bounded employee page.</summary>
@@ -59,6 +67,8 @@ public interface IEmployeeRepository
     Task<Employee> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an employee entity.</summary>
     Task<bool> UpdateEmployeeAsync(int id, UpsertEmployeeRequest request, CancellationToken cancellationToken);
+    /// <summary>Compares and updates the employee under one PostgreSQL row lock.</summary>
+    Task<EmployeeEditResult> UpdateEmployeeIfMatchAsync(int id, UpsertEmployeeRequest request, string version, CancellationToken cancellationToken);
     /// <summary>Atomically updates only employee-owned profile fields.</summary>
     Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken);
     /// <summary>Deletes an employee entity.</summary>
@@ -71,6 +81,8 @@ public interface IEmployeeRepository
     Task<Address> CreateAddressAsync(UpsertAddressRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an address entity.</summary>
     Task<bool> UpdateAddressAsync(int id, UpsertAddressRequest request, CancellationToken cancellationToken);
+    /// <summary>Compares and updates the address under one PostgreSQL row lock.</summary>
+    Task<EmployeeEditResult> UpdateAddressIfMatchAsync(int id, UpsertAddressRequest request, string version, CancellationToken cancellationToken);
     /// <summary>Gets employees whose cached projection references an address.</summary>
     Task<IReadOnlyList<int>> GetEmployeeIdsForAddressAsync(int id, CancellationToken cancellationToken);
     /// <summary>Deletes an address entity.</summary>

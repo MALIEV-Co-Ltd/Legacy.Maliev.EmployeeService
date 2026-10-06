@@ -38,6 +38,18 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
         return employee is null ? NotFound() : employee;
     }
 
+    /// <summary>Gets employee-owned edit fields and a strong conditional-edit version.</summary>
+    [HttpGet("{employeeId:int}/edit")]
+    [RequirePermission(EmployeePermissions.EmployeesRead, ResourcePathTemplate = "/employees/{employeeId}")]
+    public async Task<ActionResult<EmployeeEditResponse>> GetEmployeeEditAsync(int employeeId, CancellationToken cancellationToken)
+    {
+        var employee = await service.GetEmployeeAsync(employeeId, cancellationToken);
+        if (employee is null) return NotFound();
+        Response.Headers.ETag = EmployeeEditVersion.ForEmployee(employee);
+        Response.Headers.CacheControl = "no-store";
+        return EmployeeEditResponse.From(employee);
+    }
+
     /// <summary>Gets a bounded employee page.</summary>
     /// <param name="sort" example="EmployeeId_Ascending">The legacy employee sort value, supplied by its existing name or numeric value.</param>
     /// <param name="search">Text to search in the employee directory fields.</param>
@@ -64,6 +76,22 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
     {
         if (!Valid(item)) return BadRequest();
         return await service.UpdateEmployeeAsync(id, item, cancellationToken) ? NoContent() : NotFound();
+    }
+
+    /// <summary>Updates employee-owned fields only when the original edit version still matches.</summary>
+    [HttpPut("{id:int}/versioned")]
+    [RequirePermission(EmployeePermissions.EmployeesUpdate, ResourcePathTemplate = "/employees/{id}")]
+    public async Task<ActionResult> UpdateEmployeeVersionedAsync(int id, UpsertEmployeeRequest item, CancellationToken cancellationToken)
+    {
+        if (!Valid(item)) return BadRequest();
+        if (!EmployeeEditPrecondition.TryRead(Request, out var version)) return BadRequest();
+        if (version is null) return StatusCode(StatusCodes.Status428PreconditionRequired);
+        var result = await service.UpdateEmployeeIfMatchAsync(id, item, version, cancellationToken);
+        if (result.Outcome == EmployeeEditOutcome.NotFound) return NotFound();
+        if (result.Outcome == EmployeeEditOutcome.PreconditionFailed)
+            return StatusCode(StatusCodes.Status412PreconditionFailed);
+        Response.Headers.ETag = result.Version;
+        return NoContent();
     }
 
     /// <summary>Updates the authenticated employee's own non-administrative profile fields.</summary>
