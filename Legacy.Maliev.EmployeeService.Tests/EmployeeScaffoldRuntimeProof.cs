@@ -114,7 +114,11 @@ internal static class EmployeeScaffoldRuntimeProof
                     Directory.CreateDirectory(evidence);
                     await File.WriteAllTextAsync(Path.Combine(evidence, "employee-actual-scaffold.json"), JsonSerializer.Serialize(new
                     {
-                        lease, phases, generatedFiles, runtimeSourcesUnchanged, cleanupVerified,
+                        lease,
+                        phases,
+                        generatedFiles,
+                        runtimeSourcesUnchanged,
+                        cleanupVerified,
                         accepted = proofPassed && cleanupVerified,
                         remainingTemporaryDirectory = cleanupVerified ? null : full,
                         leaseExpiryUtc = DateTime.UtcNow.AddMinutes(20),
@@ -208,11 +212,14 @@ internal static class EmployeeScaffoldRuntimeProof
                 var exitCode = terminal ? process.ExitCode : -1;
                 phases[phaseIndex] = phases[phaseIndex] with
                 {
-                    TimedOut = timedOut, ExitCode = exitCode, Terminal = terminal,
+                    TimedOut = timedOut,
+                    ExitCode = exitCode,
+                    Terminal = terminal,
                     FailureCategory = cleanupFailed || !terminal || remainingOwned.Length != 0 ? "setup-cleanup-incomplete"
                         : timedOut ? "setup-timeout" : exitCode == 0 ? null
                         : phase == "generated-model-and-query-proof" && exitCode == 2 ? "runtime-contract-mismatch" : "setup-tool-or-compiler",
-                    OwnedProcesses = owned.Values.ToArray(), RemainingOwnedProcesses = remainingOwned,
+                    OwnedProcesses = owned.Values.ToArray(),
+                    RemainingOwnedProcesses = remainingOwned,
                     CleanupVerified = !cleanupFailed && terminal && remainingOwned.Length == 0,
                 };
             }
