@@ -69,9 +69,9 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         CancellationToken cancellationToken)
     {
         IQueryable<Employee> query = dbContext.Employees.AsNoTracking();
-        if (!string.IsNullOrWhiteSpace(search))
+        if (!string.IsNullOrEmpty(search))
         {
-            var value = search.Trim();
+            var value = search;
             var numeric = int.TryParse(value, out var id);
             var escaped = value.Replace("\\", "\\\\", StringComparison.Ordinal)
                 .Replace("%", "\\%", StringComparison.Ordinal)
