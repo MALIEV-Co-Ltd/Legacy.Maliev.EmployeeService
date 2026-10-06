@@ -10,9 +10,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+[Collection("Employee scaffold runtime")]
 public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    [Fact]
+    public async Task Scaffold_ActualEfPreviewBuildAndGeneratedQueriesPreserveMigratedOwnedGraph()
+    {
+        await ResetAsync();
+        var employee = await SeedGraphAsync();
+        await EmployeeScaffoldRuntimeProof.RunAsync(fixture, employee.Id);
+    }
+
     [Theory]
     [InlineData("employees", "legacy-employee.employees.create")]
     [InlineData("employees/addresses", "legacy-employee.addresses.create")]
