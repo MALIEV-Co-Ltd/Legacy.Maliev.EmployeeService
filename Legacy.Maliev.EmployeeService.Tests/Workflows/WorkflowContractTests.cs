@@ -21,6 +21,15 @@ public sealed class WorkflowContractTests
         WorkflowContractValidator.Validate(Workflow);
     }
 
+    [Theory]
+    [InlineData("shell: pwsh", "shell: bash")]
+    [InlineData("./tooling/Test-EmployeeScaffoldContract.ps1", "./tooling/UnreviewedScaffold.ps1")]
+    [InlineData("./runner-results/employee-scaffold-orchestration.json", "./discarded-scaffold-evidence.json")]
+    public void BuildAndTest_RejectsAlteredScaffoldGuardBoundary(string original, string replacement)
+    {
+        AssertMutationRejected(original, replacement);
+    }
+
     [Fact]
     public void BuildAndTest_RejectsSharedActionMainWithPinnedShaComment()
     {
@@ -187,9 +196,9 @@ internal static partial class WorkflowContractValidator
         RejectDuplicatedValidationActionsAndCommands(jobs);
 
         var steps = RequireSequence(validateJob, "steps");
-        if (steps.Children.Count != 6)
+        if (steps.Children.Count != 7)
         {
-            throw new InvalidOperationException("Validate job must contain four validation and two evidence steps.");
+            throw new InvalidOperationException("Validate job must contain four validation, one scaffold guard, and two evidence steps.");
         }
 
         var environment = RequireMapping(validateJob, "env");
@@ -203,7 +212,16 @@ internal static partial class WorkflowContractValidator
         RequireScalarValue(environment, "VSTestLogger", "trx");
         RequireScalarValue(environment, "VSTestResultsDirectory", "${{ github.workspace }}/runner-results");
 
-        var gate = RequireMapping(steps.Children[4], "coverage gate");
+        var scaffold = RequireMapping(steps.Children[4], "scaffold guard");
+        if (scaffold.Children.Count != 3)
+        {
+            throw new InvalidOperationException("Scaffold guard must contain only name, shell, and run.");
+        }
+
+        RequireScalarValue(scaffold, "name", "Validate safe scaffold orchestration");
+        RequireScalarValue(scaffold, "shell", "pwsh");
+        RequireScalarValue(scaffold, "run", "./tooling/Test-EmployeeScaffoldContract.ps1 -EvidencePath ./runner-results/employee-scaffold-orchestration.json");
+        var gate = RequireMapping(steps.Children[5], "coverage gate");
         if (gate.Children.Count != 2)
         {
             throw new InvalidOperationException("Coverage gate must contain only name and run.");
@@ -211,7 +229,7 @@ internal static partial class WorkflowContractValidator
 
         RequireScalarValue(gate, "name", "Gate owned production coverage");
         RequireScalarValue(gate, "run", "python3 scripts/verify-runner-coverage.py runner-results");
-        var evidence = RequireMapping(steps.Children[5], "evidence upload");
+        var evidence = RequireMapping(steps.Children[6], "evidence upload");
         if (evidence.Children.Count != 4)
         {
             throw new InvalidOperationException("Evidence upload must contain exactly name, if, uses and with.");

@@ -55,6 +55,23 @@ pagination fields `Items`, `PageIndex`, `TotalPages`, `TotalRecords`,
 - Redis prefix: `legacy:employee:`; authorized employee projections are short-lived,
   fail open to PostgreSQL, and are invalidated after employee/address/role changes.
 
+## External scaffold preview
+
+`Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1` prepares a separate
+`EmployeeScaffoldContext` preview from an externally configured target database.
+Supply `ConnectionStrings__EmployeeDbContext` through the process environment,
+use an available `dotnet ef` tool with prebuilt API/Data output, and pass
+`-OutputDirectory` with a new absolute directory outside this repository.
+The preview selects only `Employee`, `Address`, `Role`, and `SignatureImageFile`.
+It leaves the registered runtime context and existing files unchanged and passes
+the connection's setting name, rather than its value, to the tool.
+
+CI runs `tooling/Test-EmployeeScaffoldContract.ps1` against a recorded CLI boundary
+and preserves its guard evidence with the ordinary validation artifacts. These
+checks do not prove real EF named-connection resolution, generated-code
+compilation, source database parity, or cutover readiness. Source SQL Server and
+legacy credential resources must never be supplied or refreshed by this tool.
+
 ## Deployment gate
 
 Extraction does not deploy. Cutover requires a dedicated `legacy-maliev-employee`
