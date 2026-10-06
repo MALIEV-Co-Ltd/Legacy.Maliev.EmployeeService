@@ -6,6 +6,8 @@ namespace Legacy.Maliev.EmployeeService.Application.Interfaces;
 /// <summary>Employee application boundary.</summary>
 public interface IEmployeeService
 {
+    /// <summary>Fences the employee version, address binding and address version in one transaction.</summary>
+    Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request, string employeeVersion, string addressVersion, CancellationToken cancellationToken);
     /// <summary>Gets one employee.</summary>
     Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets a bounded employee page.</summary>
@@ -55,6 +57,8 @@ public interface IEmployeeService
 /// <summary>Employee PostgreSQL persistence boundary.</summary>
 public interface IEmployeeRepository
 {
+    /// <summary>Locks the employee and its captured address before comparing either version or writing.</summary>
+    Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request, string employeeVersion, string addressVersion, CancellationToken cancellationToken);
     /// <summary>Gets one employee projection.</summary>
     Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken);
     /// <summary>Gets a bounded employee page.</summary>

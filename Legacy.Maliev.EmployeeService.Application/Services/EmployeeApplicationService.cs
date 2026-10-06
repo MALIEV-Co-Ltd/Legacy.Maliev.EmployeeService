@@ -9,6 +9,34 @@ public sealed class EmployeeApplicationService(
     IEmployeeCache cache) : IEmployeeService
 {
     /// <inheritdoc />
+    public async Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request,
+        string employeeVersion, string addressVersion, CancellationToken cancellationToken)
+    {
+        EmployeeHomeAddressEditResult result;
+        try { result = await repository.UpdateHomeAddressIfMatchAsync(id, request, employeeVersion, addressVersion, cancellationToken); }
+        catch (EmployeeHomeAddressCanceledException exception)
+        {
+            try { await InvalidateEmployeesAsync(exception.AffectedEmployeeIds, CancellationToken.None); }
+            catch (Exception) { }
+            throw;
+        }
+        catch (EmployeeHomeAddressUncertainException exception)
+        {
+            await InvalidateEmployeesAsync(exception.AffectedEmployeeIds, CancellationToken.None);
+            throw;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            try { await cache.RemoveAsync(id, CancellationToken.None); }
+            catch (Exception) { }
+            throw;
+        }
+        if (result.Outcome == EmployeeEditOutcome.Updated)
+            await InvalidateEmployeesAsync(result.AffectedEmployeeIds!, CancellationToken.None);
+        return result;
+    }
+
+    /// <inheritdoc />
     public Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken) =>
         repository.GetEmployeeAsync(id, cancellationToken);
 
