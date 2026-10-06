@@ -78,7 +78,7 @@ public sealed class EmployeeControllerContractTests
     [Fact]
     public void RelatedControllers_PreserveFourteenLegacyActions()
     {
-        Assert.Equal(5, PublicActions<AddressesController>());
+        Assert.Equal(6, PublicActions<AddressesController>());
         Assert.Equal(5, PublicActions<RolesController>());
         Assert.Equal(4, PublicActions<SignaturesController>());
         AssertAction<SignaturesController>(nameof(SignaturesController.CreateSignatureImageFileEntryAsync), "/employees/{employeeId:int}/[controller]", typeof(HttpPostAttribute));

@@ -36,6 +36,22 @@ public sealed class EmployeeApplicationService(
     }
 
     /// <inheritdoc />
+    public async Task<EmployeeEditResult> UpdateEmployeeIfMatchAsync(int id, UpsertEmployeeRequest request, string version, CancellationToken cancellationToken)
+    {
+        EmployeeEditResult result;
+        try { result = await repository.UpdateEmployeeIfMatchAsync(id, request, version, cancellationToken); }
+        catch (Exception exception) when (exception is EmployeeEditUncertainException ||
+            exception is OperationCanceledException && cancellationToken.IsCancellationRequested)
+        {
+            try { await cache.RemoveAsync(id, CancellationToken.None); }
+            catch (Exception) when (exception is OperationCanceledException) { }
+            throw;
+        }
+        if (result.Outcome == EmployeeEditOutcome.Updated) await cache.RemoveAsync(id, CancellationToken.None);
+        return result;
+    }
+
+    /// <inheritdoc />
     public async Task<bool> UpdateSelfProfileAsync(int id, UpdateEmployeeSelfProfileRequest request, CancellationToken cancellationToken)
     {
         var updated = await repository.UpdateSelfProfileAsync(id, request, cancellationToken);
@@ -81,6 +97,23 @@ public sealed class EmployeeApplicationService(
         }
 
         return updated;
+    }
+
+    /// <inheritdoc />
+    public async Task<EmployeeEditResult> UpdateAddressIfMatchAsync(int id, UpsertAddressRequest request, string version, CancellationToken cancellationToken)
+    {
+        var employeeIds = await repository.GetEmployeeIdsForAddressAsync(id, cancellationToken);
+        EmployeeEditResult result;
+        try { result = await repository.UpdateAddressIfMatchAsync(id, request, version, cancellationToken); }
+        catch (Exception exception) when (exception is EmployeeEditUncertainException ||
+            exception is OperationCanceledException && cancellationToken.IsCancellationRequested)
+        {
+            try { await InvalidateEmployeesAsync(employeeIds, CancellationToken.None); }
+            catch (Exception) when (exception is OperationCanceledException) { }
+            throw;
+        }
+        if (result.Outcome == EmployeeEditOutcome.Updated) await InvalidateEmployeesAsync(employeeIds, CancellationToken.None);
+        return result;
     }
 
     /// <inheritdoc />

@@ -51,7 +51,10 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
     public async Task<ActionResult<AddressResponse>> GetAddressAsync(int addressId, CancellationToken cancellationToken)
     {
         var address = await service.GetAddressAsync(addressId, cancellationToken);
-        return address is null ? NotFound() : address;
+        if (address is null) return NotFound();
+        Response.Headers.ETag = EmployeeEditVersion.ForAddress(address);
+        Response.Headers.CacheControl = "no-store";
+        return address;
     }
 
     /// <summary>Gets all employee addresses.</summary>
@@ -78,6 +81,23 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
     [RequirePermission(EmployeePermissions.AddressesUpdate, ResourcePathTemplate = "/employees/addresses/{addressId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdateAddressAsync(int addressId, UpsertAddressRequest item, CancellationToken cancellationToken) =>
-        await service.UpdateAddressAsync(addressId, item, cancellationToken) ? NoContent() : NotFound();
+    public async Task<ActionResult> UpdateAddressAsync(int addressId, UpsertAddressRequest item, CancellationToken cancellationToken)
+    {
+        return await service.UpdateAddressAsync(addressId, item, cancellationToken) ? NoContent() : NotFound();
+    }
+
+    /// <summary>Updates an address only when the original edit version still matches.</summary>
+    [HttpPut("{addressId:int}/versioned")]
+    [RequirePermission(EmployeePermissions.AddressesUpdate, ResourcePathTemplate = "/employees/addresses/{addressId}")]
+    public async Task<ActionResult> UpdateAddressVersionedAsync(int addressId, UpsertAddressRequest item, CancellationToken cancellationToken)
+    {
+        if (!EmployeeEditPrecondition.TryRead(Request, out var version)) return BadRequest();
+        if (version is null) return StatusCode(StatusCodes.Status428PreconditionRequired);
+        var result = await service.UpdateAddressIfMatchAsync(addressId, item, version, cancellationToken);
+        if (result.Outcome == EmployeeEditOutcome.NotFound) return NotFound();
+        if (result.Outcome == EmployeeEditOutcome.PreconditionFailed)
+            return StatusCode(StatusCodes.Status412PreconditionFailed);
+        Response.Headers.ETag = result.Version;
+        return NoContent();
+    }
 }
