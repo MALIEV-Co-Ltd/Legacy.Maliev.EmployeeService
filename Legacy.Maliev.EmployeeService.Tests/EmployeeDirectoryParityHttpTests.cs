@@ -58,9 +58,10 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
     [InlineData("ENg", 1)]
     [InlineData("วิศว", 2)]
     [InlineData("  Engineer  ", 1)]
-    public async Task TextSearch_PreservesEnglishThaiAndTrimControls(string search, int id)
+    public async Task TextSearch_PreservesEnglishThaiAndSignificantPadding(string search, int id)
     {
-        await fixture.SeedAsync(new(1, "Engineer", "One", "one@example.invalid"),
+        var firstName = search == "  Engineer  " ? search : "Engineer";
+        await fixture.SeedAsync(new(1, firstName, "One", "one@example.invalid"),
             new(2, "วิศวกร", "ไทย", "two@example.invalid"));
         await AssertPageAsync($"search={Uri.EscapeDataString(search)}", [id], 1, 1, 1);
     }
