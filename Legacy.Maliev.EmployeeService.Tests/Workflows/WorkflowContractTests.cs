@@ -72,8 +72,8 @@ public sealed class WorkflowContractTests
         var enabled = Assert.Single(project.Descendants("EnableEmployeeScaffoldDesignTime"));
         Assert.Equal("false", enabled.Value);
         Assert.Equal("'$(EnableEmployeeScaffoldDesignTime)' == ''", enabled.Attribute("Condition")?.Value);
-        var reference = Assert.Single(project.Descendants("PackageReference")
-            .Where(element => (string?)element.Attribute("Include") == "Microsoft.EntityFrameworkCore.Design"));
+        var reference = Assert.Single(project.Descendants("PackageReference"),
+            element => (string?)element.Attribute("Include") == "Microsoft.EntityFrameworkCore.Design");
         Assert.Equal("'$(EnableEmployeeScaffoldDesignTime)' == 'true'", reference.Attribute("Condition")?.Value);
         Assert.Equal("10.0.12", reference.Attribute("Version")?.Value);
         Assert.Equal("all", reference.Element("PrivateAssets")?.Value);
