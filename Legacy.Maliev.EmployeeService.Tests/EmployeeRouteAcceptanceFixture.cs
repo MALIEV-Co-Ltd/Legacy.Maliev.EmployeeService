@@ -73,17 +73,21 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
             services.ConfigureDbContext<EmployeeDbContext>(options => options.AddInterceptors(new ScheduledDatabaseReader(schedule)))));
 
     public HttpClient Client(string permission, string resource = "global", string authority = "valid",
-        string decision = "allow", WebApplicationFactory<Program>? factory = null)
+        string decision = "allow", WebApplicationFactory<Program>? factory = null,
+        IReadOnlyDictionary<string, string>? additionalPermissions = null, string[]? permissionClaims = null)
     {
         var client = (factory ?? Factory).CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
         if (authority == "anonymous") return client;
         var principal = "service:route-" + Guid.NewGuid().ToString("N");
         // An authority-refusal scenario must also be denied by the authoritative
         // live IAM response; a missing cached JWT permission is not a live denial.
-        var expectation = new RouteAuthority(permission, resource, authority == "missing-permission" ? "deny" : decision);
+        var expectation = new RouteAuthority(permission, resource, authority == "missing-permission" ? "deny" : decision)
+        { AdditionalResources = additionalPermissions };
         Authorities[principal] = expectation;
         var claims = new List<Claim> { new(JwtRegisteredClaimNames.Sub, principal) };
-        if (authority != "missing-permission") claims.Add(new("permissions", permission));
+        if (authority != "missing-permission")
+            claims.AddRange((permissionClaims ?? [permission, .. (additionalPermissions?.Keys ?? [])])
+                .Select(value => new Claim("permissions", value)));
         var now = DateTime.UtcNow;
         var token = new JwtSecurityToken(authority == "wrong-issuer" ? "https://wrong.example.invalid" : Issuer,
             authority == "wrong-audience" ? "wrong-audience" : Audience, claims,
@@ -144,8 +148,13 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
                 json.EnumerateObject().Select(property => property.Name).Order(StringComparer.Ordinal).ToArray());
             var principal = json.GetProperty("principalId").GetString()!;
             Assert.True(fixture.Authorities.TryGetValue(principal, out var expected));
-            Assert.Equal(expected!.Permission, json.GetProperty("permissionId").GetString());
-            Assert.Equal(expected.Resource, json.GetProperty("resourcePath").GetString());
+            var permission = json.GetProperty("permissionId").GetString()!;
+            Assert.NotNull(expected);
+            var resource = expected.AdditionalResources is not null && expected.AdditionalResources.TryGetValue(permission, out var additionalResource)
+                ? additionalResource : expected.Resource;
+            if (expected.AdditionalResources is null || !expected.AdditionalResources.ContainsKey(permission))
+                Assert.Equal(expected.Permission, permission);
+            Assert.Equal(resource, json.GetProperty("resourcePath").GetString());
             var live = json.GetProperty("bypassCache").GetBoolean();
             Interlocked.Increment(ref expected.Calls);
             if (live)
@@ -164,8 +173,8 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
                     : JsonSerializer.Serialize(new
                     {
                         principalId = expected.ResolvedPrincipalId,
-                        permissionId = expected.Permission,
-                        resourcePath = expected.Resource,
+                        permissionId = permission,
+                        resourcePath = resource,
                         allowed = live && expected.Decision == "allow",
                         fromCache = false,
                         latencyMs = 0
@@ -240,6 +249,7 @@ internal sealed class ScheduledRedisCache(IDistributedCache actual, CachePublish
 
 public sealed class RouteAuthority(string permission, string resource, string decision)
 {
+    public IReadOnlyDictionary<string, string>? AdditionalResources { get; init; }
     public Guid ResolvedPrincipalId { get; } = Guid.NewGuid();
     public string Permission { get; } = permission;
     public string Resource { get; } = resource;

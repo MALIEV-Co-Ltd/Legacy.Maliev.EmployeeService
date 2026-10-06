@@ -137,4 +137,46 @@ public sealed class EmployeeApplicationServiceTests
     }
 
     private static EmployeeResponse SampleEmployee() => new(7, 2, "Ada", "Lovelace", "Ada Lovelace", null, "ada@example.com", null, null, null, null, null, null);
+
+    [Fact]
+    public async Task HomeAddressConditionalEdit_PostReturnCancellationCannotCancelLinkedCacheCleanup()
+    {
+        using var cancellation = new CancellationTokenSource();
+        var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        var cache = new Mock<IEmployeeCache>(MockBehavior.Strict);
+        var committed = new EmployeeHomeAddressEditResult(EmployeeEditOutcome.Updated, "address-version", "employee-version", [7, 8]);
+        repository.Setup(value => value.UpdateHomeAddressIfMatchAsync(7, It.IsAny<EmployeeHomeAddressEditRequest>(), "employee-version", "address-version", cancellation.Token))
+            .Callback(() => cancellation.Cancel()).ReturnsAsync(committed);
+        cache.Setup(value => value.RemoveAsync(7, CancellationToken.None)).Returns(Task.CompletedTask);
+        cache.Setup(value => value.RemoveAsync(8, CancellationToken.None)).Returns(Task.CompletedTask);
+        var service = new EmployeeApplicationService(repository.Object, cache.Object);
+        Assert.Same(committed, await service.UpdateHomeAddressIfMatchAsync(7,
+            new EmployeeHomeAddressEditRequest(13, null, "Road", null, null, null, null, 764), "employee-version", "address-version", cancellation.Token));
+        repository.VerifyAll();
+        cache.VerifyAll();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task HomeAddressConditionalEdit_CallerCancellationSurvivesCacheCleanupFailure(bool commitAttempted)
+    {
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+        var error = commitAttempted
+            ? new EmployeeHomeAddressCanceledException([7, 8], cancellation.Token)
+            : new OperationCanceledException(cancellation.Token);
+        var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        var cache = new Mock<IEmployeeCache>(MockBehavior.Strict);
+        repository.Setup(value => value.UpdateHomeAddressIfMatchAsync(7, It.IsAny<EmployeeHomeAddressEditRequest>(), "employee-version", "address-version", cancellation.Token))
+            .ThrowsAsync(error);
+        cache.Setup(value => value.RemoveAsync(7, CancellationToken.None)).ThrowsAsync(new InvalidOperationException("Cache unavailable"));
+        if (commitAttempted) cache.Setup(value => value.RemoveAsync(8, CancellationToken.None)).Returns(Task.CompletedTask);
+        var service = new EmployeeApplicationService(repository.Object, cache.Object);
+        var actual = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => service.UpdateHomeAddressIfMatchAsync(7,
+            new EmployeeHomeAddressEditRequest(13, null, "Road", null, null, null, null, 764), "employee-version", "address-version", cancellation.Token));
+        Assert.Same(error, actual);
+        repository.VerifyAll();
+        cache.VerifyAll();
+    }
 }
