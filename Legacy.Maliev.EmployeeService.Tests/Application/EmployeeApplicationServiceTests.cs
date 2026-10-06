@@ -73,5 +73,68 @@ public sealed class EmployeeApplicationServiceTests
         cache.VerifyAll();
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ConditionalEdit_CancellationAfterCommittedResult_CannotCancelCacheCleanup(bool address)
+    {
+        using var cancellation = new CancellationTokenSource();
+        var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        var cache = new Mock<IEmployeeCache>(MockBehavior.Strict);
+        var committed = new EmployeeEditResult(EmployeeEditOutcome.Updated, "new-version");
+        if (address)
+        {
+            repository.Setup(value => value.GetEmployeeIdsForAddressAsync(7, cancellation.Token)).ReturnsAsync([7, 8]);
+            repository.Setup(value => value.UpdateAddressIfMatchAsync(7, It.IsAny<UpsertAddressRequest>(), "version", cancellation.Token))
+                .Callback(() => cancellation.Cancel()).ReturnsAsync(committed);
+            cache.Setup(value => value.RemoveAsync(8, CancellationToken.None)).Returns(Task.CompletedTask);
+        }
+        else
+        {
+            repository.Setup(value => value.UpdateEmployeeIfMatchAsync(7, It.IsAny<UpsertEmployeeRequest>(), "version", cancellation.Token))
+                .Callback(() => cancellation.Cancel()).ReturnsAsync(committed);
+        }
+        cache.Setup(value => value.RemoveAsync(7, CancellationToken.None)).Returns(Task.CompletedTask);
+        var service = new EmployeeApplicationService(repository.Object, cache.Object);
+        var actual = address
+            ? await service.UpdateAddressIfMatchAsync(7, new UpsertAddressRequest(null, "Road", null, null, null, null, 764), "version", cancellation.Token)
+            : await service.UpdateEmployeeIfMatchAsync(7, new UpsertEmployeeRequest(null, "Ada", "Fixture", null, "ada@example.test", null, null), "version", cancellation.Token);
+        Assert.Same(committed, actual);
+        Assert.True(cancellation.IsCancellationRequested);
+        repository.VerifyAll();
+        cache.VerifyAll();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ConditionalEdit_CallerCancellationIsPreservedEvenWhenCacheCleanupFails(bool address)
+    {
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+        var canceled = new OperationCanceledException(cancellation.Token);
+        var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        var cache = new Mock<IEmployeeCache>(MockBehavior.Strict);
+        if (address)
+        {
+            repository.Setup(value => value.GetEmployeeIdsForAddressAsync(7, cancellation.Token)).ReturnsAsync([7]);
+            repository.Setup(value => value.UpdateAddressIfMatchAsync(7, It.IsAny<UpsertAddressRequest>(), "version", cancellation.Token)).ThrowsAsync(canceled);
+        }
+        else
+        {
+            repository.Setup(value => value.UpdateEmployeeIfMatchAsync(7, It.IsAny<UpsertEmployeeRequest>(), "version", cancellation.Token)).ThrowsAsync(canceled);
+        }
+        cache.Setup(value => value.RemoveAsync(7, CancellationToken.None)).ThrowsAsync(new InvalidOperationException("Cache unavailable"));
+        var service = new EmployeeApplicationService(repository.Object, cache.Object);
+        var actual = await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+        {
+            if (address) await service.UpdateAddressIfMatchAsync(7, new UpsertAddressRequest(null, "Road", null, null, null, null, 764), "version", cancellation.Token);
+            else await service.UpdateEmployeeIfMatchAsync(7, new UpsertEmployeeRequest(null, "Ada", "Fixture", null, "ada@example.test", null, null), "version", cancellation.Token);
+        });
+        Assert.Same(canceled, actual);
+        repository.VerifyAll();
+        cache.VerifyAll();
+    }
+
     private static EmployeeResponse SampleEmployee() => new(7, 2, "Ada", "Lovelace", "Ada Lovelace", null, "ada@example.com", null, null, null, null, null, null);
 }
