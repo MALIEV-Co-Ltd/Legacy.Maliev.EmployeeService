@@ -366,7 +366,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         {
             EmployeeId = employeeId,
             Bucket = request.Bucket.Trim(),
-            ObjectName = request.ObjectName.Trim(),
+            ObjectName = request.ObjectName,
             CreatedDate = now,
             ModifiedDate = now,
         };
@@ -395,7 +395,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
 
         entity.EmployeeId = request.EmployeeId ?? employeeId;
         entity.Bucket = request.Bucket.Trim();
-        entity.ObjectName = request.ObjectName.Trim();
+        entity.ObjectName = request.ObjectName;
         entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
         return true;

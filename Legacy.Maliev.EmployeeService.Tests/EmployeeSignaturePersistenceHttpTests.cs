@@ -96,6 +96,50 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task SignificantObjectNamePadding_QueryAndBodyPreserveExactStoredIdentity(bool update)
+    {
+        await SeedAsync(update);
+        const string objectName = "  signatures/ลายเซ็น +%?.png  ";
+        var before = await SnapshotAsync(update ? 101 : null);
+        var beforeWrite = DateTime.UtcNow;
+        using var writer = Writer(update);
+        using var response = await SendAsync(writer, update, "synthetic-private", objectName);
+        var afterWrite = DateTime.UtcNow;
+        Assert.Equal(update ? HttpStatusCode.NoContent : HttpStatusCode.Created, response.StatusCode);
+        await using var db = fixture.CreateContext();
+        var saved = await db.SignatureImageFiles.AsNoTracking().SingleAsync(row => row.EmployeeId == 17);
+        Assert.Equal(objectName, saved.ObjectName);
+        Assert.Equal("synthetic-private", saved.Bucket);
+        Assert.NotNull(saved.ModifiedDate);
+        Assert.InRange(saved.ModifiedDate.Value, beforeWrite.AddSeconds(-1), afterWrite.AddSeconds(1));
+        Assert.Equal(before, await SnapshotAsync(saved.Id));
+        if (update)
+        {
+            Assert.Equal(101, saved.Id);
+            Assert.Equal(new DateTime(2020, 1, 1), saved.CreatedDate);
+        }
+        else
+        {
+            Assert.NotNull(saved.CreatedDate);
+            Assert.InRange(saved.CreatedDate.Value, beforeWrite.AddSeconds(-1), afterWrite.AddSeconds(1));
+            Assert.EndsWith("/employees/signatures/17", response.Headers.Location!.ToString(), StringComparison.OrdinalIgnoreCase);
+            using var acknowledgement = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            Assert.Equal(saved.Id, acknowledgement.RootElement.GetProperty("Id").GetInt32());
+            Assert.Equal(objectName, acknowledgement.RootElement.GetProperty("ObjectName").GetString());
+        }
+        using var reader = fixture.Client("legacy-employee.signatures.read", "/employees/17/signature");
+        using var read = await reader.GetAsync("/employees/signatures/17/");
+        Assert.Equal(HttpStatusCode.OK, read.StatusCode);
+        using var json = JsonDocument.Parse(await read.Content.ReadAsStringAsync());
+        Assert.Equal(saved.Id, json.RootElement.GetProperty("Id").GetInt32());
+        Assert.Equal(objectName, json.RootElement.GetProperty("ObjectName").GetString());
+        Assert.False(json.RootElement.TryGetProperty("objectName", out _));
+        fixture.IamTransportEvidence.AssertHealthy();
+    }
+
     private HttpClient Writer(bool update) => fixture.Client("legacy-employee.signatures.write",
         update ? "/employees/17/signature" : "/employees/17");
 
@@ -142,13 +186,13 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
         Assert.Equal(new DateTime(2020, 1, 2), unrelated.ModifiedDate);
     }
 
-    private async Task<string> SnapshotAsync()
+    private async Task<string> SnapshotAsync(int? excludedSignatureId = null)
     {
         await using var db = fixture.CreateContext();
         return JsonSerializer.Serialize(new
         {
             Employees = await db.Employees.AsNoTracking().OrderBy(row => row.Id).ToArrayAsync(),
-            Signatures = await db.SignatureImageFiles.AsNoTracking().OrderBy(row => row.Id).ToArrayAsync()
+            Signatures = await db.SignatureImageFiles.AsNoTracking().Where(row => excludedSignatureId == null || row.Id != excludedSignatureId).OrderBy(row => row.Id).ToArrayAsync()
         });
     }
 }
