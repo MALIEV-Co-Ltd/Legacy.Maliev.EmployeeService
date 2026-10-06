@@ -154,3 +154,4 @@ try {
     Remove-Item -LiteralPath $absolute -Recurse -Force
 }
 if (@($script:Cases | Where-Object passed -eq $false).Count) { exit 1 }
+exit 0
