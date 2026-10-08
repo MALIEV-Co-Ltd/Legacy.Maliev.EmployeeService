@@ -4,15 +4,29 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - '.gitattributes'
+      - '.gitattributes'
       - 'scripts/employee_owned_receipts.py'
       - 'scripts/test_employee_owned_receipts.py'
+      - 'scripts/employee_linux_custody.py'
+      - 'scripts/test_employee_linux_custody.py'
+      - 'scripts/employee_linux_sdk_owner.py'
+      - 'scripts/test_employee_linux_sdk_owner.py'
+      - 'scripts/test_employee_custody_descriptors.py'
       - 'docs/employee-owned-receipts.md'
       - '.github/workflows/employee-owned-receipts.yml'
   push:
     branches: [main]
     paths:
+      - '.gitattributes'
+      - '.gitattributes'
       - 'scripts/employee_owned_receipts.py'
       - 'scripts/test_employee_owned_receipts.py'
+      - 'scripts/employee_linux_custody.py'
+      - 'scripts/test_employee_linux_custody.py'
+      - 'scripts/employee_linux_sdk_owner.py'
+      - 'scripts/test_employee_linux_sdk_owner.py'
+      - 'scripts/test_employee_custody_descriptors.py'
       - 'docs/employee-owned-receipts.md'
       - '.github/workflows/employee-owned-receipts.yml'
 
@@ -41,8 +55,8 @@ jobs:
           set -euo pipefail
           ulimit -v 262144
           ulimit -t 90
-          python3 -B -c 'import ast; from pathlib import Path; [ast.parse((Path("scripts")/name).read_bytes(), filename=name) for name in ("employee_owned_receipts.py", "test_employee_owned_receipts.py")]'
-          sha256sum scripts/employee_owned_receipts.py scripts/test_employee_owned_receipts.py > "$RUNNER_TEMP/employee-owned-receipts-source.sha256"
+          python3 -B -c 'import ast; from pathlib import Path; [ast.parse((Path("scripts")/name).read_bytes(), filename=name) for name in ("employee_owned_receipts.py", "test_employee_owned_receipts.py", "employee_linux_custody.py", "test_employee_linux_custody.py", "employee_linux_sdk_owner.py", "test_employee_linux_sdk_owner.py", "test_employee_custody_descriptors.py")]'
+          sha256sum scripts/employee_owned_receipts.py scripts/test_employee_owned_receipts.py scripts/employee_linux_custody.py scripts/test_employee_linux_custody.py scripts/employee_linux_sdk_owner.py scripts/test_employee_linux_sdk_owner.py scripts/test_employee_custody_descriptors.py > "$RUNNER_TEMP/employee-owned-receipts-source.sha256"
           (cd scripts && timeout --signal=TERM --kill-after=5s 45s python3 -B - <<'PY') 2>&1 | tee "$RUNNER_TEMP/employee-owned-receipts-controls.log"
           import json, os, sys, tempfile, unittest
           from pathlib import Path
@@ -63,13 +77,14 @@ jobs:
                   super().__init__(*args, **kwargs)
                   owned_directories.append(self.name)
           tempfile.TemporaryDirectory = TrackedDirectory
-          suite = unittest.defaultTestLoader.loadTestsFromName('test_employee_owned_receipts')
-          assert suite.countTestCases() == 18
+          names = ('test_employee_owned_receipts', 'test_employee_linux_custody', 'test_employee_linux_sdk_owner', 'test_employee_custody_descriptors')
+          suite = unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(name) for name in names)
+          assert suite.countTestCases() == 117
           before = descriptors()
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           cleanup = before == descriptors() and all(not Path(name).exists() for name in owned_directories)
-          accepted = result.wasSuccessful() and result.testsRun == 18 and not result.skipped and len(owned_directories) == 10 and cleanup
-          proof = {'executed': result.testsRun, 'failed': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'ownedDirectories': len(owned_directories), 'descriptorAndDirectoryCleanupVerified': cleanup, 'accepted': accepted, 'sdkStarted': False, 'runtimeQualified': False}
+          accepted = result.wasSuccessful() and result.testsRun == 117 and not result.skipped and len(owned_directories) >= 10 and cleanup
+          proof = {'executed': result.testsRun, 'failed': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'ownedDirectories': len(owned_directories), 'descriptorAndDirectoryCleanupVerified': cleanup, 'accepted': accepted, 'originalReceiptControls': 18, 'originalCustodyControls': 87, 'newIntegrationControls': 12, 'sdkStarted': False, 'runtimeQualified': False}
           Path(os.environ['RUNNER_TEMP'], 'employee-owned-receipts-counts.json').write_text(json.dumps(proof) + '\n')
           print(json.dumps(proof))
           raise SystemExit(not accepted)

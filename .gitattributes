@@ -1,2 +1,6 @@
 * text=auto eol=lf
 *.ps1 text eol=crlf
+
+# Frozen adapter inputs are hashed as raw bytes; preserve their reviewed encoding.
+scripts/employee_linux_sdk_owner.py -text whitespace=cr-at-eol
+scripts/test_employee_linux_sdk_owner.py -text whitespace=cr-at-eol
