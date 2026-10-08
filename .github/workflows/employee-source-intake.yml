@@ -1,0 +1,71 @@
+name: Employee sealed source intake
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/employee_source_intake.py'
+      - 'scripts/test_employee_source_intake.py'
+      - 'scripts/employee-source-policy.json'
+      - 'scripts/employee-source-packet/**'
+      - 'scripts/sealed_source_capsule.py'
+      - '.github/workflows/employee-source-intake.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: employee-source-intake-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      EMPLOYEE_SOURCE_OWNER: ${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Check out source transport
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Parse and validate exact frozen source controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          python3 -B -c 'import ast; from pathlib import Path; [ast.parse((Path("scripts")/name).read_bytes(), filename=name) for name in ("employee_source_intake.py", "test_employee_source_intake.py", "sealed_source_capsule.py")]'
+          (cd scripts && timeout --signal=TERM --kill-after=5s 45s python3 -B -m unittest test_employee_source_intake -v) 2>&1 | tee "$RUNNER_TEMP/employee-source-controls.log"
+          python3 -B scripts/employee_source_intake.py validate | tee "$RUNNER_TEMP/employee-source-validation.log"
+      - name: Fetch exact own-repository capsule blobs and materialize raw sources
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          timeout --signal=TERM --kill-after=5s 90s python3 -B scripts/employee_source_intake.py fetch-materialize | tee "$RUNNER_TEMP/employee-source-intake.log"
+          cp "$RUNNER_TEMP/employee-owner-source/intake-receipt.json" "$RUNNER_TEMP/employee-source-intake-receipt.json"
+      - name: Release only this job's disposable source projection
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B scripts/employee_source_intake.py release | tee "$RUNNER_TEMP/employee-source-release.json"
+      - name: Preserve actual source custody evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: employee-source-intake-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/employee-source-controls.log
+            ${{ runner.temp }}/employee-source-validation.log
+            ${{ runner.temp }}/employee-source-intake.log
+            ${{ runner.temp }}/employee-source-intake-receipt.json
+            ${{ runner.temp }}/employee-source-release.json
+          if-no-files-found: warn
+          retention-days: 7
