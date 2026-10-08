@@ -1,0 +1,70 @@
+name: Employee qualification controller preflight
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/employee-qualification-controller.yml'
+      - 'scripts/employee_qualification_controller.py'
+      - 'scripts/test_employee_qualification_controller.py'
+      - 'scripts/employee_phase_contract.py'
+      - 'scripts/test_employee_phase_contract.py'
+      - 'scripts/employee_source_intake.py'
+      - 'scripts/test_employee_source_intake.py'
+      - 'scripts/employee-source-policy.json'
+      - 'scripts/employee-source-packet/**'
+      - 'scripts/sealed_source_capsule.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: employee-qualification-preflight-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  controller-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      EMPLOYEE_SOURCE_OWNER: ${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Check out controller source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Check source and authority rejection controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          mkdir -p "$RUNNER_TEMP/employee-qualification-evidence"
+          python3 -B -c 'import ast; from pathlib import Path; [ast.parse((Path("scripts")/name).read_bytes(), filename=name) for name in ("employee_qualification_controller.py", "test_employee_qualification_controller.py", "employee_phase_contract.py", "test_employee_phase_contract.py")]'
+          (cd scripts && timeout --signal=TERM --kill-after=5s 45s python3 -B -m unittest test_employee_source_intake test_employee_phase_contract test_employee_qualification_controller -v) 2>&1 | tee "$RUNNER_TEMP/employee-qualification-evidence/pure-controls.log"
+      - name: Verify actual frozen projections and record source allocation
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          timeout --signal=TERM --kill-after=5s 90s python3 -B scripts/employee_qualification_controller.py --mode preflight-only --evidence "$RUNNER_TEMP/employee-qualification-evidence" | tee "$RUNNER_TEMP/employee-qualification-evidence/controller-preflight.log"
+      - name: Verify exact job source release
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/employee-qualification-evidence"
+          timeout --signal=TERM --kill-after=5s 30s python3 -B scripts/employee_source_intake.py release | tee "$RUNNER_TEMP/employee-qualification-evidence/source-final-release.json"
+      - name: Preserve actual controller and custody evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: employee-controller-preflight-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/employee-qualification-evidence/
+          if-no-files-found: warn
+          retention-days: 7
