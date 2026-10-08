@@ -1,0 +1,96 @@
+name: Employee descriptor-owned receipt controls
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/employee_owned_receipts.py'
+      - 'scripts/test_employee_owned_receipts.py'
+      - 'docs/employee-owned-receipts.md'
+      - '.github/workflows/employee-owned-receipts.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/employee_owned_receipts.py'
+      - 'scripts/test_employee_owned_receipts.py'
+      - 'docs/employee-owned-receipts.md'
+      - '.github/workflows/employee-owned-receipts.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: employee-owned-receipts-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  filesystem-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Check out exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Validate bounded descriptor controls
+        id: controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          python3 -B -c 'import ast; from pathlib import Path; [ast.parse((Path("scripts")/name).read_bytes(), filename=name) for name in ("employee_owned_receipts.py", "test_employee_owned_receipts.py")]'
+          sha256sum scripts/employee_owned_receipts.py scripts/test_employee_owned_receipts.py > "$RUNNER_TEMP/employee-owned-receipts-source.sha256"
+          (cd scripts && timeout --signal=TERM --kill-after=5s 45s python3 -B - <<'PY') 2>&1 | tee "$RUNNER_TEMP/employee-owned-receipts-controls.log"
+          import json, os, sys, tempfile, unittest
+          from pathlib import Path
+          assert sys.platform == 'linux'
+          def descriptors():
+              result = {}
+              for name in os.listdir('/proc/self/fd'):
+                  try:
+                      info = os.fstat(int(name))
+                      result[name] = [info.st_dev, info.st_ino, info.st_mode]
+                  except OSError:
+                      continue
+              return result
+          owned_directories = []
+          original = tempfile.TemporaryDirectory
+          class TrackedDirectory(original):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  owned_directories.append(self.name)
+          tempfile.TemporaryDirectory = TrackedDirectory
+          suite = unittest.defaultTestLoader.loadTestsFromName('test_employee_owned_receipts')
+          assert suite.countTestCases() == 18
+          before = descriptors()
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          cleanup = before == descriptors() and all(not Path(name).exists() for name in owned_directories)
+          accepted = result.wasSuccessful() and result.testsRun == 18 and not result.skipped and len(owned_directories) == 10 and cleanup
+          proof = {'executed': result.testsRun, 'failed': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'ownedDirectories': len(owned_directories), 'descriptorAndDirectoryCleanupVerified': cleanup, 'accepted': accepted, 'sdkStarted': False, 'runtimeQualified': False}
+          Path(os.environ['RUNNER_TEMP'], 'employee-owned-receipts-counts.json').write_text(json.dumps(proof) + '\n')
+          print(json.dumps(proof))
+          raise SystemExit(not accepted)
+          PY
+      - name: Retain terminal source-check status
+        if: always()
+        shell: bash
+        env:
+          CONTROL_OUTCOME: ${{ steps.controls.outcome }}
+        run: |
+          set -euo pipefail
+          python3 -B -c 'import json, os; from pathlib import Path; Path(os.environ["RUNNER_TEMP"], "employee-owned-receipts-scope.txt").write_text(json.dumps({"controlsOutcome": os.environ["CONTROL_OUTCOME"], "cleanupMechanism": "unittest cleanup closes descriptors and temporary directories; failure or timeout is not cleanup proof", "sdkStarted": False, "providerStarted": False, "rootWorkerStarted": False, "systemdQualification": False}) + "\n")'
+      - name: Preserve source evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: employee-owned-receipts-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/employee-owned-receipts-controls.log
+            ${{ runner.temp }}/employee-owned-receipts-source.sha256
+            ${{ runner.temp }}/employee-owned-receipts-scope.txt
+            ${{ runner.temp }}/employee-owned-receipts-counts.json
+          if-no-files-found: error
+          retention-days: 7
