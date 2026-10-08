@@ -10,6 +10,14 @@ on:
       - 'scripts/employee_linux_qualification.py'
       - 'scripts/employee_linux_readonly_helpers.py'
       - 'scripts/test_employee_linux_qualification.py'
+      - 'scripts/employee_linux_custody.py'
+      - 'scripts/test_employee_linux_custody.py'
+      - 'scripts/employee_linux_sdk_owner.py'
+      - 'scripts/test_employee_linux_sdk_owner.py'
+      - 'scripts/employee_fixture_compatibility.py'
+      - 'scripts/test_employee_fixture_compatibility.py'
+      - 'scripts/employee_fixture_registry_compatibility.py'
+      - 'scripts/test_employee_fixture_registry_compatibility.py'
       - 'scripts/employee-authority-hosted-requirements.txt'
   workflow_dispatch:
 
@@ -88,7 +96,7 @@ jobs:
           timeout --signal=TERM --kill-after=2s 10s python3 -B - <<'PY' > "$evidence/source-ast.json" 2> "$evidence/source-ast.stderr"
           import ast, hashlib, json
           from pathlib import Path
-          names = ('employee_authority.py', 'test_employee_authority.py', 'employee_linux_qualification.py', 'employee_linux_readonly_helpers.py', 'test_employee_linux_qualification.py')
+          names = ('employee_authority.py', 'test_employee_authority.py', 'employee_linux_qualification.py', 'employee_linux_readonly_helpers.py', 'test_employee_linux_qualification.py', 'employee_linux_custody.py', 'test_employee_linux_custody.py', 'employee_linux_sdk_owner.py', 'test_employee_linux_sdk_owner.py', 'employee_fixture_compatibility.py', 'test_employee_fixture_compatibility.py', 'employee_fixture_registry_compatibility.py', 'test_employee_fixture_registry_compatibility.py')
           rows = []
           for name in names:
               with (Path('scripts') / name).open('rb') as reader:
@@ -122,6 +130,26 @@ jobs:
           import test_employee_linux_qualification
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_qualification)
           assert suite.countTestCases() == 31
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+          phase=portable-custody-controls
+          timeout --signal=TERM --kill-after=2s 20s "$work_venv/bin/python" -B - <<'PY' > "$evidence/custody-controls.stdout" 2> "$evidence/custody-controls.stderr"
+          import sys, unittest
+          sys.path.insert(0, 'scripts')
+          import test_employee_linux_custody, test_employee_linux_sdk_owner
+          suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_custody), unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_sdk_owner)])
+          assert suite.countTestCases() == 87
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+          phase=portable-fixture-controls
+          timeout --signal=TERM --kill-after=2s 20s "$work_venv/bin/python" -B - <<'PY' > "$evidence/fixture-controls.stdout" 2> "$evidence/fixture-controls.stderr"
+          import sys, unittest
+          sys.path.insert(0, 'scripts')
+          import test_employee_fixture_compatibility, test_employee_fixture_registry_compatibility
+          suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(test_employee_fixture_compatibility), unittest.defaultTestLoader.loadTestsFromModule(test_employee_fixture_registry_compatibility)])
+          assert suite.countTestCases() == 92
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           raise SystemExit(0 if result.wasSuccessful() else 1)
           PY

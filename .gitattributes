@@ -1,2 +1,12 @@
 * text=auto eol=lf
 *.ps1 text eol=crlf
+
+# Preserve the exact reviewed bytes of sealed custody and compatibility capsules.
+scripts/employee_linux_sdk_owner.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/test_employee_linux_sdk_owner.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/employee_linux_custody.py -text
+scripts/test_employee_linux_custody.py -text
+scripts/employee_fixture_compatibility.py -text
+scripts/test_employee_fixture_compatibility.py -text
+scripts/employee_fixture_registry_compatibility.py -text
+scripts/test_employee_fixture_registry_compatibility.py -text
