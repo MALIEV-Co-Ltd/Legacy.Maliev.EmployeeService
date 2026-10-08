@@ -29,9 +29,13 @@ fresh complete process census, physical 4 GiB floor, and actual Linux/systemd
 capability observations. This workflow runs only source and filesystem controls;
 it does not invoke that route or launch systemd, .NET, Go or containers.
 
-The existing five-minute Linux workflow now requires 116 tests with zero skips:
-18 receipt controls, all 87 retained custody controls, and eleven integration
+The existing five-minute Linux workflow now requires 117 tests with zero skips:
+18 receipt controls, all 87 retained custody controls, and twelve integration
 regressions. Six new controls use actual Linux descriptors, directory replacement,
 exclusive actor receipts, link refusal and descriptor cleanup. Manager results in
 the remaining controls are synthetic. These results cannot replace the frozen
 12 baseline, 15 focused candidate or 371 full candidate acceptance cases.
+
+The frozen adapter and its retained tests have explicit raw-byte Git attributes.
+A regression loads the actual adapter bytes through the original sealed loader;
+normalizing its line endings must not silently change that contract.

@@ -4,6 +4,8 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - '.gitattributes'
+      - '.gitattributes'
       - 'scripts/employee_owned_receipts.py'
       - 'scripts/test_employee_owned_receipts.py'
       - 'scripts/employee_linux_custody.py'
@@ -16,6 +18,8 @@ on:
   push:
     branches: [main]
     paths:
+      - '.gitattributes'
+      - '.gitattributes'
       - 'scripts/employee_owned_receipts.py'
       - 'scripts/test_employee_owned_receipts.py'
       - 'scripts/employee_linux_custody.py'
@@ -75,12 +79,12 @@ jobs:
           tempfile.TemporaryDirectory = TrackedDirectory
           names = ('test_employee_owned_receipts', 'test_employee_linux_custody', 'test_employee_linux_sdk_owner', 'test_employee_custody_descriptors')
           suite = unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(name) for name in names)
-          assert suite.countTestCases() == 116
+          assert suite.countTestCases() == 117
           before = descriptors()
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           cleanup = before == descriptors() and all(not Path(name).exists() for name in owned_directories)
-          accepted = result.wasSuccessful() and result.testsRun == 116 and not result.skipped and len(owned_directories) >= 10 and cleanup
-          proof = {'executed': result.testsRun, 'failed': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'ownedDirectories': len(owned_directories), 'descriptorAndDirectoryCleanupVerified': cleanup, 'accepted': accepted, 'originalReceiptControls': 18, 'originalCustodyControls': 87, 'newIntegrationControls': 11, 'sdkStarted': False, 'runtimeQualified': False}
+          accepted = result.wasSuccessful() and result.testsRun == 117 and not result.skipped and len(owned_directories) >= 10 and cleanup
+          proof = {'executed': result.testsRun, 'failed': len(result.failures), 'errors': len(result.errors), 'skipped': len(result.skipped), 'ownedDirectories': len(owned_directories), 'descriptorAndDirectoryCleanupVerified': cleanup, 'accepted': accepted, 'originalReceiptControls': 18, 'originalCustodyControls': 87, 'newIntegrationControls': 12, 'sdkStarted': False, 'runtimeQualified': False}
           Path(os.environ['RUNNER_TEMP'], 'employee-owned-receipts-counts.json').write_text(json.dumps(proof) + '\n')
           print(json.dumps(proof))
           raise SystemExit(not accepted)

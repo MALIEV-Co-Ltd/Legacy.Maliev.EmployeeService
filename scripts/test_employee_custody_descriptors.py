@@ -12,6 +12,12 @@ def OwnedReceipts(fd):return custody.receipts_class()(fd)
 
 
 class RefusalControls(unittest.TestCase):
+    def test_actual_adapter_source_loads_with_original_raw_seal(self):
+        raw=Path(custody.__file__).resolve().with_name('employee_linux_sdk_owner.py').read_bytes()
+        adapter=custody.load_adapter(raw)
+        self.assertTrue(callable(adapter.RealLinuxBackend))
+        self.assertEqual(custody.ADAPTER_SHA,custody.sha(raw))
+
     def test_changed_receipt_source_refused_before_compile_or_cache(self):
         with patch.object(custody,'_receipts_module',None),patch.object(custody,'read',return_value=b'raise AssertionError("unreviewed execution")'):
             with self.assertRaisesRegex(ValueError,'descriptor receipt source differs'):
