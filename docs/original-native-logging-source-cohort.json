@@ -1,15 +1,47 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "owner": "Legacy.Maliev.EmployeeService",
-  "canonicalLedgerBase": "82520210ce5a7fb4439e2553b6567b95eded5d35",
   "currentCommittedApplicationBase": "5ace8e2b7b1de498100c2e3cd7d2327451578ea7",
-  "sourceCheckpoint": "135e526d0dab85c415b3afdcefd7b70fe2c82e2f",
-  "sourceCommits": [
+  "ownedPathCount": 16,
+  "deploymentPathsExcluded": 1,
+  "targetSourceEvidence": [
     {
-      "sourceSha": "9e51e6c5da29de8e617b65b59d46882cde6d3b64",
-      "parents": [
-        "600e79ac9b2836f540cf1547d3efd20362912aae"
-      ],
+      "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+      "gitBlobOid": "db3749e8162ac07eef404994b23e2e54ef19f5a0",
+      "sha256": "bcb7c50b9f348a7862b25113e896731d299d3e732d693a1bcddd7aa94b110d02"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+      "gitBlobOid": "0d3808825f8711e2083bd35c0c2cad32f57647bb",
+      "sha256": "c99a659d36a6794386c09a535a80c598944d671f5c39699ed979dda00f9ea326"
+    }
+  ],
+  "realStartupTestSources": [
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/StartupFailureAcceptanceTests.cs",
+      "sha256": "e9f9853c539828874dd8beb8e32f5595be791e01b40a4e6093e3a02c65c43c53",
+      "bytes": 11500
+    }
+  ],
+  "runtimeImplementationAlreadyPresent": true,
+  "newApplicationImplementationEdits": 0,
+  "newRuntimeEvidence": null,
+  "sourceClosure": false,
+  "acceptanceRequires": [
+    "Exact PR-head hosted strict Release build with zero warnings/errors.",
+    "Existing real production entrypoint/privacy tests and full owning suite, format, package audit and raw coverage.",
+    "Independent source disposition review per SHA/path; packaging/image and deployment obligations remain pending until actual proof.",
+    "Attach exact owning issue/PR/merged target/run evidence without changing canonical tracking here."
+  ],
+  "canonicalCounts": [
+    1126,
+    204,
+    922
+  ],
+  "privateEvidenceReference": "crm-original-native-logging-cohort-20261008",
+  "sourceReferences": [
+    {
+      "sourceReference": "crm-native-logging-01",
       "owner": "Legacy.Maliev.EmployeeService",
       "paths": [
         {
@@ -111,20 +143,10 @@
           "runtimeParityClaimed": false
         }
       ],
-      "wholeSourceShaAccepted": false,
-      "currentOwnerResolution": {
-        "status": "pending",
-        "issueUrls": [],
-        "prUrls": [],
-        "mergedTargetSha": null,
-        "validationEvidenceUrls": []
-      }
+      "wholeSourceReferenceAccepted": false
     },
     {
-      "sourceSha": "5ac7d045c51194edd9e64d8564f1b726b001be34",
-      "parents": [
-        "03dc9a1271c16e6535934445e9dd6e3f30e8fffe"
-      ],
+      "sourceReference": "crm-native-logging-02",
       "owner": "Legacy.Maliev.EmployeeService",
       "paths": [
         {
@@ -198,20 +220,10 @@
           "runtimeParityClaimed": false
         }
       ],
-      "wholeSourceShaAccepted": false,
-      "currentOwnerResolution": {
-        "status": "pending",
-        "issueUrls": [],
-        "prUrls": [],
-        "mergedTargetSha": null,
-        "validationEvidenceUrls": []
-      }
+      "wholeSourceReferenceAccepted": false
     },
     {
-      "sourceSha": "a59193ae2ac030d0e1d373ce4ec50c1b35437391",
-      "parents": [
-        "8175e8f3383d31030de2321c480bf6f5bc0fbb2b"
-      ],
+      "sourceReference": "crm-native-logging-03",
       "owner": "Legacy.Maliev.EmployeeService",
       "paths": [
         {
@@ -269,50 +281,7 @@
           "runtimeParityClaimed": false
         }
       ],
-      "wholeSourceShaAccepted": false,
-      "currentOwnerResolution": {
-        "status": "pending",
-        "issueUrls": [],
-        "prUrls": [],
-        "mergedTargetSha": null,
-        "validationEvidenceUrls": []
-      }
+      "wholeSourceReferenceAccepted": false
     }
-  ],
-  "ownedPathCount": 16,
-  "deploymentPathsExcluded": 1,
-  "targetSourceEvidence": [
-    {
-      "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "gitBlobOid": "db3749e8162ac07eef404994b23e2e54ef19f5a0",
-      "sha256": "bcb7c50b9f348a7862b25113e896731d299d3e732d693a1bcddd7aa94b110d02"
-    },
-    {
-      "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "gitBlobOid": "0d3808825f8711e2083bd35c0c2cad32f57647bb",
-      "sha256": "c99a659d36a6794386c09a535a80c598944d671f5c39699ed979dda00f9ea326"
-    }
-  ],
-  "realStartupTestSources": [
-    {
-      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/StartupFailureAcceptanceTests.cs",
-      "sha256": "e9f9853c539828874dd8beb8e32f5595be791e01b40a4e6093e3a02c65c43c53",
-      "bytes": 11500
-    }
-  ],
-  "runtimeImplementationAlreadyPresent": true,
-  "newApplicationImplementationEdits": 0,
-  "newRuntimeEvidence": null,
-  "sourceClosure": false,
-  "acceptanceRequires": [
-    "Exact PR-head hosted strict Release build with zero warnings/errors.",
-    "Existing real production entrypoint/privacy tests and full owning suite, format, package audit and raw coverage.",
-    "Independent source disposition review per SHA/path; packaging/image and deployment obligations remain pending until actual proof.",
-    "Attach exact owning issue/PR/merged target/run evidence without changing canonical tracking here."
-  ],
-  "canonicalCounts": [
-    1126,
-    204,
-    922
   ]
 }
