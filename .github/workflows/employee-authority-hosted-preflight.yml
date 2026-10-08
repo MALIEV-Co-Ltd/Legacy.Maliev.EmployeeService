@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/employee-authority-hosted-preflight.yml'
       - 'scripts/employee_authority.py'
+      - 'scripts/employee-source-policy.json'
+      - 'scripts/employee_phase_contract.py'
       - 'scripts/test_employee_authority.py'
       - 'scripts/employee_linux_qualification.py'
       - 'scripts/employee_linux_readonly_helpers.py'
@@ -104,6 +106,19 @@ jobs:
               assert len(raw) <= 65536
               ast.parse(raw, filename=name)
               rows.append({'path': name, 'sha256': hashlib.sha256(raw).hexdigest()})
+          authority = ast.parse((Path('scripts') / 'employee_authority.py').read_bytes())
+          pins = {node.targets[0].id: ast.literal_eval(node.value)
+                  for node in authority.body if isinstance(node, ast.Assign)
+                  and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)
+                  and node.targets[0].id in {'SOURCE_POLICY', 'PHASE_CONTRACT'}}
+          for name, constant, limit in (('employee-source-policy.json', 'SOURCE_POLICY', 262144),
+                                        ('employee_phase_contract.py', 'PHASE_CONTRACT', 65536)):
+              with (Path('scripts') / name).open('rb') as reader:
+                  raw = reader.read(limit + 1)
+              assert 0 < len(raw) <= limit
+              actual = hashlib.sha256(raw).hexdigest()
+              assert actual == pins[constant], 'sealed authority input differs: ' + name
+              rows.append({'path': name, 'sha256': actual, 'authorityConstant': constant})
           print(json.dumps({'sourceOnly': True, 'nativeExecutionGranted': False, 'files': rows}))
           PY
           phase=owned-venv-create
