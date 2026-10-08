@@ -130,6 +130,14 @@ public sealed class WorkflowContractTests
             "          use-local-maliev-dependencies: 'true'\n        env:\n          GITHUB_ACTIONS: 'false'\n");
     }
 
+    [Theory]
+    [InlineData("auto")]
+    [InlineData("go1.26.9")]
+    public void BuildAndTest_RejectsGoToolchainSelectionDrift(string replacement)
+    {
+        AssertMutationRejected("GOTOOLCHAIN: go1.26.8", $"GOTOOLCHAIN: {replacement}");
+    }
+
     private static void AssertMutationRejected(string original, string replacement)
     {
         Assert.Contains(original, Workflow, StringComparison.Ordinal);
@@ -211,15 +219,16 @@ internal static partial class WorkflowContractValidator
         }
 
         var environment = RequireMapping(validateJob, "env");
-        if (environment.Children.Count != 4)
+        if (environment.Children.Count != 5)
         {
-            throw new InvalidOperationException("Validate environment must contain only dependency root and evidence properties.");
+            throw new InvalidOperationException("Validate environment must contain only dependency root, evidence properties and the exact Go toolchain pin.");
         }
 
         RequireScalarValue(environment, "MalievWorkspaceRoot", "${{ github.workspace }}/.dependencies");
         RequireScalarValue(environment, "VSTestCollect", "XPlat Code Coverage");
         RequireScalarValue(environment, "VSTestLogger", "trx");
         RequireScalarValue(environment, "VSTestResultsDirectory", "${{ github.workspace }}/runner-results");
+        RequireScalarValue(environment, "GOTOOLCHAIN", "go1.26.8");
 
         var scaffold = RequireMapping(steps.Children[4], "scaffold guard");
         if (scaffold.Children.Count != 3)
