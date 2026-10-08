@@ -55,9 +55,15 @@ def manager_property(raw, name):
     need(name in COMMANDS, 'unknown manager property')
     item = parse(raw)
     need(type(item) is dict and set(item) == {'type', 'data'} and item['type'] == 's', 'unknown manager JSON layout')
-    need(type(item['data']) is list and len(item['data']) == 1 and type(item['data'][0]) is str,
-         'typed singleton manager string required')
-    value = item['data'][0]
+    # get-property serializes its string variant as a scalar. Method-message
+    # fixtures use a singleton array. Both retain the closed D-Bus type 's'.
+    data = item['data']
+    if type(data) is str:
+        value = data
+    else:
+        need(type(data) is list and len(data) == 1 and type(data[0]) is str,
+             'typed scalar or singleton manager string required')
+        value = data[0]
     need(0 < len(value) <= 128 and re.fullmatch(r'[\x20-\x7e]+', value), 'bounded manager string required')
     if name == 'SystemState':
         need(value in {'initializing', 'starting', 'running', 'degraded', 'maintenance', 'stopping', 'offline'},
@@ -106,12 +112,19 @@ def sealed_helper(path):
 class ReadOnlyHelpers:
     def __init__(self, evidence, helper_path):
         module = sealed_helper(helper_path)
+        self.evidence = Path(evidence)
         # Standalone helper exposes no SDK/backend/start API.
         self.backend = module.FiniteReadOnlyHelpers(evidence)
     def get(self, name):
         need(name in COMMANDS, 'unknown helper command refused')
         result = self.backend._command(list(COMMANDS[name]), timeout=3)
         need(len(result) <= MAX_RAW, 'manager raw response bound')
+        # These two fixed public manager properties contain no application data.
+        # Keep exact response bytes even when their parser refuses the layout.
+        with (self.evidence/('manager-'+name+'.json')).open('xb') as writer:
+            writer.write(result)
+            writer.flush()
+            os.fsync(writer.fileno())
         return result
     def release_evidence(self):
         rows = self.backend.command_receipts

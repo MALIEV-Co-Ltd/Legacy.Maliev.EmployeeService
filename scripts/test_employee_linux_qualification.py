@@ -102,6 +102,24 @@ class ProbeControls(unittest.TestCase):
 
 
 class ParserControls(unittest.TestCase):
+    def test_scalar_string_property_uses_original_byte_hash(self):
+        raw = b'{"type":"s","data":"255.4-1ubuntu8"}'
+        result = m.manager_property(raw, 'Version')
+        self.assertEqual('255.4-1ubuntu8', result['value'])
+        self.assertEqual(m.hashlib.sha256(raw).hexdigest(), result['rawSha256'])
+    def test_scalar_system_state_is_typed_and_bounded(self):
+        self.assertEqual('degraded', m.manager_property(b'{"type":"s","data":"degraded"}', 'SystemState')['value'])
+        for raw in (b'{"type":"s","data":"future"}', b'{"type":"s","data":"running\\nprivate"}'):
+            with self.subTest(raw=raw), self.assertRaises(ValueError): m.manager_property(raw, 'SystemState')
+    def test_scalar_wrong_type_and_container_layouts_still_refuse(self):
+        for raw in (b'{"type":"s","data":true}', b'{"type":"s","data":255}',
+                    b'{"type":"s","data":null}', b'{"type":"s","data":{"value":"255"}}',
+                    b'{"type":"s","data":[["255"]]}', b'{"type":"s","data":["255","extra"]}'):
+            with self.subTest(raw=raw), self.assertRaises(ValueError): m.manager_property(raw, 'Version')
+    def test_scalar_duplicate_unknown_and_empty_fields_still_refuse(self):
+        for raw in (b'{"type":"s","data":"255","data":"256"}', b'{"type":"s","data":"255","x":1}',
+                    b'{"type":"u","data":"255"}', b'{"type":"s","data":""}'):
+            with self.subTest(raw=raw), self.assertRaises(ValueError): m.manager_property(raw, 'Version')
     def test_manager_signature_and_raw_hash(self):
         raw = b'{"type":"s","data":["255 synthetic"]}'
         self.assertEqual('255 synthetic', m.manager_property(raw, 'Version')['value'])

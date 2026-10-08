@@ -121,7 +121,7 @@ jobs:
           import unittest
           import test_employee_linux_qualification
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_qualification)
-          assert suite.countTestCases() == 27
+          assert suite.countTestCases() == 31
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           raise SystemExit(0 if result.wasSuccessful() else 1)
           PY
