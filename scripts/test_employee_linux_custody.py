@@ -260,6 +260,13 @@ class Controls(unittest.TestCase):
 
     def test_probe_cap_refusal_settles_already_retained_exact_generation(self):
         calls=[];stopped=False
+        # Only the privileged platform gate is synthetic. Receipt files retain
+        # the actual temporary-directory owner and close their real handles.
+        actual_uid=getattr(m.os,'geteuid',lambda:0)()
+        original_atomic=m.atomic;real_close=m.os.close
+        def owned_atomic(*args):
+            with patch.object(m.os,'geteuid',return_value=actual_uid,create=True),patch.object(m.os,'close',side_effect=real_close):
+                return original_atomic(*args)
         process={'pid':123,'birthTicks':'456'}
         unit='employee-custody-probe-123-1.service'
         group='/system.slice/'+unit
@@ -278,7 +285,7 @@ class Controls(unittest.TestCase):
         observer.process.return_value=process
         observer.cgroup.side_effect=lambda *args:None if stopped else {'device':1,'inode':2,'members':[process]}
         args=types.SimpleNamespace(policy='policy',policy_sha='1'*64,evidence=str(self.folder),adapter='adapter')
-        with patch.object(m.sys,'platform','linux'),patch.object(m.os,'geteuid',return_value=0,create=True),patch.object(m.os,'pidfd_open',return_value=77,create=True),patch.object(m.os,'close') as close,patch.object(m,'read',return_value=b'sealed'),patch.object(m,'qualification_policy',return_value=self.policy),patch.object(m,'ProcObserver',return_value=observer),patch.object(m,'load_adapter'),patch.object(m,'backend_class',return_value=Backend):
+        with patch.object(m.sys,'platform','linux'),patch.object(m.os,'geteuid',return_value=0,create=True),patch.object(m.os,'pidfd_open',return_value=77,create=True),patch.object(m.os,'close') as close,patch.object(m,'atomic',side_effect=owned_atomic),patch.object(m,'read',return_value=b'sealed'),patch.object(m,'qualification_policy',return_value=self.policy),patch.object(m,'ProcObserver',return_value=observer),patch.object(m,'load_adapter'),patch.object(m,'backend_class',return_value=Backend):
             with self.assertRaisesRegex(ValueError,'containment differs'):m.qualify_no_sdk(args)
         self.assertIn(['/usr/bin/systemctl','stop','--no-block',unit],calls)
         self.assertTrue((self.folder/'qualification-generation.json').is_file())
