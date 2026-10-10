@@ -1,0 +1,199 @@
+name: Employee authority and Linux read-only preflight
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/employee-authority-hosted-preflight.yml'
+      - 'scripts/employee_authority.py'
+      - 'scripts/employee-source-policy.json'
+      - 'scripts/employee_phase_contract.py'
+      - 'scripts/test_employee_authority.py'
+      - 'scripts/employee_linux_qualification.py'
+      - 'scripts/employee_linux_readonly_helpers.py'
+      - 'scripts/test_employee_linux_qualification.py'
+      - 'scripts/employee_linux_custody.py'
+      - 'scripts/test_employee_linux_custody.py'
+      - 'scripts/employee_linux_sdk_owner.py'
+      - 'scripts/test_employee_linux_sdk_owner.py'
+      - 'scripts/employee_fixture_compatibility.py'
+      - 'scripts/test_employee_fixture_compatibility.py'
+      - 'scripts/employee_fixture_registry_compatibility.py'
+      - 'scripts/test_employee_fixture_registry_compatibility.py'
+      - 'scripts/employee-authority-hosted-requirements.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: employee-authority-readonly-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  source-and-readonly-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      EMPLOYEE_HOSTED_OWNER: ${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - name: Check out source with read-only contents
+        timeout-minutes: 1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Verify source controls and observe read-only Linux capabilities
+        shell: bash
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          evidence="$RUNNER_TEMP/employee-authority-hosted-evidence"
+          mkdir -p "$evidence"
+          phase=platform-guard
+          work_venv=''
+          cleanup_venv() {
+            original_status=$?
+            trap - EXIT HUP INT TERM
+            set +e
+            cleanup_ok=true
+            if [[ -n "$work_venv" ]]; then
+              runner_root=$(realpath -- "$RUNNER_TEMP")
+              venv_root=$(realpath -- "$work_venv")
+              if [[ ! -L "$work_venv" && -d "$work_venv" &&
+                    "$venv_root" == "$runner_root"/employee-authority-venv.* &&
+                    "$(dirname -- "$venv_root")" == "$runner_root" &&
+                    ! -L "$work_venv/.employee-owned-venv" &&
+                    -f "$work_venv/.employee-owned-venv" &&
+                    "$(stat -c '%s' -- "$work_venv/.employee-owned-venv")" == "${#EMPLOYEE_HOSTED_OWNER}" &&
+                    "$(head -c 128 -- "$work_venv/.employee-owned-venv")" == "$EMPLOYEE_HOSTED_OWNER" ]]; then
+                timeout --signal=TERM --kill-after=2s 10s rm -rf -- "$venv_root"
+                if [[ $? -ne 0 || -e "$venv_root" || -L "$venv_root" ]]; then cleanup_ok=false; fi
+              else
+                cleanup_ok=false
+              fi
+            fi
+            printf '{"phase":"%s","originalExitCode":%s,"venvCleanupVerified":%s,"sourceOnly":true,"nativeExecutionGranted":false,"runtimeQualified":false}\n' \
+              "$phase" "$original_status" "$cleanup_ok" > "$evidence/step-terminal.json"
+            if [[ "$cleanup_ok" != true && "$original_status" -eq 0 ]]; then original_status=1; fi
+            exit "$original_status"
+          }
+          trap cleanup_venv EXIT
+          trap 'exit 129' HUP
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          timeout --signal=TERM --kill-after=2s 10s python3 -B - <<'PY' > "$evidence/platform.json" 2> "$evidence/platform.stderr"
+          import json, os, platform, re, sys
+          from pathlib import Path
+          assert sys.version_info[:2] == (3, 12) and sys.implementation.name == 'cpython'
+          assert platform.machine() == 'x86_64' and sys.platform == 'linux'
+          assert os.environ['RUNNER_OS'] == 'Linux' and os.environ['RUNNER_ARCH'] == 'X64'
+          assert re.fullmatch(r'[1-9][0-9]*-[1-9][0-9]*', os.environ['EMPLOYEE_HOSTED_OWNER'])
+          release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+          assert release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '24.04'
+          print(json.dumps({'python': sys.version, 'machine': platform.machine(), 'ubuntu': '24.04', 'sourceOnly': True, 'nativeExecutionGranted': False}))
+          PY
+          phase=source-ast
+          timeout --signal=TERM --kill-after=2s 10s python3 -B - <<'PY' > "$evidence/source-ast.json" 2> "$evidence/source-ast.stderr"
+          import ast, hashlib, json
+          from pathlib import Path
+          names = ('employee_authority.py', 'test_employee_authority.py', 'employee_linux_qualification.py', 'employee_linux_readonly_helpers.py', 'test_employee_linux_qualification.py', 'employee_linux_custody.py', 'test_employee_linux_custody.py', 'employee_linux_sdk_owner.py', 'test_employee_linux_sdk_owner.py', 'employee_fixture_compatibility.py', 'test_employee_fixture_compatibility.py', 'employee_fixture_registry_compatibility.py', 'test_employee_fixture_registry_compatibility.py')
+          rows = []
+          for name in names:
+              with (Path('scripts') / name).open('rb') as reader:
+                  raw = reader.read(65537)
+              assert len(raw) <= 65536
+              ast.parse(raw, filename=name)
+              rows.append({'path': name, 'sha256': hashlib.sha256(raw).hexdigest()})
+          authority = ast.parse((Path('scripts') / 'employee_authority.py').read_bytes())
+          pins = {node.targets[0].id: ast.literal_eval(node.value)
+                  for node in authority.body if isinstance(node, ast.Assign)
+                  and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)
+                  and node.targets[0].id in {'SOURCE_POLICY', 'PHASE_CONTRACT'}}
+          for name, constant, limit in (('employee-source-policy.json', 'SOURCE_POLICY', 262144),
+                                        ('employee_phase_contract.py', 'PHASE_CONTRACT', 65536)):
+              with (Path('scripts') / name).open('rb') as reader:
+                  raw = reader.read(limit + 1)
+              assert 0 < len(raw) <= limit
+              actual = hashlib.sha256(raw).hexdigest()
+              assert actual == pins[constant], 'sealed authority input differs: ' + name
+              rows.append({'path': name, 'sha256': actual, 'authorityConstant': constant})
+          print(json.dumps({'sourceOnly': True, 'nativeExecutionGranted': False, 'files': rows}))
+          PY
+          phase=owned-venv-create
+          work_venv=$(mktemp -d "$RUNNER_TEMP/employee-authority-venv.XXXXXXXXXXXX")
+          printf '%s' "$EMPLOYEE_HOSTED_OWNER" > "$work_venv/.employee-owned-venv"
+          chmod 700 "$work_venv"
+          timeout --signal=TERM --kill-after=5s 20s python3 -B -m venv "$work_venv" > "$evidence/venv-create.stdout" 2> "$evidence/venv-create.stderr"
+          phase=hash-pinned-wheel-install
+          timeout --signal=TERM --kill-after=5s 45s "$work_venv/bin/python" -B -m pip --isolated --disable-pip-version-check install \
+            --no-index --no-cache-dir --require-hashes --no-deps --only-binary=:all: \
+            -r scripts/employee-authority-hosted-requirements.txt > "$evidence/wheel-install.stdout" 2> "$evidence/wheel-install.stderr"
+          phase=authority-controls
+          (cd scripts && timeout --signal=TERM --kill-after=5s 30s "$work_venv/bin/python" -B - <<'PY') > "$evidence/authority-controls.stdout" 2> "$evidence/authority-controls.stderr"
+          import unittest
+          import test_employee_authority
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_employee_authority)
+          assert suite.countTestCases() == 25
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+          phase=portable-probe-controls
+          (cd scripts && timeout --signal=TERM --kill-after=5s 30s "$work_venv/bin/python" -B - <<'PY') > "$evidence/probe-controls.stdout" 2> "$evidence/probe-controls.stderr"
+          import unittest
+          import test_employee_linux_qualification
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_qualification)
+          assert suite.countTestCases() == 31
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+          phase=portable-custody-controls
+          timeout --signal=TERM --kill-after=2s 20s "$work_venv/bin/python" -B - <<'PY' > "$evidence/custody-controls.stdout" 2> "$evidence/custody-controls.stderr"
+          import sys, unittest
+          sys.path.insert(0, 'scripts')
+          import test_employee_linux_custody, test_employee_linux_sdk_owner
+          suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_custody), unittest.defaultTestLoader.loadTestsFromModule(test_employee_linux_sdk_owner)])
+          assert suite.countTestCases() == 87
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+          phase=portable-fixture-controls
+          timeout --signal=TERM --kill-after=2s 20s "$work_venv/bin/python" -B - <<'PY' > "$evidence/fixture-controls.stdout" 2> "$evidence/fixture-controls.stderr"
+          import sys, unittest
+          sys.path.insert(0, 'scripts')
+          import test_employee_fixture_compatibility, test_employee_fixture_registry_compatibility
+          suite = unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromModule(test_employee_fixture_compatibility), unittest.defaultTestLoader.loadTestsFromModule(test_employee_fixture_registry_compatibility)])
+          assert suite.countTestCases() == 92
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          raise SystemExit(0 if result.wasSuccessful() else 1)
+          PY
+          phase=actual-readonly-probe
+          timeout --signal=TERM --kill-after=5s 45s "$work_venv/bin/python" -B scripts/employee_linux_qualification.py \
+            --mode readonly-probe --evidence "$evidence" > "$evidence/readonly-probe.stdout" 2> "$evidence/readonly-probe.stderr"
+          phase=source-only-preflight-complete
+      - name: Record terminal preflight status even after failure
+        if: always()
+        shell: bash
+        env:
+          PREFLIGHT_JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          ulimit -v 262144
+          ulimit -t 90
+          timeout --signal=TERM --kill-after=2s 10s python3 -B - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path(os.environ['RUNNER_TEMP']) / 'employee-authority-hosted-evidence'
+          path.mkdir(exist_ok=True)
+          (path / 'workflow-terminal.json').write_text(json.dumps({'jobStatus': os.environ['PREFLIGHT_JOB_STATUS'], 'sourceOnly': True, 'nativeExecutionGranted': False, 'runtimeQualified': False}) + '\n')
+          PY
+      - name: Retain source controls and actual read-only evidence
+        if: always()
+        timeout-minutes: 1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: employee-authority-readonly-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/employee-authority-hosted-evidence/
+          if-no-files-found: warn
+          retention-days: 7
