@@ -111,10 +111,29 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
     }
 
     private static bool Valid(UpsertEmployeeRequest request) =>
-        !string.IsNullOrWhiteSpace(request.FirstName) &&
-        !string.IsNullOrWhiteSpace(request.LastName) &&
+        ValidAdministrativeName(request.FirstName) && ValidAdministrativeName(request.LastName) &&
         !string.IsNullOrWhiteSpace(request.Email) &&
         request.Email.Contains('@', StringComparison.Ordinal);
+
+    // Preserve the original administrative SQL Server nvarchar(256) UTF-16 capacity.
+    // Refuse excess trailing spaces without normalization or truncation.
+    private static bool ValidAdministrativeName(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value) || value.Length > 256) return false;
+        var remaining = value.AsSpan();
+        while (!remaining.IsEmpty)
+        {
+            if (System.Text.Rune.DecodeFromUtf16(remaining, out var rune, out var consumed) !=
+                System.Buffers.OperationStatus.Done || rune.Value == 0)
+            {
+                return false;
+            }
+
+            remaining = remaining[consumed..];
+        }
+
+        return true;
+    }
 
     private static bool Valid(UpdateEmployeeSelfProfileRequest request) =>
         !string.IsNullOrWhiteSpace(request.FirstName) &&

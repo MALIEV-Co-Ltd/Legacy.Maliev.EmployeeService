@@ -87,14 +87,18 @@ public sealed class EmployeeAdministrativePersistenceHttpTests(EmployeeRouteAcce
         invalid["HomeAddressId"] = 2;
         invalid["DateOfBirth"] = new DateTime(1990, 2, 3);
         using var rejected = await SendAsync(writer, update, invalid);
-        Assert.Equal(HttpStatusCode.InternalServerError, rejected.StatusCode);
+        var nameBoundary = field is "FirstName" or "LastName";
+        Assert.Equal(nameBoundary ? HttpStatusCode.BadRequest : HttpStatusCode.InternalServerError, rejected.StatusCode);
         Assert.Equal(before, await SnapshotAsync());
         Assert.Equal(beforeOwnerCache, await cache.GetAsync("employee:17"));
         Assert.Equal(otherCache, await cache.GetAsync("employee:18"));
-        using var error = JsonDocument.Parse(await rejected.Content.ReadAsStringAsync());
-        Assert.Equal(500, error.RootElement.GetProperty("statusCode").GetInt32());
-        Assert.Equal(JsonValueKind.Null, error.RootElement.GetProperty("details").ValueKind);
-        Assert.False(string.IsNullOrWhiteSpace(error.RootElement.GetProperty("traceId").GetString()));
+        if (!nameBoundary)
+        {
+            using var error = JsonDocument.Parse(await rejected.Content.ReadAsStringAsync());
+            Assert.Equal(500, error.RootElement.GetProperty("statusCode").GetInt32());
+            Assert.Equal(JsonValueKind.Null, error.RootElement.GetProperty("details").ValueKind);
+            Assert.False(string.IsNullOrWhiteSpace(error.RootElement.GetProperty("traceId").GetString()));
+        }
         var body = await rejected.Content.ReadAsStringAsync();
         foreach (var marker in new[] { (string)invalid[field]!, "Npgsql", "character varying", "owner@example.invalid" })
             Assert.DoesNotContain(marker, body, StringComparison.OrdinalIgnoreCase);

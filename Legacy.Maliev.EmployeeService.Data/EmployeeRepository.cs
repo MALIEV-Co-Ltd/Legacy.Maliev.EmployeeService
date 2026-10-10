@@ -119,8 +119,8 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         var entity = new Employee
         {
             RoleId = request.RoleId,
-            FirstName = request.FirstName.Trim(),
-            LastName = request.LastName.Trim(),
+            FirstName = request.FirstName,
+            LastName = request.LastName,
             PhoneNumber = request.PhoneNumber,
             Email = request.Email.Trim(),
             DateOfBirth = request.DateOfBirth,
@@ -143,8 +143,8 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         }
 
         entity.RoleId = request.RoleId;
-        entity.FirstName = request.FirstName.Trim();
-        entity.LastName = request.LastName.Trim();
+        entity.FirstName = request.FirstName;
+        entity.LastName = request.LastName;
         entity.PhoneNumber = request.PhoneNumber;
         entity.Email = request.Email.Trim();
         entity.DateOfBirth = request.DateOfBirth;
