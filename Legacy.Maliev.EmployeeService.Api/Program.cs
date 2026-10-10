@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Legacy.Maliev.EmployeeService.Api.Documentation;
+using Legacy.Maliev.EmployeeService.Api.Logging;
 using Legacy.Maliev.EmployeeService.Application.Interfaces;
 using Legacy.Maliev.EmployeeService.Application.Services;
 using Legacy.Maliev.EmployeeService.Data;
@@ -24,6 +25,7 @@ static async Task RunHostAsync(string[] startupArgs)
     var builder = WebApplication.CreateBuilder(startupArgs);
 
     builder.AddServiceDefaults();
+    builder.Logging.AddEmployeePrivateDiagnostics();
     builder.AddDefaultApiVersioning();
     builder.AddPostgresDbContext<EmployeeDbContext>(connectionName: "EmployeeDbContext");
     builder.AddStandardCache("legacy:employee:");
