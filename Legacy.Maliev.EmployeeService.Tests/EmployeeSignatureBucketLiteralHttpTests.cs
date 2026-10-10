@@ -129,13 +129,21 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
             new Employee { Id = 18, RoleId = 21, HomeAddressId = 31, FirstName = "Other", LastName = "Synthetic", Email = "other@example.invalid" });
         if (signature) db.SignatureImageFiles.Add(new SignatureImageFile
         {
-            Id = 101, EmployeeId = 17, Bucket = "original", ObjectName = "original.png",
-            CreatedDate = new DateTime(2020, 1, 1), ModifiedDate = new DateTime(2020, 1, 2)
+            Id = 101,
+            EmployeeId = 17,
+            Bucket = "original",
+            ObjectName = "original.png",
+            CreatedDate = new DateTime(2020, 1, 1),
+            ModifiedDate = new DateTime(2020, 1, 2)
         });
         db.SignatureImageFiles.Add(new SignatureImageFile
         {
-            Id = 301, EmployeeId = 18, Bucket = "unrelated", ObjectName = "unrelated.png",
-            CreatedDate = new DateTime(2020, 1, 1), ModifiedDate = new DateTime(2020, 1, 2)
+            Id = 301,
+            EmployeeId = 18,
+            Bucket = "unrelated",
+            ObjectName = "unrelated.png",
+            CreatedDate = new DateTime(2020, 1, 1),
+            ModifiedDate = new DateTime(2020, 1, 2)
         });
         await db.SaveChangesAsync();
         fixture.Authorities.Clear();
