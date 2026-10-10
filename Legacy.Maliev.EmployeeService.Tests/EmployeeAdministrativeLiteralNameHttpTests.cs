@@ -102,7 +102,7 @@ public sealed class EmployeeAdministrativeLiteralNameHttpTests(EmployeeRouteAcce
                 var stored = await db.Employees.AsNoTracking().SingleAsync(row => row.Id == id, token);
                 Assert.Equal(first, stored.FirstName); Assert.Equal(last, stored.LastName);
                 Assert.Equal((first + " " + last).Trim(' '), stored.FullName);
-                Assert.Equal("literal@example.test", stored.Email);
+                Assert.Equal(" literal@example.test ", stored.Email);
                 Assert.Equal(" \t0800000000\u00a0 ", stored.PhoneNumber);
                 Assert.Equal(1, stored.RoleId); Assert.Equal(1, stored.HomeAddressId);
                 Assert.Equal(new DateTime(1980, 1, 2), stored.DateOfBirth);
