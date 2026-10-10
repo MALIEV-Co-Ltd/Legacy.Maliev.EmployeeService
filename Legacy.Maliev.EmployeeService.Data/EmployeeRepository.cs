@@ -123,7 +123,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
             FirstName = request.FirstName,
             LastName = request.LastName,
             PhoneNumber = request.PhoneNumber,
-            Email = request.Email.Trim(),
+            Email = request.Email,
             DateOfBirth = request.DateOfBirth,
             HomeAddressId = request.HomeAddressId,
             CreatedDate = now,
@@ -147,7 +147,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         entity.FirstName = request.FirstName;
         entity.LastName = request.LastName;
         entity.PhoneNumber = request.PhoneNumber;
-        entity.Email = request.Email.Trim();
+        entity.Email = request.Email;
         entity.DateOfBirth = request.DateOfBirth;
         entity.HomeAddressId = request.HomeAddressId;
         entity.ModifiedDate = UtcWallClockNow();
