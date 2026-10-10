@@ -25,6 +25,8 @@ HEX = re.compile(r'[0-9a-f]{64}\Z')
 BOOT = re.compile(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\Z')
 FLOOR = 4194304
 MAX_HELPER_SECONDS = 90
+RECEIPTS_SHA = '3b3a97c3ea9b96dbdd712effddec9a2db2ae0877fd20df6b6d789b1864ba646f'
+_receipts_module = None
 
 
 def need(ok, message):
@@ -58,6 +60,18 @@ def read(path, limit=65536):
     with path.open('rb') as stream: raw = stream.read(limit+1)
     need(len(raw) <= limit, 'read bound exceeded')
     return raw
+
+
+def receipts_class():
+    """Load exact reviewed bytes lazily; isolated payload needs no sibling import."""
+    global _receipts_module
+    if _receipts_module is None:
+        raw=read(Path(__file__).resolve().with_name('employee_owned_receipts.py'))
+        need(sha(raw)==RECEIPTS_SHA,'reviewed descriptor receipt source differs')
+        module=types.ModuleType('sealed_employee_receipts')
+        exec(compile(raw,'sealed_employee_receipts','exec'),module.__dict__)
+        _receipts_module=module
+    return _receipts_module.OwnedReceipts
 
 
 def parse(raw):
@@ -277,8 +291,9 @@ def backend_class(adapter_raw):
     adapter=load_adapter(adapter_raw)
     class QualifiedLinuxBackend(adapter.RealLinuxBackend):
         sdk_adapter = adapter
-        def __init__(self,evidence,executable_sha256,allowlist=None,adapter_path=None,source_path=None,authority_file=None,watcher_side=False):
+        def __init__(self,evidence,executable_sha256,allowlist=None,adapter_path=None,source_path=None,authority_file=None,watcher_side=False,receipt_store=None):
             super().__init__(evidence,executable_sha256)
+            self.receipt_store=receipt_store
             self.observer=ProcObserver();self.approved=allowlist
             self.adapter_path=adapter_path;self.source_path=source_path or str(Path(__file__).resolve())
             self.authority_file=authority_file
@@ -295,6 +310,9 @@ def backend_class(adapter_raw):
             if re.fullmatch(r'helper-[1-9][0-9]*\.json',name):
                 actor='watcher' if self.watcher_side else 'controller'
                 name='helper-'+actor+'-'+name.removeprefix('helper-')
+            if self.receipt_store is not None:
+                need(type(self.receipt_store) is receipts_class(),'retained receipt store required')
+                return self.receipt_store.write_json(name,value)
             return super()._write(name,value)
 
         def _command(self,argv,timeout=3):
@@ -467,6 +485,17 @@ def watch(evidence,adapter_path,intent_sha,source_sha,authority_file):
 
 
 def qualify_no_sdk(args):
+    """Consume a caller-retained descriptor; path-only custody is refused."""
+    need(sys.platform=='linux' and os.geteuid()==0 and hasattr(os,'pidfd_open'),'Linux root pidfd/systemd qualification host required')
+    fd=getattr(args,'evidence_fd',None)
+    need(type(fd) is int and fd>=0,'caller-retained evidence descriptor required')
+    # OwnedReceipts duplicates the descriptor, validates current ownership and
+    # closes only its own duplicate on every exit. No pathname is reacquired.
+    with receipts_class()(fd) as receipts:
+        return _qualify_no_sdk(args,receipts)
+
+
+def _qualify_no_sdk(args,receipts):
     """Actual Linux disposable cap/typed-observation/expiry route; never dotnet.
 
     This does not itself enroll the SDK/provider backend. Controller-loss and
@@ -477,10 +506,10 @@ def qualify_no_sdk(args):
     observer=ProcObserver()
     policy=qualification_policy(read(args.policy),args.policy_sha,observer.boot(),source_sha,now())
     evidence=Path(args.evidence)
-    need(evidence.is_absolute() and evidence.is_dir(),'precreated private evidence required')
+    need(evidence.is_absolute(),'absolute evidence label required; receipt custody is descriptor-only')
     adapter=load_adapter(read(args.adapter))
     Backend=backend_class(read(args.adapter))
-    backend=Backend(evidence,'0'*64,policy['approvedNonNativeExecutableSha256'])
+    backend=Backend(evidence,'0'*64,policy['approvedNonNativeExecutableSha256'],receipt_store=receipts)
     # NoSDK census does not call the SDK binary admission method.
     census=observer.census()
     need(observer.memory()>=FLOOR and classify(census,policy['approvedNonNativeExecutableSha256'],[])==[],'fresh physical floor/executable census refused')
@@ -491,7 +520,7 @@ def qualify_no_sdk(args):
     command=['/usr/bin/python3','-I',str(Path(__file__).resolve()),'--mode','probe-payload']
     argv=['/usr/bin/systemd-run','--quiet','--unit='+unit]+['--property='+k+'='+v for k,v in literal.items()]+['--',*command]
     intent={'sourceOnly':True,'nativeSDKExecutionGranted':False,'policySha256':args.policy_sha,'sourceSha256':source_sha,'unit':unit,'command':command,'properties':properties,'bootId':observer.boot(),'observedUtc':stamp()}
-    token=atomic(evidence,'qualification-intent.json',intent)
+    token=receipts.write_json('qualification-intent.json',intent)
     generation=None;pidfd=None
     try:
         backend._command(argv,10)
@@ -505,14 +534,14 @@ def qualify_no_sdk(args):
         kernel=observer.cgroup(group);process=observer.process(pid)
         need(kernel is not None and process in kernel['members'],'actual complete probe membership required')
         generation={'unit':unit,'invocationId':invocation,'bootId':observer.boot(),'cgroup':group,'device':kernel['device'],'inode':kernel['inode'],'process':process}
-        atomic(evidence,'qualification-generation.json',{'generation':generation,'intentSha256':token,'observedUtc':stamp(),'containmentValidated':False})
+        receipts.write_json('qualification-generation.json',{'generation':generation,'intentSha256':token,'observedUtc':stamp(),'containmentValidated':False})
         pidfd=os.pidfd_open(pid)
         for name,expected in properties.items():
             sig='b' if type(expected) is bool else 't' if type(expected) is int else 'as' if name=='Environment' else 's'
             need(prop(service,name,sig)==expected,'actual manager containment differs')
         actual=prop(service,'ExecStart','a(sasbttttuii)')
         need(len(actual)==1 and type(actual[0]) is list and actual[0][:3]==[command[0],command,False],'literal actual probe argv differs')
-        atomic(evidence,'qualification-containment.json',{'generation':generation,'intentSha256':token,'observedUtc':stamp(),'containmentValidated':True})
+        receipts.write_json('qualification-containment.json',{'generation':generation,'intentSha256':token,'observedUtc':stamp(),'containmentValidated':True})
         deadline=time.monotonic()+seconds+35
         while time.monotonic()<deadline:
             need(prop(manager,'InvocationID','ay')==invocation and observer.boot()==generation['bootId'],'manager invocation changed')
@@ -524,7 +553,7 @@ def qualify_no_sdk(args):
         kernel=observer.cgroup(group,generation)
         need(kernel is None or kernel['members']==[],'probe descendants remain')
         need(select.select([pidfd],[],[],0)[0],'retained probe PID has not exited')
-        atomic(evidence,'qualification-result.json',{'generation':generation,'actualFiniteExpiryPassed':True,'actualTypedPropertiesPassed':True,'remainingMembers':[],'managerState':active,'execMainStatus':prop(service,'ExecMainStatus','i'),'observedUtc':stamp(),'runtimeQualified':False,'sdkProviderQualified':False})
+        receipts.write_json('qualification-result.json',{'generation':generation,'actualFiniteExpiryPassed':True,'actualTypedPropertiesPassed':True,'remainingMembers':[],'managerState':active,'execMainStatus':prop(service,'ExecMainStatus','i'),'observedUtc':stamp(),'runtimeQualified':False,'sdkProviderQualified':False})
     finally:
         try:
             backend.cleaning=True
@@ -541,8 +570,8 @@ def qualify_no_sdk(args):
                     if prop(manager,'ActiveState','s') in {'inactive','failed'} and prop(service,'MainPID','u')==0 and (kernel is None or kernel['members']==[]):break
                     time.sleep(.1)
                 else:raise ValueError('same-generation qualification cleanup deadline failed')
-                atomic(evidence,'qualification-cleanup.json',{'intentSha256':token,'generation':generation,'remainingMembers':[],'actualTerminal':True,'observedUtc':stamp()})
-            else:atomic(evidence,'qualification-uncertain.json',{'intentSha256':token,'failureType':'UncertainAcquisition','runtimeQualified':False})
+                receipts.write_json('qualification-cleanup.json',{'intentSha256':token,'generation':generation,'remainingMembers':[],'actualTerminal':True,'observedUtc':stamp()})
+            else:receipts.write_json('qualification-uncertain.json',{'intentSha256':token,'failureType':'UncertainAcquisition','runtimeQualified':False})
         finally:
             if pidfd is not None:os.close(pidfd)
 
@@ -554,7 +583,7 @@ def probe_payload():
 
 def main(argv=None):
     p=argparse.ArgumentParser();p.add_argument('--mode',choices=['watch','qualify-no-sdk','probe-payload'],required=True)
-    p.add_argument('--evidence');p.add_argument('--adapter')
+    p.add_argument('--evidence');p.add_argument('--evidence-fd',type=int);p.add_argument('--adapter')
     p.add_argument('--intent-sha');p.add_argument('--source-sha');p.add_argument('--policy');p.add_argument('--policy-sha');p.add_argument('--authority')
     args=p.parse_args(argv)
     if args.mode=='probe-payload':return probe_payload()

@@ -43,7 +43,7 @@ or global provider cleanup exists.
 The actual Linux no-SDK route is:
 
 ```text
-sudo /usr/bin/python3 -I scripts/employee_linux_custody.py --mode qualify-no-sdk --adapter /private/sealed/employee_linux_sdk_owner.py --evidence /private/owned/evidence --policy /private/original-qualification.json --policy-sha EXACT_REVIEWED_RAW_SHA
+The no-SDK controller retains the private evidence directory descriptor and passes `--evidence-fd` to custody. Direct pathname-only invocation is refused; qualification remains pending.
 ```
 
 The evidence directory must already be absolute/private. Policy is closed:
