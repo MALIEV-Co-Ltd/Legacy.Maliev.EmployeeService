@@ -95,13 +95,14 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         };
 
         var total = await query.CountAsync(cancellationToken);
-        if (total == 0)
+        var offset = (pageIndex - 1L) * pageSize;
+        if (total == 0 || offset >= total)
         {
             return null;
         }
 
         var items = await Project(query)
-            .Skip((pageIndex - 1) * pageSize)
+            .Skip((int)offset)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
         if (items.Count == 0)
