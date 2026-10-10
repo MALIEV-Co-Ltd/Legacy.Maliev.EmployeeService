@@ -366,7 +366,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         var entity = new SignatureImageFile
         {
             EmployeeId = employeeId,
-            Bucket = request.Bucket.Trim(),
+            Bucket = request.Bucket,
             ObjectName = request.ObjectName,
             CreatedDate = now,
             ModifiedDate = now,
@@ -395,7 +395,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         }
 
         entity.EmployeeId = request.EmployeeId ?? employeeId;
-        entity.Bucket = request.Bucket.Trim();
+        entity.Bucket = request.Bucket;
         entity.ObjectName = request.ObjectName;
         entity.ModifiedDate = UtcWallClockNow();
         await dbContext.SaveChangesAsync(cancellationToken);
