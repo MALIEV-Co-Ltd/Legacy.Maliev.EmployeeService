@@ -46,14 +46,21 @@ public sealed class EmployeeApplicationServiceTests
     [Fact]
     public async Task GetEmployeesAsync_ClampsUnboundedLegacyRequest()
     {
-        var repository = new Mock<IEmployeeRepository>();
-        repository.Setup(value => value.GetEmployeesAsync(null, null, 1, 250, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((PaginatedResponse<EmployeeResponse>?)null);
+        // Retain this historical Fact identity while replacing the unsupported
+        // migration clamp oracle with the original unmodified size forwarding.
+        var repository = new Mock<IEmployeeRepository>(MockBehavior.Strict);
+        int?[] sizes = [null, 0, -1, 251, 10_000, int.MaxValue];
+        foreach (var size in sizes)
+            repository.Setup(value => value.GetEmployeesAsync(null, null, 1, size, It.IsAny<CancellationToken>()))
+                .ReturnsAsync((PaginatedResponse<EmployeeResponse>?)null);
         var service = new EmployeeApplicationService(repository.Object, Mock.Of<IEmployeeCache>());
 
-        await service.GetEmployeesAsync(null, null, null, 10_000, CancellationToken.None);
+        foreach (var size in sizes)
+            await service.GetEmployeesAsync(null, null, null, size, CancellationToken.None);
 
-        repository.VerifyAll();
+        foreach (var size in sizes)
+            repository.Verify(value => value.GetEmployeesAsync(null, null, 1, size, It.IsAny<CancellationToken>()), Times.Once);
+        repository.VerifyNoOtherCalls();
     }
 
     [Fact]

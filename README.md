@@ -40,8 +40,16 @@ role, email, address, identity, and security fields remain server-owned.
 
 PascalCase JSON, null omission, the four legacy sort values, named routes and the
 pagination fields `Items`, `PageIndex`, `TotalPages`, `TotalRecords`,
-`HasNextPage`, and `HasPreviousPage` remain compatible. List size is bounded to
-250 records to protect the existing cluster.
+`HasNextPage`, and `HasPreviousPage` remain compatible. Omitting `size`, or
+supplying an empty `size=`, returns the entire filtered cohort in one page, as the
+original controller did, including cohorts larger than 250. A later omitted-size
+page remains exhausted (404). Explicit positive sizes are forwarded unchanged, including values greater than
+250. Zero size yields no items (404). Negative sizes are not silently clamped: for
+a nonempty cohort they retain the original database failure boundary (500 in
+Production); an empty cohort remains 404 before paging. Page index is normalized
+to at least 1. The accepted Int64 offset arithmetic remains unchanged. Original
+SQL Server/provider and new PostgreSQL behavior require actual hosted regression
+validation; source inspection alone is not runtime acceptance.
 
 ## Data, signatures and caching
 

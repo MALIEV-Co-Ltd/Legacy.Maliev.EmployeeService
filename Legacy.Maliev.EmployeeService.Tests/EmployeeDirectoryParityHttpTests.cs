@@ -126,7 +126,29 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
     {
         await fixture.SeedAsync(Enumerable.Range(1, 260)
             .Select(id => new DirectoryRow(id, "Bulk", "Employee", $"bulk-{id:D3}@example.invalid")).ToArray());
-        await AssertPageAsync(query, Enumerable.Range(1, count).ToArray(), 1, pages, 260);
+        // Preserve the historical theory name and inputs, but correct its obsolete
+        // migration cap assertions against the committed controller/helper oracle.
+        // Bind all retained historical inputs independently from the corrected
+        // source outcome; prior count/pages values are not new response oracles.
+        Assert.Contains((query, count, pages), new[]
+        {
+            ("", 50, 6),
+            ("size=10000", 250, 2),
+            ("index=0&size=0", 1, 260),
+        });
+        var (sourceCount, sourcePages) = query switch
+        {
+            "" => (260, 1),
+            "size=10000" => (260, 1),
+            "index=0&size=0" => (0, 0),
+            _ => throw new InvalidOperationException("Unrecognized historical pagination case."),
+        };
+        if (sourceCount == 0)
+        {
+            await AssertNotFoundAsync(query);
+            return;
+        }
+        await AssertPageAsync(query, Enumerable.Range(1, sourceCount).ToArray(), 1, sourcePages, 260);
     }
 
     [Fact]

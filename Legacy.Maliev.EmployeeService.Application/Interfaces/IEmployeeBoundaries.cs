@@ -61,8 +61,8 @@ public interface IEmployeeRepository
     Task<EmployeeHomeAddressEditResult> UpdateHomeAddressIfMatchAsync(int id, EmployeeHomeAddressEditRequest request, string employeeVersion, string addressVersion, CancellationToken cancellationToken);
     /// <summary>Gets one employee projection.</summary>
     Task<EmployeeResponse?> GetEmployeeAsync(int id, CancellationToken cancellationToken);
-    /// <summary>Gets a bounded employee page.</summary>
-    Task<PaginatedResponse<EmployeeResponse>?> GetEmployeesAsync(EmployeeSortType? sort, string? search, int pageIndex, int pageSize, CancellationToken cancellationToken);
+    /// <summary>Gets an explicit employee page or the complete filtered cohort when page size is omitted.</summary>
+    Task<PaginatedResponse<EmployeeResponse>?> GetEmployeesAsync(EmployeeSortType? sort, string? search, int pageIndex, int? pageSize, CancellationToken cancellationToken);
     /// <summary>Creates an employee entity.</summary>
     Task<Employee> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken);
     /// <summary>Updates an employee entity.</summary>
