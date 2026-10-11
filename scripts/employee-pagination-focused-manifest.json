@@ -264,8 +264,8 @@
     },
     {
       "path": ".github/workflows/_build-and-test.yml",
-      "bytes": 5668,
-      "sha256": "e26d5abf4391d8c5efb708cc2d448aa6137ae7db37d469d1a1ea6e7de537fb81"
+      "bytes": 2174,
+      "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDefaultPageHttpTests.cs",
@@ -606,6 +606,11 @@
       "path": "Legacy.Maliev.EmployeeService.slnx",
       "bytes": 531,
       "sha256": "a15a96da04818867fe10e249f61351e8f5b8b63ccaca9e8ca9aff4c16c92bf5b"
+    },
+    {
+      "path": ".github/workflows/employee-pagination-focused.yml",
+      "bytes": 3843,
+      "sha256": "dcbfd643a83c6620825171a56d56cfb8effc5c78f2855b61902344c4acdd94e7"
     }
   ],
   "dependencyPins": [
