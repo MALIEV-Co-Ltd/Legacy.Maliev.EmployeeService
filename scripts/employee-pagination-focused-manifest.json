@@ -1,0 +1,623 @@
+{
+  "schemaVersion": 1,
+  "behaviorHead": "c7cf8172b83591499070588654d570a9d700723d",
+  "ordinaryFullRun": 38108335884,
+  "requiredFocusedCount": 49,
+  "selected": [
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.AllSourceSortFlags_PreserveWireOrder(sort: \"EmployeeEmail_Descending\", first: 1, second: 3, third: 2)",
+      "testId": "db05be2d-4ff4-cc31-c5a5-3078a8017670"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedOrEmptySize_ReturnsEntireFilteredCohortAndPreservesExplicitPages(matches: 300, distractors: 900)",
+      "testId": "7f0f2707-faa3-9224-b802-646468e14979"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SourceSearch_RemainingStoredTextFieldsMatchLiteralInputs(field: \"LastName\")",
+      "testId": "0d7bccfc-3a41-1449-3231-351c7b63364e"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.AllSourceSortFlags_PreserveWireOrder(sort: \"EmployeeId_Descending\", first: 3, second: 2, third: 1)",
+      "testId": "96c0686b-2841-8f07-5458-a2f44f984dc1"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SearchSpecialCharacters_AreLiteralSubstrings(literal: \"Sales%Lead\", distractor: \"SalesXLead\")",
+      "testId": "0114f0e8-a959-969f-a329-945940821c8c"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.NormalSignedAuthority_DenialsLeaveDatabaseUnchanged(authority: \"wrong-signature\", expected: Unauthorized)",
+      "testId": "58b08dda-002c-ca36-a560-09deb1766b19"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.Projection_PreservesPascalCaseNestedAddressAndNullOmission",
+      "testId": "78c78827-d115-0c18-fb8e-a0be8a273007"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.GetEmployeesAsync_ClampsUnboundedLegacyRequest",
+      "testId": "d6a918de-d5e6-fc1c-1def-5385c9d6f631"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.TextSearch_PreservesEnglishThaiAndSignificantPadding(search: \"  Engineer  \", id: 1)",
+      "testId": "f9eeb6b7-59c8-d552-6e0f-52c585a467c6"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.TextSearch_PreservesEnglishThaiAndSignificantPadding(search: \"ENg\", id: 1)",
+      "testId": "9b84cdd3-cd68-13ec-5479-b5af3329d487"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SourceSearch_ComputedFullNameMatchesAcrossNameBoundary",
+      "testId": "66e5c631-7b87-165c-5785-3f9439926e9a"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.AbsentNumericId_DoesNotMatchPhoneOrEmail",
+      "testId": "69069219-9516-0b69-7220-a475aa762755"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.CurrentBoundedDefaultsAndClamps_AreRetained(query: \"index=0&size=0\", count: 1, pages: 260)",
+      "testId": "2f115944-60e1-3aa9-5da4-07573c9efe08"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.UpdateAddressAsync_InvalidatesEveryEmployeeUsingAddress",
+      "testId": "c5cbeb2d-7111-5f97-2b70-773f88afb9b2"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.ConditionalEdit_CallerCancellationIsPreservedEvenWhenCacheCleanupFails(address: True)",
+      "testId": "14b756f2-e734-a0d5-d9bb-2ce53a94864d"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedSize_StillRequiresEmployeeDirectoryAuthority(authority: \"expired\", expected: Unauthorized)",
+      "testId": "d8bec905-e977-1a7c-b36f-c7ba70db5fb4"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.ConditionalEdit_CallerCancellationIsPreservedEvenWhenCacheCleanupFails(address: False)",
+      "testId": "b0c98a19-fb55-42bc-2c69-3e0b596782dc"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.GetEmployeeAsync_StaleCacheCannotReplaceAuthoritativePostgreSqlResult",
+      "testId": "8bde6dcc-3af8-6bdd-330f-fd48c2c474fd"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.AllSourceSortFlags_PreserveWireOrder(sort: \"EmployeeId_Ascending\", first: 1, second: 2, third: 3)",
+      "testId": "d4576e91-a530-80d3-073b-07ad0d541d97"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SearchSpecialCharacters_AreLiteralSubstrings(literal: \"Code_1\", distractor: \"CodeA1\")",
+      "testId": "dc6650b8-30e4-45c6-af32-9087b91c693e"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.ConditionalEdit_CancellationAfterCommittedResult_CannotCancelCacheCleanup(address: False)",
+      "testId": "c1e6ab62-5f50-64dd-4e89-814a63b01c74"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.UpdateSelfProfileAsync_Success_InvalidatesOnlyOwnedEmployeeCache",
+      "testId": "8b7fd341-a17f-b2d7-7b71-44e5e8169300"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedOrEmptySize_ReturnsEntireFilteredCohortAndPreservesExplicitPages(matches: 100, distractors: 900)",
+      "testId": "5bea1ecc-2950-6f56-5eb0-e0731abb0d12"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.NormalSignedAuthority_DenialsLeaveDatabaseUnchanged(authority: \"anonymous\", expected: Unauthorized)",
+      "testId": "ff057d75-02b3-c5ed-ae60-debc3e0ddbef"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.NumericSearch_SelectsOnlyExactEmployeeId(search: \"007\")",
+      "testId": "1cc29633-46f1-1642-4dd9-8b27be4d7ac0"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.CurrentBoundedDefaultsAndClamps_AreRetained(query: \"size=10000\", count: 250, pages: 2)",
+      "testId": "cb074946-332b-bfa3-0f3a-43b22868740f"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.LiteralFilteredPaging_CountsOnlyLiteralMatches",
+      "testId": "390ffe6c-6ca4-15fd-a7e3-31d0d38c5376"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.HomeAddressConditionalEdit_CallerCancellationSurvivesCacheCleanupFailure(commitAttempted: False)",
+      "testId": "4c1c87bc-9d38-d0dc-8ae6-085ea30079f8"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.NumericSearch_SelectsOnlyExactEmployeeId(search: \"7\")",
+      "testId": "e2b1474d-039e-58f8-faaf-874b55888966"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedSize_StillRequiresEmployeeDirectoryAuthority(authority: \"missing-permission\", expected: Forbidden)",
+      "testId": "e4cac480-dfc5-9bc2-3126-2385caa1d4b3"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.CurrentBoundedDefaultsAndClamps_AreRetained(query: \"\", count: 50, pages: 6)",
+      "testId": "885b2b08-28e5-b1b1-4f48-5d6e37cc6e99"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.TextSearch_PreservesEnglishThaiAndSignificantPadding(search: \"\u0e27\u0e34\u0e28\u0e27\", id: 2)",
+      "testId": "46eea657-6ab5-aa21-7eff-2eba2929514c"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.HomeAddressConditionalEdit_PostReturnCancellationCannotCancelLinkedCacheCleanup",
+      "testId": "5319f8d1-3582-db9e-0b0a-4b374c56dc5f"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SourceSearch_RemainingStoredTextFieldsMatchLiteralInputs(field: \"Email\")",
+      "testId": "65b20ef9-a460-16d7-ef10-efbbaad0dea1"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.EmptySelectedPage_ReturnsSourceNotFound",
+      "testId": "0f2220b8-f061-6626-f5a1-2ec4203368aa"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedOrEmptySize_ReturnsEntireFilteredCohortAndPreservesExplicitPages(matches: 60, distractors: 100)",
+      "testId": "a928f762-fcda-b171-98c1-2789168d8aea"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.MissingText_ReturnsNotFoundWithoutMutation",
+      "testId": "43c9f77a-3784-cede-a200-7aefc7054b4e"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedSize_StillRequiresEmployeeDirectoryAuthority(authority: \"anonymous\", expected: Unauthorized)",
+      "testId": "78a22c59-262a-f37a-5002-b7282d12e79a"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SourceSearch_RemainingStoredTextFieldsMatchLiteralInputs(field: \"PhoneNumber\")",
+      "testId": "3806febb-bf6c-6606-b358-98e02394421e"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.ConditionalEdit_CancellationAfterCommittedResult_CannotCancelCacheCleanup(address: True)",
+      "testId": "55a2e647-f0bf-9e7f-8703-17bc0e4187f9"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SearchSpecialCharacters_AreLiteralSubstrings(literal: \"%_\\\\\", distractor: \"XYZ\")",
+      "testId": "5be700f4-b2a7-e1e8-2c6e-7f2553f33245"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.NormalSignedAuthority_DenialsLeaveDatabaseUnchanged(authority: \"expired\", expected: Unauthorized)",
+      "testId": "cf947c27-d782-ec50-eb82-699cc04c3cf1"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.SearchSpecialCharacters_AreLiteralSubstrings(literal: \"Back\\\\Slash\", distractor: \"BackSlash\")",
+      "testId": "c178d56e-cf91-600c-1a7c-b049418c6337"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.CallerCancellation_ReachesActualDirectoryQueryAndLeavesDatabaseUnchanged",
+      "testId": "eef385fe-55a2-8f0e-b85b-ff0d0d338113"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDefaultPageHttpTests.OmittedSize_StillRequiresEmployeeDirectoryAuthority(authority: \"wrong-signature\", expected: Unauthorized)",
+      "testId": "d9bb5cce-4321-4860-29f2-68fa81144706"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.AllSourceSortFlags_PreserveWireOrder(sort: \"EmployeeEmail_Ascending\", first: 2, second: 3, third: 1)",
+      "testId": "422037bb-fe6b-ae9b-5460-1400bd9fcba2"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.Application.EmployeeApplicationServiceTests.HomeAddressConditionalEdit_CallerCancellationSurvivesCacheCleanupFailure(commitAttempted: True)",
+      "testId": "c7426042-c1cf-f642-7be0-42e2b01584c3"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.NormalSignedAuthority_DenialsLeaveDatabaseUnchanged(authority: \"missing-permission\", expected: Forbidden)",
+      "testId": "078bae65-08f5-cc2f-5866-ea14775bf3cb"
+    },
+    {
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDocumentationAcceptanceTests.Documentation_ExplainsExistingDirectoryDefaultsAndQueryNames",
+      "testId": "9b01d809-7191-6efa-eb5c-efdc816387ff"
+    }
+  ],
+  "codePins": [
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Interfaces/IEmployeeBoundaries.cs",
+      "bytes": 9434,
+      "sha256": "c78c4751c3ee3fb82a06f42e98c0940fcb40b19f024f510985178a1df116b8c6"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Services/EmployeeApplicationService.cs",
+      "bytes": 10017,
+      "sha256": "2fddf7ee56b272cb7769968dada146c6f2ae079e5ac46dcee3e006b14a06ba4b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeRepository.cs",
+      "bytes": 22327,
+      "sha256": "206cfadc5c7e170d9829b88f011fb2afa6dd970638795ba03f00e1f6f4245f8c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeesController.cs",
+      "bytes": 7590,
+      "sha256": "d81e385c91604317a3af9a6277f192695f58361c2980290a779de28699ab56ad"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6516,
+      "sha256": "408ee2d6eaab6b3a32cead0494056d443c509c5ce28ad78c65009d9038076bf9"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryParityHttpTests.cs",
+      "bytes": 11173,
+      "sha256": "e5657acc41843ac70a2cfccb2d686016bebb3ecd9c456a1e811def8c223fd880"
+    },
+    {
+      "path": "docs/employee-directory-parity-design-20261001.md",
+      "bytes": 12392,
+      "sha256": "fb1f436987c8c9dcdbe5b52700ea764998d4b40ec6f8fb7abe28563678be68d4"
+    },
+    {
+      "path": "docs/employee-route-acceptance-design-20261001.md",
+      "bytes": 16633,
+      "sha256": "96ac56a26987cd9f6b560398068701dd54531a382cdf2f1df5aa0b9300af067d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Application/EmployeeApplicationServiceTests.cs",
+      "bytes": 11158,
+      "sha256": "dd7006c8fd0aa917a4e321941c7338eaaa6918d9350a5e29f55c3e50e8e71449"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDocumentationAcceptanceTests.cs",
+      "bytes": 10201,
+      "sha256": "58679367996f58b50dbba6c4bf8f4e062e053f7f258ea8edbba27a2f7d6b6845"
+    },
+    {
+      "path": "scripts/verify_employee_pagination_focused.py",
+      "bytes": 9668,
+      "sha256": "c5e970b0102db9eceb8616c270734474e3020382d255de905c4ab63a4346250a"
+    },
+    {
+      "path": "scripts/test_employee_pagination_focused_validator.py",
+      "bytes": 11416,
+      "sha256": "8b240493e0ff120626232544b8cb0afcb4c14453d8c96f45e99a3e0f4455bad1"
+    },
+    {
+      "path": ".github/workflows/_build-and-test.yml",
+      "bytes": 5668,
+      "sha256": "e26d5abf4391d8c5efb708cc2d448aa6137ae7db37d469d1a1ea6e7de537fb81"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDefaultPageHttpTests.cs",
+      "bytes": 12434,
+      "sha256": "466adf18cd48f84da89127daae7963be1cf13fa3f13127503d5472f83bdbf3a3"
+    },
+    {
+      "path": "Directory.Build.props",
+      "bytes": 515,
+      "sha256": "b03b93e505f9bd0f5d396c5041d9b35d6cfccb454384ba8151e55e05edf45083"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
+      "bytes": 2652,
+      "sha256": "effb6c9ca1e0666975f2b076dfbe77594825b552ce7f51fa51c04ec17d241eb4"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs",
+      "bytes": 6143,
+      "sha256": "76bcc021718df3846e1f472c732ea19075835ab8cf23ae131465e413b178d31c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeEditPrecondition.cs",
+      "bytes": 719,
+      "sha256": "bb1f6371d89797083c15c75f8ff23ed49a7de02257ab6c81fa1c902ba599dfa1"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeHomeAddressController.cs",
+      "bytes": 2169,
+      "sha256": "3245826d1ef46474eba4883eef89e15306a72a99b61118f10b8cac94cf0fe86c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/RolesController.cs",
+      "bytes": 2591,
+      "sha256": "664b2764d05838732a1a0eea33b8751d6f0445d5796ef21290185724bdec67ba"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/SignaturesController.cs",
+      "bytes": 3141,
+      "sha256": "39a91a2d55c7d8aacf93810432e3c6849d506e535129bbbf85a92143a219739b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Documentation/EmployeeOpenApi.cs",
+      "bytes": 1753,
+      "sha256": "d81e868b45b38e177d12e517a44737ce62d2a8fb4ccd70f0a2dc2e664a6b2371"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+      "bytes": 2659,
+      "sha256": "c99a659d36a6794386c09a535a80c598944d671f5c39699ed979dda00f9ea326"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
+      "bytes": 6343,
+      "sha256": "daf4f5b4fb582accf2c44f3c8d29a09ef5aa6c19d6fe9dbc410008f31972a11b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticLogging.cs",
+      "bytes": 915,
+      "sha256": "d5e83e49bb2ad4cfd1ebbc0edc8be9b412d493836694ac655332b9023143f610"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+      "bytes": 2680,
+      "sha256": "1f0adadfb52dcc0155c1ed566ceeb0ba9172cccaa6bbc558f7ce4d4b52323237"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
+      "bytes": 476,
+      "sha256": "6bfd68d42a5fc4c333efbaf9e1597ce86703e5a8bc65721c07cc797eee74da6f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeEditVersion.cs",
+      "bytes": 2652,
+      "sha256": "5239a4b8e656d13cee90e4096755b7831eb107a3f859418cc57b13de00961ad2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeHomeAddressEdit.cs",
+      "bytes": 1932,
+      "sha256": "e55bca91edda8a00e7f001b4aec31b8c5a565ad888dddf75eb917dc0733859f5"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeModels.cs",
+      "bytes": 3411,
+      "sha256": "83fd034b3385ff3a06238be6957c3fce3ac4760598b6193c98f7ccce2cf51d25"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/DistributedEmployeeCache.cs",
+      "bytes": 2616,
+      "sha256": "da0ececc22e3d0dbfbab11d5baf72d3de86de76bf02b77ac4acd3446f9749510"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeDbContext.cs",
+      "bytes": 4824,
+      "sha256": "a1a016ef583cd95245e1ec6af44a5cf0711682ea4482c773518556ce581d1192"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeDbContextFactory.cs",
+      "bytes": 930,
+      "sha256": "4e624ae0c384ba32b0c7d5672a84a3ee08033c621caeec601af2a99b57c37f56"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+      "bytes": 1170,
+      "sha256": "9a2a6618927467a2abf194f72e5adc91a12c8d0c3842b2b4b720ccea330c89a3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
+      "bytes": 9690,
+      "sha256": "67977d84dffce3cd6fe9865656fe80e3df9f9ede063762637d92f973001fda38"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
+      "bytes": 7037,
+      "sha256": "9d5f51f6d8c9cc741f74a91fdd55c8e69485d0b04c7777eafe15af75e43b2ac8"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.Designer.cs",
+      "bytes": 9858,
+      "sha256": "b7d929d5c6cc54f8776de1d505c3c51d873607ecc9e5985c92ca73098c41fa83"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
+      "bytes": 5889,
+      "sha256": "66d6211c796b85efd8a08e2c12ff4a8e8db5995ec6c5d31bd86b282e90035e69"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/EmployeeDbContextModelSnapshot.cs",
+      "bytes": 9740,
+      "sha256": "c51814d189c66c7ec4e5c06f04f1a2e7faed2a7951941c964a4fb93de7938a39"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Domain/EmployeeEntities.cs",
+      "bytes": 3956,
+      "sha256": "1576b346b66b17166c70d8df2de41d776ccc5fc46affc1510e1873e28d681392"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Domain/Legacy.Maliev.EmployeeService.Domain.csproj",
+      "bytes": 327,
+      "sha256": "0aec8d23fc31d062753209091db0c1b51aef9b67e0ed3626bf0dee66e38dc118"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Caching/DistributedEmployeeCacheTests.cs",
+      "bytes": 4055,
+      "sha256": "f0739d0c5c4f85d29e05709189386c5d2b4cd52f0babf98710096e3e5f31a470"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeControllerContractTests.cs",
+      "bytes": 6948,
+      "sha256": "3738c5e8ea0e4ac306c407415681ea3941cc874a8c4deedf2729ddd4f267438d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeeModelCompatibilityTests.cs",
+      "bytes": 4162,
+      "sha256": "02b9f5a591ca4c6dde0a0ab4be057de7e3c4c17b7712feeffe196764d3082ba6"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeePostgresMigrationTests.cs",
+      "bytes": 2939,
+      "sha256": "cab3685ab8720567c09bad0f8a607f17d4109704ff4a46f014755b3574690343"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeeSelfProfilePostgresTests.cs",
+      "bytes": 3871,
+      "sha256": "93903dfc88fbf62b99a8a541f460a1292f288604abd6e284a52a9a4fd2793f8f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/DeliveryContractTests.cs",
+      "bytes": 6753,
+      "sha256": "24fe498f3fa784aeab031325172a40630672c97b221c74e78ecf1125f40d3625"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAddressPersistenceHttpTests.cs",
+      "bytes": 9985,
+      "sha256": "f3021fca629e327238af16b66c8660c9e55140bc72bbe8073cadc74b72a67893"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeEmailLiteralHttpTests.cs",
+      "bytes": 16296,
+      "sha256": "7cb782b35093e54e726589440b50efde2bb01c9e0e5154d1dfb5b320196f6b69"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeLiteralNameHttpTests.cs",
+      "bytes": 15302,
+      "sha256": "159b03aae5e002309ef684c67fbc87c4803e63282a6591ee6341bd3dd9e2c3c3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativePersistenceHttpTests.cs",
+      "bytes": 9620,
+      "sha256": "0ed99ccc04281f4bf7c46b8b28f2fbb99494b0381bba1964cf31ebaa801ff4e1"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeProfileLifecycleHttpTests.cs",
+      "bytes": 7159,
+      "sha256": "c1c7e500aad64cc6019945e09c7cc82baa114e44df70eb491a7d68a4ab393bcf"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeConditionalEditHttpTests.cs",
+      "bytes": 20395,
+      "sha256": "02b0f461527aedc9362f13aa31f441d2ef1ae8af946a959319a15be865a82746"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryOffsetHttpTests.cs",
+      "bytes": 7234,
+      "sha256": "ecd3700525f0ba9a8a78b823f617ea53d738d0064f2c237ea1f3234f67fec737"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryParityFixture.cs",
+      "bytes": 7919,
+      "sha256": "2297b7d87614518de4f7cb659dc9d2f98556f8957aa21af77ebcb74b32fdc0c2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeHomeAddressConditionalEditHttpTests.cs",
+      "bytes": 24252,
+      "sha256": "256f3e14befdcf1b05eb075c409b8b7496c381fd56780ef55de75527aac20de8"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeIamTransportEvidenceTests.cs",
+      "bytes": 5835,
+      "sha256": "cf2cec77336980cdb5538319486f9fc34db4ed19f7e5b4b84f56a04b99e69845"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeJwtExternalizationTests.cs",
+      "bytes": 6021,
+      "sha256": "5bb9b6701f49ae6eff17f93ade1aeb3a26262828d213de75bae3e2c544312e5e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProductionPipelineHttpTests.cs",
+      "bytes": 5718,
+      "sha256": "bc85f232b712d8787e364d685850fb2be54f1570ac91567b0fcbbad447ea1667"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProfileDeletionIsolationHttpTests.cs",
+      "bytes": 14244,
+      "sha256": "24e17de749c2328c67f933658cff016c62eca18fecd96d0f81e7b877583f029e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRelationshipRollbackHttpTests.cs",
+      "bytes": 7327,
+      "sha256": "b0b4466f85d587e40ef19d8b2910aa98a6767d68645977308f8bed004b511f2c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRouteAcceptanceFixture.cs",
+      "bytes": 14284,
+      "sha256": "f6df4934640c98e294bd38d3691988aa9fdc57777e2571235f9964fb94bd5f40"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRouteAcceptanceHttpTests.cs",
+      "bytes": 36274,
+      "sha256": "3a32e1678b0ae96d5f60dc829aacea108763f60b108fe143c6878a40427b0720"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+      "bytes": 24278,
+      "sha256": "ba3e8128643e67a29f44a0c5e359682a617d3271416eb0992a3b110e7a60dc32"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
+      "bytes": 14610,
+      "sha256": "3b65fa2511c71f0169785eda35ec9acc4cae6f9d8fc65ca087b385f1904f1eba"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSharedAddressHttpTests.cs",
+      "bytes": 7154,
+      "sha256": "911066f96a743ec8460fc2d7b31386b90f6cf7de22ff3ccda23b443f42c36c44"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSharedRoleHttpTests.cs",
+      "bytes": 10358,
+      "sha256": "2f92f1142771876572ed018531c8d7740eb6cb29c2176791bc4ec05b10977cb3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureAmbiguityHttpTests.cs",
+      "bytes": 9731,
+      "sha256": "77d725051a4472aee0e574d1ccb01b836e65233864f6ad66b6979301c95973c2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureBucketLiteralHttpTests.cs",
+      "bytes": 9556,
+      "sha256": "7170885f4dfc81ee92f915c7d708438c0e55667d4ab0f15c5286f149e40aad13"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureDeletionTruthHttpTests.cs",
+      "bytes": 5640,
+      "sha256": "ee9954336ca06f339710bb1294c1f4bac69ccc40786e684ecede33780befcde3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignaturePersistenceHttpTests.cs",
+      "bytes": 10722,
+      "sha256": "d745e28c6166bf7c806f06a0f8d6c21af5f4008a6114a183efc4d25e454140f9"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignificantSearchHttpTests.cs",
+      "bytes": 3252,
+      "sha256": "7d20fac2f2d99b3c153b6c5377681fc1e5b888817fefa6cdeb05628cbec97d64"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeUnhealthyReadinessHttpTests.cs",
+      "bytes": 3853,
+      "sha256": "76edb50ae8d089beb04cd9d1fbdd6719e0e0de43be4b1ed8e5b7776ae71776eb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/IamTransportContractEvidence.cs",
+      "bytes": 796,
+      "sha256": "5d8f6fd56fd1321845a6efa3f369419c01a3c5e959f1e65ed7bca24d10a3c62a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+      "bytes": 1613,
+      "sha256": "843efa58a1f622058dece181439012803459dba1b1aca5083fa3d0e3f9164a3e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
+      "bytes": 2298,
+      "sha256": "ae3c0b3b54d8e1de8381e1be4017f41cfdd728acf53c80f6cb0d8683c7d1918b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/EmployeeDiagnosticConsoleFormatterTests.cs",
+      "bytes": 23510,
+      "sha256": "f7aaf4dc47aa68d5b9d35a613812b8dc9f0ed96f483e384c77d2f4f89080b1cf"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/StartupFailureAcceptanceTests.cs",
+      "bytes": 11500,
+      "sha256": "e9f9853c539828874dd8beb8e32f5595be791e01b40a4e6093e3a02c65c43c53"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/DependabotConfigurationContractTests.cs",
+      "bytes": 2443,
+      "sha256": "54aad271eea8c43f4cbba6e02319629f8b5e0c9975940a05d4caf6d84f588a30"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+      "bytes": 19872,
+      "sha256": "a34292abe7f1c4fbf83b84c29bf4232bd0b73899e24993c82cd1f3253a7b8666"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.slnx",
+      "bytes": 531,
+      "sha256": "a15a96da04818867fe10e249f61351e8f5b8b63ccaca9e8ca9aff4c16c92bf5b"
+    }
+  ],
+  "dependencyPins": [
+    {
+      "path": ".dependencies/Legacy.Maliev.ServiceDefaults",
+      "commit": "c40a7f82cea347b949444dcd7fb730f2b8dc3c0e"
+    },
+    {
+      "path": ".dependencies/Legacy.Maliev.CompatibilityContracts",
+      "commit": "78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7"
+    }
+  ],
+  "distinction": "48 pagination/application identities plus repaired documentation identity. Separate49 command; full437 unchanged.",
+  "filter": "FullyQualifiedName~EmployeeDirectoryParityHttpTests|FullyQualifiedName~Application.EmployeeApplicationServiceTests|FullyQualifiedName~EmployeeDefaultPageHttpTests|FullyQualifiedName~EmployeeDocumentationAcceptanceTests.Documentation_ExplainsExistingDirectoryDefaultsAndQueryNames"
+}

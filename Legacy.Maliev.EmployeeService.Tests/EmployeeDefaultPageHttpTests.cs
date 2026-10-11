@@ -35,13 +35,18 @@ public sealed class EmployeeDefaultPageHttpTests(EmployeeDirectoryParityFixture 
             var address = new Address { AddressLine1 = "Synthetic shared road", CountryId = 764 };
             var cohort = Enumerable.Range(0, matches).Select(value => new Employee
             {
-                FirstName = Needle, LastName = "Staff", Email = $"match-{value}@example.invalid",
-                Role = role, HomeAddress = address,
+                FirstName = Needle,
+                LastName = "Staff",
+                Email = $"match-{value}@example.invalid",
+                Role = role,
+                HomeAddress = address,
             }).ToArray();
             db.Employees.AddRange(cohort);
             db.Employees.AddRange(Enumerable.Range(0, distractors).Select(value => new Employee
             {
-                FirstName = "Distractor", LastName = "Staff", Email = $"distractor-{value}@example.invalid",
+                FirstName = "Distractor",
+                LastName = "Staff",
+                Email = $"distractor-{value}@example.invalid",
             }));
             await db.SaveChangesAsync(cancellation);
             matchingIds = cohort.Select(row => row.Id).Order().ToArray();
@@ -50,7 +55,9 @@ public sealed class EmployeeDefaultPageHttpTests(EmployeeDirectoryParityFixture 
             addressId = address.Id;
             db.SignatureImageFiles.Add(new SignatureImageFile
             {
-                EmployeeId = matchingIds[0], Bucket = "synthetic-bucket", ObjectName = "synthetic-object",
+                EmployeeId = matchingIds[0],
+                Bucket = "synthetic-bucket",
+                ObjectName = "synthetic-object",
             });
             await db.SaveChangesAsync(cancellation);
             Assert.Equal(matches + distractors, allIds.Length);
@@ -189,21 +196,47 @@ public sealed class EmployeeDefaultPageHttpTests(EmployeeDirectoryParityFixture 
         {
             Employees = await db.Employees.AsNoTracking().OrderBy(row => row.Id).Select(row => new
             {
-                row.Id, row.RoleId, row.FirstName, row.LastName, row.FullName, row.PhoneNumber, row.Email,
-                row.DateOfBirth, row.HomeAddressId, row.CreatedDate, row.ModifiedDate,
+                row.Id,
+                row.RoleId,
+                row.FirstName,
+                row.LastName,
+                row.FullName,
+                row.PhoneNumber,
+                row.Email,
+                row.DateOfBirth,
+                row.HomeAddressId,
+                row.CreatedDate,
+                row.ModifiedDate,
             }).ToArrayAsync(cancellation),
             Addresses = await db.Addresses.AsNoTracking().OrderBy(row => row.Id).Select(row => new
             {
-                row.Id, row.Building, row.AddressLine1, row.AddressLine2, row.City, row.State,
-                row.PostalCode, row.CountryId, row.CreatedDate, row.ModifiedDate,
+                row.Id,
+                row.Building,
+                row.AddressLine1,
+                row.AddressLine2,
+                row.City,
+                row.State,
+                row.PostalCode,
+                row.CountryId,
+                row.CreatedDate,
+                row.ModifiedDate,
             }).ToArrayAsync(cancellation),
             Roles = await db.Roles.AsNoTracking().OrderBy(row => row.Id).Select(row => new
             {
-                row.Id, row.Name, row.Description, row.CreatedDate, row.ModifiedDate,
+                row.Id,
+                row.Name,
+                row.Description,
+                row.CreatedDate,
+                row.ModifiedDate,
             }).ToArrayAsync(cancellation),
             Signatures = await db.SignatureImageFiles.AsNoTracking().OrderBy(row => row.Id).Select(row => new
             {
-                row.Id, row.EmployeeId, row.Bucket, row.ObjectName, row.CreatedDate, row.ModifiedDate,
+                row.Id,
+                row.EmployeeId,
+                row.Bucket,
+                row.ObjectName,
+                row.CreatedDate,
+                row.ModifiedDate,
             }).ToArrayAsync(cancellation),
             EmployeeRevisions = await db.Database.SqlQueryRaw<string>(
                 "SELECT \"ID\"::text || ':' || xmin::text AS \"Value\" FROM \"Employee\" ORDER BY \"ID\"").ToArrayAsync(cancellation),
