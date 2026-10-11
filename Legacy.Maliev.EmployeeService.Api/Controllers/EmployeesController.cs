@@ -50,11 +50,11 @@ public sealed class EmployeesController(IEmployeeService service) : ControllerBa
         return EmployeeEditResponse.From(employee);
     }
 
-    /// <summary>Gets a bounded employee page.</summary>
+    /// <summary>Gets an employee page or the complete filtered cohort when size is omitted.</summary>
     /// <param name="sort" example="EmployeeId_Ascending">The legacy employee sort value, supplied by its existing name or numeric value.</param>
     /// <param name="search">Text to search in the employee directory fields.</param>
     /// <param name="index">The one-based page index; omitted values default to 1 and values below 1 use 1.</param>
-    /// <param name="size">The page size; omitted values default to 50 and supplied values are bounded from 1 to 250.</param>
+    /// <param name="size">The page size; omitted or empty values return the complete filtered cohort without a row cap. Explicit numeric values are forwarded without a cap or lower clamp; zero returns an empty page (404), while negative values retain the original provider failure boundary.</param>
     /// <param name="cancellationToken">Request cancellation.</param>
     [HttpGet]
     [RequirePermission(EmployeePermissions.EmployeesList)]

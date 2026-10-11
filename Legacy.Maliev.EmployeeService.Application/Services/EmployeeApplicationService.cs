@@ -42,7 +42,7 @@ public sealed class EmployeeApplicationService(
 
     /// <inheritdoc />
     public Task<PaginatedResponse<EmployeeResponse>?> GetEmployeesAsync(EmployeeSortType? sort, string? search, int? index, int? size, CancellationToken cancellationToken) =>
-        repository.GetEmployeesAsync(sort, search, Math.Max(index ?? 1, 1), Math.Clamp(size ?? 50, 1, 250), cancellationToken);
+        repository.GetEmployeesAsync(sort, search, Math.Max(index ?? 1, 1), size, cancellationToken);
 
     /// <inheritdoc />
     public async Task<EmployeeResponse> CreateEmployeeAsync(UpsertEmployeeRequest request, CancellationToken cancellationToken)

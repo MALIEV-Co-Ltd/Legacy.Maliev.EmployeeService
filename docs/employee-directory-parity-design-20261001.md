@@ -34,7 +34,7 @@ The immutable source mirror checkpoint is `bed10c7d15e0698e0b75f1329d0f312937f5d
 | Empty selected page | Missing result **or Items.Count == 0** returns 404 | Genuine RED: total > 0 returns 200 empty Items |
 | Sort | ID ascending default, ID descending, email ascending/descending | All four passing controls |
 | Projection | HomeAddress included, relationship cycles cleared | PascalCase/nested country/address/null omission passing control |
-| Paging | Historical unbounded default | Deliberately retain current bounded default 50, max 250 and lower clamp 1; passing controls |
+| Paging | Omitted size uses the filtered count without a cap | Restore uncapped omitted/empty-size cohort and unmodified explicit size. Zero is empty/404; negative nonempty provider failure remains500. Actual runtime acceptance is pending |
 
 Credential validation source `f32adc66af8d7ba66fc7b803a7f5291349c11932` is Auth-owned and excluded. No identity/password projection was added.
 

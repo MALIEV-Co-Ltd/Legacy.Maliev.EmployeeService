@@ -65,7 +65,7 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         EmployeeSortType? sort,
         string? search,
         int pageIndex,
-        int pageSize,
+        int? pageSize,
         CancellationToken cancellationToken)
     {
         IQueryable<Employee> query = dbContext.Employees.AsNoTracking();
@@ -95,7 +95,8 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
         };
 
         var total = await query.CountAsync(cancellationToken);
-        var offset = (pageIndex - 1L) * pageSize;
+        var resolvedPageSize = pageSize ?? total;
+        var offset = (pageIndex - 1L) * resolvedPageSize;
         if (total == 0 || offset >= total)
         {
             return null;
@@ -103,14 +104,14 @@ public sealed class EmployeeRepository(EmployeeDbContext dbContext, TimeProvider
 
         var items = await Project(query)
             .Skip((int)offset)
-            .Take(pageSize)
+            .Take(resolvedPageSize)
             .ToListAsync(cancellationToken);
         if (items.Count == 0)
         {
             return null;
         }
 
-        return new PaginatedResponse<EmployeeResponse>(items, pageIndex, (int)Math.Ceiling(total / (double)pageSize), total);
+        return new PaginatedResponse<EmployeeResponse>(items, pageIndex, (int)Math.Ceiling(total / (double)resolvedPageSize), total);
     }
 
     /// <inheritdoc />
