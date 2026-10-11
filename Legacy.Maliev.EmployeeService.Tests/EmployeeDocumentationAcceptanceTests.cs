@@ -113,8 +113,15 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
                 $"Missing existing directory query guidance for {name}: {parameter}");
         }
         var size = Assert.Single(parameters, item => item.GetProperty("name").GetString() == "size");
-        Assert.Contains("50", size.GetProperty("description").GetString(), StringComparison.Ordinal);
-        Assert.Contains("250", size.GetProperty("description").GetString(), StringComparison.Ordinal);
+        // Preserve this original documentation test identity and host/query checks.
+        // Its size description must describe the committed source fidelity contract.
+        var sizeDescription = size.GetProperty("description").GetString();
+        Assert.Contains("omitted or empty values return the complete filtered cohort without a row cap", sizeDescription, StringComparison.Ordinal);
+        Assert.Contains("Explicit numeric values are forwarded without a cap or lower clamp", sizeDescription, StringComparison.Ordinal);
+        Assert.Contains("zero returns an empty page (404)", sizeDescription, StringComparison.Ordinal);
+        Assert.Contains("negative values retain the original provider failure boundary", sizeDescription, StringComparison.Ordinal);
+        Assert.DoesNotContain("default to 50", sizeDescription, StringComparison.Ordinal);
+        Assert.DoesNotContain("bounded from 1 to 250", sizeDescription, StringComparison.Ordinal);
         var sort = Assert.Single(parameters, item => item.GetProperty("name").GetString() == "sort");
         Assert.Equal("EmployeeId_Ascending", sort.GetProperty("example").GetString());
     }
