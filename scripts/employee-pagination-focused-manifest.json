@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "behaviorHead": "c7cf8172b83591499070588654d570a9d700723d",
   "ordinaryFullRun": 38108335884,
   "requiredFocusedCount": 49,
@@ -259,8 +259,8 @@
     },
     {
       "path": "scripts/test_employee_pagination_focused_validator.py",
-      "bytes": 11416,
-      "sha256": "8b240493e0ff120626232544b8cb0afcb4c14453d8c96f45e99a3e0f4455bad1"
+      "bytes": 13511,
+      "sha256": "0fd5f42cb01d0f17af9eca9e452eea6b7712d2ba54a27eccdae113ff9707fc21"
     },
     {
       "path": ".github/workflows/_build-and-test.yml",
@@ -284,8 +284,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs",
-      "bytes": 6143,
-      "sha256": "76bcc021718df3846e1f472c732ea19075835ab8cf23ae131465e413b178d31c"
+      "bytes": 6289,
+      "sha256": "2291633e7ede2a9922d52e9864216d2fa269393d75b74b1c874da1177d419ffb"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeEditPrecondition.cs",
@@ -611,6 +611,11 @@
       "path": ".github/workflows/employee-pagination-focused.yml",
       "bytes": 3843,
       "sha256": "dcbfd643a83c6620825171a56d56cfb8effc5c78f2855b61902344c4acdd94e7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs",
+      "bytes": 1540,
+      "sha256": "8f507065b68da5e33ce024d7078aa058fbbf848584eb5d181f9785a24c865b06"
     }
   ],
   "dependencyPins": [
@@ -624,5 +629,15 @@
     }
   ],
   "distinction": "48 pagination/application identities plus repaired documentation identity. Separate49 command; full437 unchanged.",
-  "filter": "FullyQualifiedName~EmployeeDirectoryParityHttpTests|FullyQualifiedName~Application.EmployeeApplicationServiceTests|FullyQualifiedName~EmployeeDefaultPageHttpTests|FullyQualifiedName~EmployeeDocumentationAcceptanceTests.Documentation_ExplainsExistingDirectoryDefaultsAndQueryNames"
+  "filter": "FullyQualifiedName~EmployeeDirectoryParityHttpTests|FullyQualifiedName~Application.EmployeeApplicationServiceTests|FullyQualifiedName~EmployeeDefaultPageHttpTests|FullyQualifiedName~EmployeeDocumentationAcceptanceTests.Documentation_ExplainsExistingDirectoryDefaultsAndQueryNames",
+  "bindingRevision": {
+    "version": 2,
+    "predecessorManifestSha256": "ed23aaa970bdabef2e9ab62869a58f7ffe09853a3da18e3b07fc7f2d9e6b0212",
+    "reviewedProducerHead": "8e47b116b8859a8ac96d897b7d2141c99e929d40",
+    "scope": "Original49 unchanged; reviewed direct-null guards and direct3 source freeze only; no extra CSharp tests accepted by focused49",
+    "selectedSha256": "d99de53b0973cbb403d7d80f10d39e609b75ba3c4355b0c86cd81f695fe41a25",
+    "dependencyPinsSha256": "9a0e1d76f98ceb7d96a11468c1e5fb8678f009a7339846d69ca730f911414c3d",
+    "preservedBaselineBehaviorHead": "c7cf8172b83591499070588654d570a9d700723d",
+    "preservedOrdinaryFullRun": 38108335884
+  }
 }
