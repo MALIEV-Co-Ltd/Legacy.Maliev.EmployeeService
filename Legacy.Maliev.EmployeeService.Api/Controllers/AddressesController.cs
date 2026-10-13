@@ -22,6 +22,7 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
     [ProducesResponseType<AddressResponse>(StatusCodes.Status201Created)]
     public async Task<ActionResult> CreateAddressAsync(UpsertAddressRequest item, CancellationToken cancellationToken)
     {
+        if (item is null) return BadRequest("Address data is required");
         var address = await service.CreateAddressAsync(item, cancellationToken);
         return CreatedAtRoute("GetAddress", new { addressId = address.Id }, address);
     }
@@ -83,6 +84,7 @@ public sealed class AddressesController(IEmployeeService service) : ControllerBa
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> UpdateAddressAsync(int addressId, UpsertAddressRequest item, CancellationToken cancellationToken)
     {
+        if (item is null) return BadRequest("Address data is required");
         return await service.UpdateAddressAsync(addressId, item, cancellationToken) ? NoContent() : NotFound();
     }
 

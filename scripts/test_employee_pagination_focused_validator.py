@@ -134,6 +134,35 @@ class ProcessIdentityControls(unittest.TestCase):
         self.assertEqual({'kernelStatusReadable':True,'kernelTaskFlag':'0','kernelState':'S'},v.unknown_task_observation(directory))
         with self.assertRaises(ValueError):v.require_authoritative_census([{'pid':2,'identity':None,'source':'unknown',**v.unknown_task_observation(directory)}])
         directory.__truediv__.return_value.read_text.side_effect=PermissionError();self.assertFalse(v.unknown_task_observation(directory)['kernelStatusReadable'])
+
+class FocusedManifestSuccessorControls(unittest.TestCase):
+    def test_original49_and_dependency_pins_remain_exact(self):
+        import hashlib
+        digest=lambda value:hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+        self.assertEqual(49,MANIFEST['requiredFocusedCount'])
+        self.assertEqual('d99de53b0973cbb403d7d80f10d39e609b75ba3c4355b0c86cd81f695fe41a25',digest(MANIFEST['selected']))
+        self.assertEqual('9a0e1d76f98ceb7d96a11468c1e5fb8678f009a7339846d69ca730f911414c3d',digest(MANIFEST['dependencyPins']))
+        self.assertEqual('c7cf8172b83591499070588654d570a9d700723d',MANIFEST['behaviorHead'])
+        self.assertEqual(38108335884,MANIFEST['ordinaryFullRun'])
+
+    def test_reviewed_address_and_direct_test_are_frozen(self):
+        import hashlib
+        pins={row['path']:row for row in MANIFEST['codePins']}
+        for path,expected in [('Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs','2291633e7ede2a9922d52e9864216d2fa269393d75b74b1c874da1177d419ffb'),
+                              ('Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs','8f507065b68da5e33ce024d7078aa058fbbf848584eb5d181f9785a24c865b06')]:
+            raw=(HERE.parent/path).read_bytes()
+            self.assertEqual(expected,pins[path]['sha256'])
+            self.assertEqual(len(raw),pins[path]['bytes'])
+            self.assertEqual(expected,hashlib.sha256(raw).hexdigest())
+
+    def test_stale_address_pin_and_unreviewed_bytes_are_refused(self):
+        import hashlib
+        raw=(HERE.parent/'Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs').read_bytes()
+        for expected,data in [('76bcc021718df3846e1f472c732ea19075835ab8cf23ae131465e413b178d31c',raw),
+                              ('2291633e7ede2a9922d52e9864216d2fa269393d75b74b1c874da1177d419ffb',raw+b' unreviewed drift')]:
+            with self.assertRaises(ValueError):
+                v.need(hashlib.sha256(data).hexdigest()==expected,'Frozen behavior/dependency/workflow code drift')
+
 if __name__=='__main__':
     import sys
     suite=unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__])
