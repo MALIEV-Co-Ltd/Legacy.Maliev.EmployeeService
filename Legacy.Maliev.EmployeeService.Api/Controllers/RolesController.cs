@@ -18,6 +18,11 @@ public sealed class RolesController(IEmployeeService service) : ControllerBase
     [RequirePermission(EmployeePermissions.RolesCreate)]
     public async Task<ActionResult> CreateRoleAsync(UpsertRoleRequest item, CancellationToken cancellationToken)
     {
+        if (item is null)
+        {
+            return BadRequest("Role data is required");
+        }
+
         var role = await service.CreateRoleAsync(item, cancellationToken);
         return CreatedAtRoute("GetRole", new { roleId = role.Id }, role);
     }
@@ -49,6 +54,13 @@ public sealed class RolesController(IEmployeeService service) : ControllerBase
     /// <summary>Updates an employee role.</summary>
     [HttpPut("{roleId:int}")]
     [RequirePermission(EmployeePermissions.RolesUpdate, ResourcePathTemplate = "/employees/roles/{roleId}")]
-    public async Task<ActionResult> UpdateRoleAsync(int roleId, UpsertRoleRequest item, CancellationToken cancellationToken) =>
-        await service.UpdateRoleAsync(roleId, item, cancellationToken) ? NoContent() : NotFound();
+    public async Task<ActionResult> UpdateRoleAsync(int roleId, UpsertRoleRequest item, CancellationToken cancellationToken)
+    {
+        if (item is null)
+        {
+            return BadRequest("Role data is required");
+        }
+
+        return await service.UpdateRoleAsync(roleId, item, cancellationToken) ? NoContent() : NotFound();
+    }
 }
