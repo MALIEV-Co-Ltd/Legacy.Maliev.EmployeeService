@@ -299,8 +299,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Controllers/RolesController.cs",
-      "bytes": 2591,
-      "sha256": "664b2764d05838732a1a0eea33b8751d6f0445d5796ef21290185724bdec67ba"
+      "bytes": 2813,
+      "sha256": "278428917e4b30441f70ab1ffcfcb9b1171ddb82a76453bd79545fd04485fffa"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Controllers/SignaturesController.cs",
@@ -616,6 +616,11 @@
       "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs",
       "bytes": 1540,
       "sha256": "8f507065b68da5e33ce024d7078aa058fbbf848584eb5d181f9785a24c865b06"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalRoleNullControllerTests.cs",
+      "bytes": 1506,
+      "sha256": "3be56c52fef8b5c30d2fa0325b72cc7640266660749d93e4c39bb6f9454d67fe"
     }
   ],
   "dependencyPins": [
