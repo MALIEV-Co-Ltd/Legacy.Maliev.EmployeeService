@@ -1,0 +1,1732 @@
+{
+  "schemaVersion": 1,
+  "issue": 77,
+  "kind": "ordinary-source successor; not sealed SDK policy",
+  "baseCommit": "972cc8f9a8e0cd8da69642f8423c14443f4236f7",
+  "baseTree": "eca68ab4c46b1fd2deff8f142cef11d0989f2999",
+  "featureTree": "67a1a410df7c26a5955aa2766910e8212faeb535",
+  "featureManifest": "2000ed97d0f4b228a359e54fda50d4de8117a4c8",
+  "grants": {
+    "executionGranted": false,
+    "sdkGranted": false,
+    "runtimeQualified": false
+  },
+  "manifestSelfBinding": "Root immutable enclosing packet binds this file; no self-hash cycle",
+  "originalPolicy": {
+    "path": "scripts/employee-source-policy.json",
+    "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68",
+    "sha256": "88507d27eeee6b7b4095bb556a5c7d1fc2d1b859786d0d5ba891c5bada0be895",
+    "unchanged": true
+  },
+  "baseline": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 1565,
+      "blob": "942a549b0b11e10981dd9823433824b9865e6684"
+    },
+    {
+      "path": "deploy/base/deployment.yaml",
+      "bytes": 1985,
+      "blob": "0d67140c2473ac056e7c106d64c8ad68234017b4"
+    },
+    {
+      "path": "deploy/base/kustomization.yaml",
+      "bytes": 375,
+      "blob": "6a693dbe647ba19cf1393c355a175c19f3f50d22"
+    },
+    {
+      "path": "deploy/base/network-policy.yaml",
+      "bytes": 828,
+      "blob": "f883ec7384e6d0749b37febd7b8eb29ac4a1d4e0"
+    },
+    {
+      "path": "deploy/base/service-account.yaml",
+      "bytes": 140,
+      "blob": "a2ad4e30f2b5f20e6e3ca7d760c24cfe210b074d"
+    },
+    {
+      "path": "deploy/base/service.yaml",
+      "bytes": 246,
+      "blob": "30f07e52e22f429167116e3b9558aacd114df571"
+    },
+    {
+      "path": "deploy/README.md",
+      "bytes": 2382,
+      "blob": "2e6388d2ce05c31cbe2b7de5514d3cff838d549d"
+    },
+    {
+      "path": "Directory.Build.props",
+      "bytes": 515,
+      "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+    },
+    {
+      "path": ".dockerignore",
+      "bytes": 110,
+      "blob": "d5af0a28be33bd79cec97b55069a347d35c1febf"
+    },
+    {
+      "path": "docs/administrative-conditional-edits.md",
+      "bytes": 5454,
+      "blob": "afdfe143b06bfbc49e83bfb9e673dcd61bfe64f9"
+    },
+    {
+      "path": "docs/coupled-home-address-edits.md",
+      "bytes": 3514,
+      "blob": "939e9b5742285c3e9700dae05c02147b5f5b96f0"
+    },
+    {
+      "path": "docs/employee-actual-scaffold-proof-20261006.md",
+      "bytes": 2926,
+      "blob": "b0faeb18a45df62d6b1682cd6e1c7fd7339dbf9b"
+    },
+    {
+      "path": "docs/employee-administrative-email-literal-source-20261011.md",
+      "bytes": 2331,
+      "blob": "70166a03527f5f0fd7ab1f168b7007902cc9826e"
+    },
+    {
+      "path": "docs/employee-authority-readonly-preflight.md",
+      "bytes": 4015,
+      "blob": "abd59fd079e53809c0f6923472a1f506db53ed9a"
+    },
+    {
+      "path": "docs/employee-directory-parity-design-20261001.md",
+      "bytes": 12392,
+      "blob": "283df12696a46f8d5c72732a75dbd652646386d6"
+    },
+    {
+      "path": "docs/employee-fixture-compatibility.md",
+      "bytes": 9176,
+      "blob": "b2d494089932c916a5b73553c4ef663873e9c190"
+    },
+    {
+      "path": "docs/employee-linux-custody.md",
+      "bytes": 5708,
+      "blob": "3938357df60ca69e3e18bdb38ab147721bf47542"
+    },
+    {
+      "path": "docs/employee-no-sdk-controller.md",
+      "bytes": 2157,
+      "blob": "d3c64a813015ab066521f798a9ee7b2356fec963"
+    },
+    {
+      "path": "docs/employee-owned-receipts.md",
+      "bytes": 3887,
+      "blob": "e09daaaa2a1cfab1341dfc1f2b79bbea5e119e99"
+    },
+    {
+      "path": "docs/employee-owner-source-intake.md",
+      "bytes": 3863,
+      "blob": "a4d949e49c7eea01e1fc26e33e596e6cf2732809"
+    },
+    {
+      "path": "docs/employee-qualification-controller.md",
+      "bytes": 3013,
+      "blob": "b47289d31341592410e00b075eb6b019c0eb86c7"
+    },
+    {
+      "path": "docs/employee-route-acceptance-design-20261001.md",
+      "bytes": 16633,
+      "blob": "1abd2284af5b44d22e5b85ca2b62baf55f3195ee"
+    },
+    {
+      "path": "docs/employee-self-profile-null-phone-20261001.md",
+      "bytes": 10090,
+      "blob": "36db0948a5d1ba04cbd14a0b8d268ef4b15d41d8"
+    },
+    {
+      "path": "docs/employee-signature-bucket-literal-source-20261011.md",
+      "bytes": 2290,
+      "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
+    },
+    {
+      "path": "docs/employee-significant-search-source-20261006.md",
+      "bytes": 1928,
+      "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
+    },
+    {
+      "path": "docs/employee-stored-search-field-proof-20261006.md",
+      "bytes": 2165,
+      "blob": "0a31b6b98ee95b353b69ff3e5b4a113cf3f8c879"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.json",
+      "bytes": 10973,
+      "blob": "6164594c18838fa1f4864146bc7302a0e0d65118"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.md",
+      "bytes": 759,
+      "blob": "3596485a0e20fb922bffc68579fc7a9e2062763b"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 644,
+      "blob": "861b98bd64c328cd7d33c64747243d8fb6395d8c"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "bytes": 1169,
+      "blob": "5d5ada546c8a6bb44570962c0eafbe62b5e7bf38"
+    },
+    {
+      "path": ".github/workflows/_build-and-test.yml",
+      "bytes": 2174,
+      "blob": "73010a448f78253ce9b56a33ca7cc7a7b1254eac"
+    },
+    {
+      "path": ".github/workflows/ci-develop.yml",
+      "bytes": 247,
+      "blob": "c1bf874ecf39eab2864889fb4f2d8b38d1017bb0"
+    },
+    {
+      "path": ".github/workflows/ci-main.yml",
+      "bytes": 241,
+      "blob": "56aa263726fd6b3f767e4044c9037b0c7b54d7d5"
+    },
+    {
+      "path": ".github/workflows/ci-staging.yml",
+      "bytes": 246,
+      "blob": "a069e91ab4fbd614302a6a1f73e1182a181ebb2c"
+    },
+    {
+      "path": ".github/workflows/employee-authority-hosted-preflight.yml",
+      "bytes": 11650,
+      "blob": "35f12fa2a78e952e8f8ebcafdf2b5940abca97fc"
+    },
+    {
+      "path": ".github/workflows/employee-owned-receipts.yml",
+      "bytes": 6450,
+      "blob": "74c6842e9d897bcea120f342d7a0dacbeb589e55"
+    },
+    {
+      "path": ".github/workflows/employee-pagination-focused.yml",
+      "bytes": 3843,
+      "blob": "c07ea8ac9ea3e91324e7f0b88cba21a2125cedbb"
+    },
+    {
+      "path": ".github/workflows/employee-qualification-controller.yml",
+      "bytes": 3252,
+      "blob": "e5b849fe57bf7f80fd94b99db096adf63234c741"
+    },
+    {
+      "path": ".github/workflows/employee-source-intake.yml",
+      "bytes": 3056,
+      "blob": "f11eb189127461008dec41aa4fac19f08b3cd29a"
+    },
+    {
+      "path": ".github/workflows/pr-validation.yml",
+      "bytes": 293,
+      "blob": "49b784875dd9275866012396c3ff51a0b1f9dee2"
+    },
+    {
+      "path": ".github/workflows/publish-image.yml",
+      "bytes": 1027,
+      "blob": "2f9a52561c3c581388444a9cd01adde978880eaf"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 86,
+      "blob": "968e06b6f0ed18358d0427d0e9b5232c15f58e1a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
+      "bytes": 119,
+      "blob": "0c208ae9181e5e5717e47ec1bd59368aebc6066e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.json",
+      "bytes": 398,
+      "blob": "b057873ee272efdfc5311a0179a6214f4e1768b7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
+      "bytes": 2652,
+      "blob": "fba7601517f5d7d63125e7b93ff67d6ffc756c2f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs",
+      "bytes": 6289,
+      "blob": "bec232576eb1bb2acf129e0315eed8cef5305023"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeEditPrecondition.cs",
+      "bytes": 719,
+      "blob": "3f50f27d52a5d369333867f0bd54bb63f82d0917"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeHomeAddressController.cs",
+      "bytes": 2169,
+      "blob": "56fc136648c6ce6abaa8714a806f878bb1e84579"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeesController.cs",
+      "bytes": 7590,
+      "blob": "69e1962716f7dec2d6ce283f45ab0f8cb5a72c53"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/RolesController.cs",
+      "bytes": 2813,
+      "blob": "506e92b3c439d3ca355f00b05587d29825db508a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/SignaturesController.cs",
+      "bytes": 3141,
+      "blob": "351846bf51b1c6e148426be48ead2c6e32b317d2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Dockerfile",
+      "bytes": 1193,
+      "blob": "1c74f50b72e71bc10c0b5c5b8f5625215373b990"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Documentation/EmployeeOpenApi.cs",
+      "bytes": 1753,
+      "blob": "9f74ab9c0f787e15d93b6bdb9825117685d0c51b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Documentation/EmployeePayload.xml",
+      "bytes": 7112,
+      "blob": "c30c056da0512b8415b94d5b3bb10928253c37cb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+      "bytes": 2659,
+      "blob": "0d3808825f8711e2083bd35c0c2cad32f57647bb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
+      "bytes": 6343,
+      "blob": "9c453e6303dd02d5e994089618c7f1d1626b83f4"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticLogging.cs",
+      "bytes": 915,
+      "blob": "8e52f722cbb9b157c2c17b2d027017fd5e1dfa8f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+      "bytes": 2680,
+      "blob": "efa56cc3c6b9ba10f2686c7155804d73789ccd01"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
+      "bytes": 618,
+      "blob": "5b49ab6aa8f800b7ed4a376abb9ccf0942625251"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Interfaces/IEmployeeBoundaries.cs",
+      "bytes": 9434,
+      "blob": "2a5a15981796de73c832a9106fd9abf9d0632f29"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
+      "bytes": 476,
+      "blob": "690ac5c28dcedd9ea951b031bfd9deddbbc9bcaa"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeEditVersion.cs",
+      "bytes": 2652,
+      "blob": "ad68f4591f4dd8212b26731d2e5200f1f9ae9c2c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeHomeAddressEdit.cs",
+      "bytes": 1932,
+      "blob": "4993a44290fc63790b2c584fbbfa23dcf1fe9e5c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeModels.cs",
+      "bytes": 3411,
+      "blob": "aed4a360e4f678aefd1d74ce56d89aa4328d338f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Services/EmployeeApplicationService.cs",
+      "bytes": 10017,
+      "blob": "a2122eb1661c921eb313fb3f9c13ba06291d8ad6"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/DistributedEmployeeCache.cs",
+      "bytes": 2616,
+      "blob": "c9342d57bc2b3f3c67ad254c59b57c0483cb92b6"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeDbContext.cs",
+      "bytes": 4824,
+      "blob": "d752944a5c94b7d56a663e87efd125708b719a38"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeDbContextFactory.cs",
+      "bytes": 930,
+      "blob": "f835643b6e2fcc5ac0ead551a7739c544459b65d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeRepository.cs",
+      "bytes": 22327,
+      "blob": "63e5cb0f9b279c12c2844af4b0b05fb6517750e1"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+      "bytes": 1170,
+      "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
+      "bytes": 7037,
+      "blob": "93f998ba11d4b97069a25b7f1415b9f46147ada4"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
+      "bytes": 9690,
+      "blob": "f82ed9ac464b97ae061bc417d53b6bd83d24feb3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
+      "bytes": 5889,
+      "blob": "fc15921ce75bf1be80334eb4744da5879ec87828"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.Designer.cs",
+      "bytes": 9858,
+      "blob": "d3b2652c3b8dc1c379254e120eef00948ab5fc5e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/EmployeeDbContextModelSnapshot.cs",
+      "bytes": 9740,
+      "blob": "c21880d5529a2735001b2f0baeef7c66b96c13a3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1",
+      "bytes": 2691,
+      "blob": "2b4d2b41b10776fa5ce4450a7a2c9c0a007cfd31"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Domain/EmployeeEntities.cs",
+      "bytes": 3956,
+      "blob": "82152637ed05d346eb08bbacfaf8c4ee3ebbf691"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Domain/Legacy.Maliev.EmployeeService.Domain.csproj",
+      "bytes": 327,
+      "blob": "51addf44ecf979d69d9d77527d402f14c06a4fa5"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.slnx",
+      "bytes": 531,
+      "blob": "bbe22dd2cdaeba7edcf0e2778d522e81f91a0e2a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Application/EmployeeApplicationServiceTests.cs",
+      "bytes": 11158,
+      "blob": "9c9570e23d17d02ba016900b4db7efbb485d07d9"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Caching/DistributedEmployeeCacheTests.cs",
+      "bytes": 4055,
+      "blob": "7708cd127547f4723569101dd043d0ad115ca446"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeControllerContractTests.cs",
+      "bytes": 6948,
+      "blob": "8c38f8bd0f86bbe74abcff369f1551b33dc91ae9"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs",
+      "bytes": 1540,
+      "blob": "58c87597096f6303104deb49ffb7df86e38bddad"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalRoleNullControllerTests.cs",
+      "bytes": 1506,
+      "blob": "014f0af39919163d148df5c921d0c1847f9a21d7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeeModelCompatibilityTests.cs",
+      "bytes": 4162,
+      "blob": "9426ae8db3ceaf5ee7815944471cef48837e5c06"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeePostgresMigrationTests.cs",
+      "bytes": 2939,
+      "blob": "14ae9ce9ab5a384dbfeb25ea364c30e0e60e30fc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeeSelfProfilePostgresTests.cs",
+      "bytes": 3871,
+      "blob": "a9d1e3c0a3facc4739d41acfb1c8a252835bd472"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/DeliveryContractTests.cs",
+      "bytes": 6753,
+      "blob": "ec956e22fb92b58f21a38585e35db3b25e77cba8"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAddressPersistenceHttpTests.cs",
+      "bytes": 9985,
+      "blob": "9bc99911f215f1b9b551db06bfd521d01d1a840d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeEmailLiteralHttpTests.cs",
+      "bytes": 16296,
+      "blob": "313a0267187308df4e9a69517acb99798d3127a3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeLiteralNameHttpTests.cs",
+      "bytes": 15302,
+      "blob": "9e78a53c01f53af7b4198b4db5bd2e5849b4a085"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativePersistenceHttpTests.cs",
+      "bytes": 9620,
+      "blob": "63dc24a33a34079ea3ce04dfb698a6335b1a7e02"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeProfileLifecycleHttpTests.cs",
+      "bytes": 7159,
+      "blob": "a55a43501259b110f7bb0120f8c2d17d89e73f48"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeConditionalEditHttpTests.cs",
+      "bytes": 20395,
+      "blob": "c484440486f9c78a408f1967f1fb9353ff21a276"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDefaultPageHttpTests.cs",
+      "bytes": 12434,
+      "blob": "e2490e89e88bb1e6653f90576a8e28005ef20846"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryOffsetHttpTests.cs",
+      "bytes": 7234,
+      "blob": "99cd31a4b931ddf2c77cb6a2ecfaf232c9301d26"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryParityFixture.cs",
+      "bytes": 7919,
+      "blob": "56e31207d5009d866adf4a32c45a0b87140b9659"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryParityHttpTests.cs",
+      "bytes": 11173,
+      "blob": "1805044e6d117b50861522600358cad5cbcf24fc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDocumentationAcceptanceTests.cs",
+      "bytes": 10201,
+      "blob": "a57486c6e2d655a2e9fe8c1ef98e54c87a86965e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeHomeAddressConditionalEditHttpTests.cs",
+      "bytes": 24252,
+      "blob": "e0639036b21ceb5a90b9bd0732eba1fbf40993d7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeIamTransportEvidenceTests.cs",
+      "bytes": 5835,
+      "blob": "abc9fb69fe056e05e023905bb59d06259c6cdd2f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeJwtExternalizationTests.cs",
+      "bytes": 6021,
+      "blob": "a6166972330a0512e7fab077e63db251de23ec8b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProductionPipelineHttpTests.cs",
+      "bytes": 5718,
+      "blob": "28df25fc7a8d3d0ebdc869869607277019251f19"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProfileDeletionIsolationHttpTests.cs",
+      "bytes": 14244,
+      "blob": "584d02937fbc2c0872a25591b01c92b094ae469b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRelationshipRollbackHttpTests.cs",
+      "bytes": 7327,
+      "blob": "20deb4f40a122633325aaeca8e40c3febe3ec0b2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRouteAcceptanceFixture.cs",
+      "bytes": 14284,
+      "blob": "9317fbbd68d0f794a49e178aadb3943081f61aec"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRouteAcceptanceHttpTests.cs",
+      "bytes": 36274,
+      "blob": "faf6c354f2cdea184fc92bf8386785d8f3ec4e1e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+      "bytes": 24278,
+      "blob": "73fef5c818fdc8a5c47c3dd262e7a7c44427e28c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
+      "bytes": 14610,
+      "blob": "2d332640fb9c81fec093bcc0143a488a3f7cc425"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSharedAddressHttpTests.cs",
+      "bytes": 7154,
+      "blob": "7eb3fd83ba5d32deae2421f5756a8bccb6b532eb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSharedRoleHttpTests.cs",
+      "bytes": 10358,
+      "blob": "6eb12ed356a38a66523d60032ca5491c2aa6d1df"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureAmbiguityHttpTests.cs",
+      "bytes": 9731,
+      "blob": "2e86642f1379d6c69fdb3ea95d4504abab563b26"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureBucketLiteralHttpTests.cs",
+      "bytes": 9556,
+      "blob": "35026cf460989164cc683783979f7caac430ce18"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureDeletionTruthHttpTests.cs",
+      "bytes": 5640,
+      "blob": "4b835eb4feef00559507fd01aa06756a3ac84cdb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignaturePersistenceHttpTests.cs",
+      "bytes": 10722,
+      "blob": "07b502f394344490bc971fbe104020021ef35931"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignificantSearchHttpTests.cs",
+      "bytes": 3252,
+      "blob": "cd2c204f05730b20672d933332cda573500cd332"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeUnhealthyReadinessHttpTests.cs",
+      "bytes": 3853,
+      "blob": "499b6814bf1f87525fc70c623537b806eee0203c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/IamTransportContractEvidence.cs",
+      "bytes": 796,
+      "blob": "dc0f40ca0e5779703e4afb0f315f8709c5958290"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+      "bytes": 1613,
+      "blob": "47ad58a4b45bdea224decc71a34f08ee8b445df0"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
+      "bytes": 2298,
+      "blob": "01e806502cbd975562bfeb1fdac33d4a38cdf0bc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/EmployeeDiagnosticConsoleFormatterTests.cs",
+      "bytes": 23510,
+      "blob": "adac4ffaefd903dac95f6285fc71d5debdfaac7a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/StartupFailureAcceptanceTests.cs",
+      "bytes": 11500,
+      "blob": "f97841cc01ead4aa88f915ac47f46ea6ccb4af0a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/DependabotConfigurationContractTests.cs",
+      "bytes": 2443,
+      "blob": "780bd34817f7d79789963391f2d4a231763b6074"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+      "bytes": 19872,
+      "blob": "1afae92d98fc0e03a951cf7d59b670dbff88792f"
+    },
+    {
+      "path": "nuget.config",
+      "bytes": 197,
+      "blob": "765346e5343d46ac83654843869dc06b65b2bdc4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6516,
+      "blob": "d37ca7d3fc67b60ae56d127370087847c63fa75e"
+    },
+    {
+      "path": "scripts/employee-authority-hosted-requirements.txt",
+      "bytes": 751,
+      "blob": "09d54b198c80f95237d59756cc4a25d75a5e29c8"
+    },
+    {
+      "path": "scripts/employee_authority.py",
+      "bytes": 9407,
+      "blob": "d64ba282b5457ca7e78ddd24517d458808f8adc2"
+    },
+    {
+      "path": "scripts/employee_fixture_compatibility.py",
+      "bytes": 55741,
+      "blob": "6d2d309b75ab87fe9d5f3dc6d173b28d52087bc7"
+    },
+    {
+      "path": "scripts/employee_fixture_registry_compatibility.py",
+      "bytes": 15006,
+      "blob": "4935e2a1e2107229cc77e56db56e2dbb642f20b6"
+    },
+    {
+      "path": "scripts/employee_linux_custody.py",
+      "bytes": 39148,
+      "blob": "580bfa5d9835bb3365ef31d68a2a0b27ec2e82d2"
+    },
+    {
+      "path": "scripts/employee_linux_qualification.py",
+      "bytes": 11323,
+      "blob": "d4e704cb79fdcae3685bb8c052e08de42733d009"
+    },
+    {
+      "path": "scripts/employee_linux_readonly_helpers.py",
+      "bytes": 8864,
+      "blob": "a6d614ebaf4df717b78366fdc94d9ccd1eb6adcb"
+    },
+    {
+      "path": "scripts/employee_linux_sdk_owner.py",
+      "bytes": 44102,
+      "blob": "69b69b196159bea8eb9b735e4108da5753643e67"
+    },
+    {
+      "path": "scripts/employee_no_sdk_controller.py",
+      "bytes": 4825,
+      "blob": "0c89aa6e8de92feba1a4c9419439b3e2f44395bd"
+    },
+    {
+      "path": "scripts/employee_owned_receipts.py",
+      "bytes": 6805,
+      "blob": "fe605c5c0889757c9014a1b10a4c4edc158300d6"
+    },
+    {
+      "path": "scripts/employee-pagination-focused-manifest.json",
+      "bytes": 30600,
+      "blob": "1655c3b51639157030a00e5be909cc752826fc67"
+    },
+    {
+      "path": "scripts/employee_phase_contract.py",
+      "bytes": 15302,
+      "blob": "9fd7137e326ee0f6a1c8a84e6755826813b70aba"
+    },
+    {
+      "path": "scripts/employee_qualification_controller.py",
+      "bytes": 8692,
+      "blob": "431f79bb4227cb40b901fe26fdf429ada20ddd9f"
+    },
+    {
+      "path": "scripts/employee_source_intake.py",
+      "bytes": 8151,
+      "blob": "8b061ce57af4d64de69ed1445f0dd3aeb0b81045"
+    },
+    {
+      "path": "scripts/employee-source-packet/baseline.zip",
+      "bytes": 178090,
+      "blob": "cdaede4e7e7f684043910394d862eab0a986f95c"
+    },
+    {
+      "path": "scripts/employee-source-packet/candidate.zip",
+      "bytes": 178143,
+      "blob": "6de816d32edeb0998c9915817946f9cc91bf182d"
+    },
+    {
+      "path": "scripts/employee-source-packet/dependencies.zip",
+      "bytes": 261264,
+      "blob": "b0aad7d0d6c52f553cc449dbf5847c895c4b034a"
+    },
+    {
+      "path": "scripts/employee-source-policy.json",
+      "bytes": 200627,
+      "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68"
+    },
+    {
+      "path": "scripts/sealed_source_capsule.py",
+      "bytes": 12296,
+      "blob": "cab6997ff2af48bdd4ac7e9240cd12d01e5b3190"
+    },
+    {
+      "path": "scripts/test_employee_authority.py",
+      "bytes": 8598,
+      "blob": "a7c33aa2e31235211ceff64e01b17bb099134969"
+    },
+    {
+      "path": "scripts/test_employee_custody_descriptors.py",
+      "bytes": 7336,
+      "blob": "2c7806460e9f3a82eb659e933c98797855588c14"
+    },
+    {
+      "path": "scripts/test_employee_fixture_compatibility.py",
+      "bytes": 26842,
+      "blob": "eb75f2a0b1dfadaf39fe21cd927c5c98b7a5b81c"
+    },
+    {
+      "path": "scripts/test_employee_fixture_registry_compatibility.py",
+      "bytes": 9135,
+      "blob": "1e4f93f5de70270ed4f94c57982f21b92ad35632"
+    },
+    {
+      "path": "scripts/test_employee_linux_custody.py",
+      "bytes": 16995,
+      "blob": "ec075b3faca43c2d20707235757f0024b3f2f85c"
+    },
+    {
+      "path": "scripts/test_employee_linux_qualification.py",
+      "bytes": 10407,
+      "blob": "8640eef6bcb1aae775b80f48dc607c9bc2ec1f9e"
+    },
+    {
+      "path": "scripts/test_employee_linux_sdk_owner.py",
+      "bytes": 14879,
+      "blob": "6bfa51ec2cabb5ae38d7e631617c110468d14b32"
+    },
+    {
+      "path": "scripts/test_employee_no_sdk_controller.py",
+      "bytes": 7377,
+      "blob": "7a1d3bf94d6383db1c9a478f86d0740d39cd69ac"
+    },
+    {
+      "path": "scripts/test_employee_owned_receipts.py",
+      "bytes": 11466,
+      "blob": "499931184caa6a200ca1c72d07814dbd29dc7f97"
+    },
+    {
+      "path": "scripts/test_employee_pagination_focused_validator.py",
+      "bytes": 13511,
+      "blob": "fb9c1f34ab7c29d317a7bdc2807c6520a1c9e6b2"
+    },
+    {
+      "path": "scripts/test_employee_phase_contract.py",
+      "bytes": 9366,
+      "blob": "749bdb14dc6027fe45204e09a0c903c2c6564281"
+    },
+    {
+      "path": "scripts/test_employee_qualification_controller.py",
+      "bytes": 6615,
+      "blob": "2c35183cf469e838833d091ede1c644bb0983001"
+    },
+    {
+      "path": "scripts/test_employee_source_intake.py",
+      "bytes": 5892,
+      "blob": "46992796020f0a8fca4ecc375559605388000d20"
+    },
+    {
+      "path": "scripts/verify_employee_pagination_focused.py",
+      "bytes": 9668,
+      "blob": "183ea34fb4ce95806faf3cf8585d6776d6a8010c"
+    },
+    {
+      "path": "scripts/verify-runner-coverage.py",
+      "bytes": 2073,
+      "blob": "6aae67d556e087177a75a80478abe37943c717a5"
+    },
+    {
+      "path": "tooling/Test-EmployeeScaffoldContract.ps1",
+      "bytes": 10503,
+      "blob": "4084d5406237df28bb094ccf6bba129fbdad7b2e"
+    }
+  ],
+  "candidate": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 1565,
+      "blob": "942a549b0b11e10981dd9823433824b9865e6684"
+    },
+    {
+      "path": "deploy/base/deployment.yaml",
+      "bytes": 1985,
+      "blob": "0d67140c2473ac056e7c106d64c8ad68234017b4"
+    },
+    {
+      "path": "deploy/base/kustomization.yaml",
+      "bytes": 375,
+      "blob": "6a693dbe647ba19cf1393c355a175c19f3f50d22"
+    },
+    {
+      "path": "deploy/base/network-policy.yaml",
+      "bytes": 828,
+      "blob": "f883ec7384e6d0749b37febd7b8eb29ac4a1d4e0"
+    },
+    {
+      "path": "deploy/base/service-account.yaml",
+      "bytes": 140,
+      "blob": "a2ad4e30f2b5f20e6e3ca7d760c24cfe210b074d"
+    },
+    {
+      "path": "deploy/base/service.yaml",
+      "bytes": 246,
+      "blob": "30f07e52e22f429167116e3b9558aacd114df571"
+    },
+    {
+      "path": "deploy/README.md",
+      "bytes": 2382,
+      "blob": "2e6388d2ce05c31cbe2b7de5514d3cff838d549d"
+    },
+    {
+      "path": "Directory.Build.props",
+      "bytes": 515,
+      "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+    },
+    {
+      "path": ".dockerignore",
+      "bytes": 110,
+      "blob": "d5af0a28be33bd79cec97b55069a347d35c1febf"
+    },
+    {
+      "path": "docs/administrative-conditional-edits.md",
+      "bytes": 5454,
+      "blob": "afdfe143b06bfbc49e83bfb9e673dcd61bfe64f9"
+    },
+    {
+      "path": "docs/coupled-home-address-edits.md",
+      "bytes": 3514,
+      "blob": "939e9b5742285c3e9700dae05c02147b5f5b96f0"
+    },
+    {
+      "path": "docs/employee-actual-scaffold-proof-20261006.md",
+      "bytes": 2926,
+      "blob": "b0faeb18a45df62d6b1682cd6e1c7fd7339dbf9b"
+    },
+    {
+      "path": "docs/employee-administrative-email-literal-source-20261011.md",
+      "bytes": 2331,
+      "blob": "70166a03527f5f0fd7ab1f168b7007902cc9826e"
+    },
+    {
+      "path": "docs/employee-authority-readonly-preflight.md",
+      "bytes": 4015,
+      "blob": "abd59fd079e53809c0f6923472a1f506db53ed9a"
+    },
+    {
+      "path": "docs/employee-directory-parity-design-20261001.md",
+      "bytes": 12392,
+      "blob": "283df12696a46f8d5c72732a75dbd652646386d6"
+    },
+    {
+      "path": "docs/employee-fixture-compatibility.md",
+      "bytes": 9176,
+      "blob": "b2d494089932c916a5b73553c4ef663873e9c190"
+    },
+    {
+      "path": "docs/employee-linux-custody.md",
+      "bytes": 5708,
+      "blob": "3938357df60ca69e3e18bdb38ab147721bf47542"
+    },
+    {
+      "path": "docs/employee-metadata-proof.md",
+      "bytes": 4745,
+      "blob": "a4fd49113eb14e979dff147027642c9f62fbfda0"
+    },
+    {
+      "path": "docs/employee-no-sdk-controller.md",
+      "bytes": 2157,
+      "blob": "d3c64a813015ab066521f798a9ee7b2356fec963"
+    },
+    {
+      "path": "docs/employee-owned-receipts.md",
+      "bytes": 3887,
+      "blob": "e09daaaa2a1cfab1341dfc1f2b79bbea5e119e99"
+    },
+    {
+      "path": "docs/employee-owner-source-intake.md",
+      "bytes": 3863,
+      "blob": "a4d949e49c7eea01e1fc26e33e596e6cf2732809"
+    },
+    {
+      "path": "docs/employee-qualification-controller.md",
+      "bytes": 3013,
+      "blob": "b47289d31341592410e00b075eb6b019c0eb86c7"
+    },
+    {
+      "path": "docs/employee-route-acceptance-design-20261001.md",
+      "bytes": 16633,
+      "blob": "1abd2284af5b44d22e5b85ca2b62baf55f3195ee"
+    },
+    {
+      "path": "docs/employee-self-profile-null-phone-20261001.md",
+      "bytes": 10090,
+      "blob": "36db0948a5d1ba04cbd14a0b8d268ef4b15d41d8"
+    },
+    {
+      "path": "docs/employee-signature-bucket-literal-source-20261011.md",
+      "bytes": 2290,
+      "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
+    },
+    {
+      "path": "docs/employee-significant-search-source-20261006.md",
+      "bytes": 1928,
+      "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
+    },
+    {
+      "path": "docs/employee-stored-search-field-proof-20261006.md",
+      "bytes": 2165,
+      "blob": "0a31b6b98ee95b353b69ff3e5b4a113cf3f8c879"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.json",
+      "bytes": 10973,
+      "blob": "6164594c18838fa1f4864146bc7302a0e0d65118"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.md",
+      "bytes": 759,
+      "blob": "3596485a0e20fb922bffc68579fc7a9e2062763b"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 644,
+      "blob": "861b98bd64c328cd7d33c64747243d8fb6395d8c"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "bytes": 1169,
+      "blob": "5d5ada546c8a6bb44570962c0eafbe62b5e7bf38"
+    },
+    {
+      "path": ".github/workflows/_build-and-test.yml",
+      "bytes": 2174,
+      "blob": "73010a448f78253ce9b56a33ca7cc7a7b1254eac"
+    },
+    {
+      "path": ".github/workflows/ci-develop.yml",
+      "bytes": 247,
+      "blob": "c1bf874ecf39eab2864889fb4f2d8b38d1017bb0"
+    },
+    {
+      "path": ".github/workflows/ci-main.yml",
+      "bytes": 241,
+      "blob": "56aa263726fd6b3f767e4044c9037b0c7b54d7d5"
+    },
+    {
+      "path": ".github/workflows/ci-staging.yml",
+      "bytes": 246,
+      "blob": "a069e91ab4fbd614302a6a1f73e1182a181ebb2c"
+    },
+    {
+      "path": ".github/workflows/employee-authority-hosted-preflight.yml",
+      "bytes": 11650,
+      "blob": "35f12fa2a78e952e8f8ebcafdf2b5940abca97fc"
+    },
+    {
+      "path": ".github/workflows/employee-metadata-focused.yml",
+      "bytes": 7580,
+      "blob": "181763dd8c4afffcc92239e2ac480a51b20d311d"
+    },
+    {
+      "path": ".github/workflows/employee-owned-receipts.yml",
+      "bytes": 6450,
+      "blob": "74c6842e9d897bcea120f342d7a0dacbeb589e55"
+    },
+    {
+      "path": ".github/workflows/employee-pagination-focused.yml",
+      "bytes": 3843,
+      "blob": "c07ea8ac9ea3e91324e7f0b88cba21a2125cedbb"
+    },
+    {
+      "path": ".github/workflows/employee-qualification-controller.yml",
+      "bytes": 3252,
+      "blob": "e5b849fe57bf7f80fd94b99db096adf63234c741"
+    },
+    {
+      "path": ".github/workflows/employee-source-intake.yml",
+      "bytes": 3056,
+      "blob": "f11eb189127461008dec41aa4fac19f08b3cd29a"
+    },
+    {
+      "path": ".github/workflows/pr-validation.yml",
+      "bytes": 293,
+      "blob": "49b784875dd9275866012396c3ff51a0b1f9dee2"
+    },
+    {
+      "path": ".github/workflows/publish-image.yml",
+      "bytes": 1027,
+      "blob": "2f9a52561c3c581388444a9cd01adde978880eaf"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 86,
+      "blob": "968e06b6f0ed18358d0427d0e9b5232c15f58e1a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
+      "bytes": 119,
+      "blob": "0c208ae9181e5e5717e47ec1bd59368aebc6066e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.json",
+      "bytes": 398,
+      "blob": "b057873ee272efdfc5311a0179a6214f4e1768b7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
+      "bytes": 2652,
+      "blob": "fba7601517f5d7d63125e7b93ff67d6ffc756c2f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs",
+      "bytes": 6289,
+      "blob": "bec232576eb1bb2acf129e0315eed8cef5305023"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeEditPrecondition.cs",
+      "bytes": 719,
+      "blob": "3f50f27d52a5d369333867f0bd54bb63f82d0917"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeeHomeAddressController.cs",
+      "bytes": 2169,
+      "blob": "56fc136648c6ce6abaa8714a806f878bb1e84579"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/EmployeesController.cs",
+      "bytes": 7590,
+      "blob": "69e1962716f7dec2d6ce283f45ab0f8cb5a72c53"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/RolesController.cs",
+      "bytes": 2813,
+      "blob": "506e92b3c439d3ca355f00b05587d29825db508a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Controllers/SignaturesController.cs",
+      "bytes": 3141,
+      "blob": "351846bf51b1c6e148426be48ead2c6e32b317d2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Dockerfile",
+      "bytes": 1193,
+      "blob": "1c74f50b72e71bc10c0b5c5b8f5625215373b990"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Documentation/EmployeeOpenApi.cs",
+      "bytes": 1753,
+      "blob": "9f74ab9c0f787e15d93b6bdb9825117685d0c51b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Documentation/EmployeePayload.xml",
+      "bytes": 7112,
+      "blob": "c30c056da0512b8415b94d5b3bb10928253c37cb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+      "bytes": 2659,
+      "blob": "0d3808825f8711e2083bd35c0c2cad32f57647bb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
+      "bytes": 6343,
+      "blob": "9c453e6303dd02d5e994089618c7f1d1626b83f4"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticLogging.cs",
+      "bytes": 915,
+      "blob": "8e52f722cbb9b157c2c17b2d027017fd5e1dfa8f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+      "bytes": 2784,
+      "blob": "a4acb05aac9cf8a74734ddcd900661d222a0cc55"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
+      "bytes": 618,
+      "blob": "5b49ab6aa8f800b7ed4a376abb9ccf0942625251"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeMetadataJsonOptions.cs",
+      "bytes": 5030,
+      "blob": "1c09bc324c4ab875d44a0ea8cd8f5282b251eb31"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Interfaces/IEmployeeBoundaries.cs",
+      "bytes": 9434,
+      "blob": "2a5a15981796de73c832a9106fd9abf9d0632f29"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
+      "bytes": 476,
+      "blob": "690ac5c28dcedd9ea951b031bfd9deddbbc9bcaa"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeEditVersion.cs",
+      "bytes": 2652,
+      "blob": "ad68f4591f4dd8212b26731d2e5200f1f9ae9c2c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeHomeAddressEdit.cs",
+      "bytes": 1932,
+      "blob": "4993a44290fc63790b2c584fbbfa23dcf1fe9e5c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Models/EmployeeModels.cs",
+      "bytes": 3411,
+      "blob": "aed4a360e4f678aefd1d74ce56d89aa4328d338f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Application/Services/EmployeeApplicationService.cs",
+      "bytes": 10017,
+      "blob": "a2122eb1661c921eb313fb3f9c13ba06291d8ad6"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/DistributedEmployeeCache.cs",
+      "bytes": 2616,
+      "blob": "c9342d57bc2b3f3c67ad254c59b57c0483cb92b6"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeDbContext.cs",
+      "bytes": 4824,
+      "blob": "d752944a5c94b7d56a663e87efd125708b719a38"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeDbContextFactory.cs",
+      "bytes": 930,
+      "blob": "f835643b6e2fcc5ac0ead551a7739c544459b65d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/EmployeeRepository.cs",
+      "bytes": 22327,
+      "blob": "63e5cb0f9b279c12c2844af4b0b05fb6517750e1"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+      "bytes": 1170,
+      "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
+      "bytes": 7037,
+      "blob": "93f998ba11d4b97069a25b7f1415b9f46147ada4"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
+      "bytes": 9690,
+      "blob": "f82ed9ac464b97ae061bc417d53b6bd83d24feb3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
+      "bytes": 5889,
+      "blob": "fc15921ce75bf1be80334eb4744da5879ec87828"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.Designer.cs",
+      "bytes": 9858,
+      "blob": "d3b2652c3b8dc1c379254e120eef00948ab5fc5e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/EmployeeDbContextModelSnapshot.cs",
+      "bytes": 9740,
+      "blob": "c21880d5529a2735001b2f0baeef7c66b96c13a3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1",
+      "bytes": 2691,
+      "blob": "2b4d2b41b10776fa5ce4450a7a2c9c0a007cfd31"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Domain/EmployeeEntities.cs",
+      "bytes": 3956,
+      "blob": "82152637ed05d346eb08bbacfaf8c4ee3ebbf691"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Domain/Legacy.Maliev.EmployeeService.Domain.csproj",
+      "bytes": 327,
+      "blob": "51addf44ecf979d69d9d77527d402f14c06a4fa5"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.slnx",
+      "bytes": 531,
+      "blob": "bbe22dd2cdaeba7edcf0e2778d522e81f91a0e2a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Application/EmployeeApplicationServiceTests.cs",
+      "bytes": 11158,
+      "blob": "9c9570e23d17d02ba016900b4db7efbb485d07d9"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Caching/DistributedEmployeeCacheTests.cs",
+      "bytes": 4055,
+      "blob": "7708cd127547f4723569101dd043d0ad115ca446"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeControllerContractTests.cs",
+      "bytes": 6948,
+      "blob": "8c38f8bd0f86bbe74abcff369f1551b33dc91ae9"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs",
+      "bytes": 1540,
+      "blob": "58c87597096f6303104deb49ffb7df86e38bddad"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalRoleNullControllerTests.cs",
+      "bytes": 1506,
+      "blob": "014f0af39919163d148df5c921d0c1847f9a21d7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeeModelCompatibilityTests.cs",
+      "bytes": 4162,
+      "blob": "9426ae8db3ceaf5ee7815944471cef48837e5c06"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeePostgresMigrationTests.cs",
+      "bytes": 2939,
+      "blob": "14ae9ce9ab5a384dbfeb25ea364c30e0e60e30fc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Data/EmployeeSelfProfilePostgresTests.cs",
+      "bytes": 3871,
+      "blob": "a9d1e3c0a3facc4739d41acfb1c8a252835bd472"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/DeliveryContractTests.cs",
+      "bytes": 6753,
+      "blob": "ec956e22fb92b58f21a38585e35db3b25e77cba8"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAddressPersistenceHttpTests.cs",
+      "bytes": 9985,
+      "blob": "9bc99911f215f1b9b551db06bfd521d01d1a840d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeEmailLiteralHttpTests.cs",
+      "bytes": 16296,
+      "blob": "313a0267187308df4e9a69517acb99798d3127a3"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeLiteralNameHttpTests.cs",
+      "bytes": 15302,
+      "blob": "9e78a53c01f53af7b4198b4db5bd2e5849b4a085"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativePersistenceHttpTests.cs",
+      "bytes": 9620,
+      "blob": "63dc24a33a34079ea3ce04dfb698a6335b1a7e02"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeAdministrativeProfileLifecycleHttpTests.cs",
+      "bytes": 7159,
+      "blob": "a55a43501259b110f7bb0120f8c2d17d89e73f48"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeConditionalEditHttpTests.cs",
+      "bytes": 20395,
+      "blob": "c484440486f9c78a408f1967f1fb9353ff21a276"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDefaultPageHttpTests.cs",
+      "bytes": 12434,
+      "blob": "e2490e89e88bb1e6653f90576a8e28005ef20846"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryOffsetHttpTests.cs",
+      "bytes": 7234,
+      "blob": "99cd31a4b931ddf2c77cb6a2ecfaf232c9301d26"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryParityFixture.cs",
+      "bytes": 7919,
+      "blob": "56e31207d5009d866adf4a32c45a0b87140b9659"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDirectoryParityHttpTests.cs",
+      "bytes": 11173,
+      "blob": "1805044e6d117b50861522600358cad5cbcf24fc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDocumentationAcceptanceTests.cs",
+      "bytes": 10201,
+      "blob": "a57486c6e2d655a2e9fe8c1ef98e54c87a86965e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeHomeAddressConditionalEditHttpTests.cs",
+      "bytes": 24252,
+      "blob": "e0639036b21ceb5a90b9bd0732eba1fbf40993d7"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeIamTransportEvidenceTests.cs",
+      "bytes": 5835,
+      "blob": "abc9fb69fe056e05e023905bb59d06259c6cdd2f"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeJwtExternalizationTests.cs",
+      "bytes": 6021,
+      "blob": "a6166972330a0512e7fab077e63db251de23ec8b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProductionPipelineHttpTests.cs",
+      "bytes": 5718,
+      "blob": "28df25fc7a8d3d0ebdc869869607277019251f19"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProfileDeletionIsolationHttpTests.cs",
+      "bytes": 14244,
+      "blob": "584d02937fbc2c0872a25591b01c92b094ae469b"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRelationshipRollbackHttpTests.cs",
+      "bytes": 7327,
+      "blob": "20deb4f40a122633325aaeca8e40c3febe3ec0b2"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRouteAcceptanceFixture.cs",
+      "bytes": 14284,
+      "blob": "9317fbbd68d0f794a49e178aadb3943081f61aec"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeRouteAcceptanceHttpTests.cs",
+      "bytes": 36274,
+      "blob": "faf6c354f2cdea184fc92bf8386785d8f3ec4e1e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+      "bytes": 24278,
+      "blob": "73fef5c818fdc8a5c47c3dd262e7a7c44427e28c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
+      "bytes": 14610,
+      "blob": "2d332640fb9c81fec093bcc0143a488a3f7cc425"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSharedAddressHttpTests.cs",
+      "bytes": 7154,
+      "blob": "7eb3fd83ba5d32deae2421f5756a8bccb6b532eb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSharedRoleHttpTests.cs",
+      "bytes": 10358,
+      "blob": "6eb12ed356a38a66523d60032ca5491c2aa6d1df"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureAmbiguityHttpTests.cs",
+      "bytes": 9731,
+      "blob": "2e86642f1379d6c69fdb3ea95d4504abab563b26"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureBucketLiteralHttpTests.cs",
+      "bytes": 9556,
+      "blob": "35026cf460989164cc683783979f7caac430ce18"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureDeletionTruthHttpTests.cs",
+      "bytes": 5640,
+      "blob": "4b835eb4feef00559507fd01aa06756a3ac84cdb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignaturePersistenceHttpTests.cs",
+      "bytes": 10722,
+      "blob": "07b502f394344490bc971fbe104020021ef35931"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignificantSearchHttpTests.cs",
+      "bytes": 3252,
+      "blob": "cd2c204f05730b20672d933332cda573500cd332"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeUnhealthyReadinessHttpTests.cs",
+      "bytes": 3853,
+      "blob": "499b6814bf1f87525fc70c623537b806eee0203c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/IamTransportContractEvidence.cs",
+      "bytes": 796,
+      "blob": "dc0f40ca0e5779703e4afb0f315f8709c5958290"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+      "bytes": 1701,
+      "blob": "b39f14f5c601928a5b93ee68a5b432968697b7c1"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingCases.cs",
+      "bytes": 6669,
+      "blob": "f2616a507bc4842adc1faa97e65036ac5e2f962c"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingHttpTests.cs",
+      "bytes": 13234,
+      "blob": "ed2f3bb0498505373f5e89fa883aa21cb53f8603"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
+      "bytes": 6045,
+      "blob": "cf7df37f45ecdde07b777862194f6b3858c8f8fb"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
+      "bytes": 1706,
+      "blob": "e491073153941a56b9e0e816ca1017684dd01581"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs",
+      "bytes": 8657,
+      "blob": "e9cb8945d344cb13a1d971d6aa83f502829a9a8d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
+      "bytes": 2298,
+      "blob": "01e806502cbd975562bfeb1fdac33d4a38cdf0bc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/EmployeeDiagnosticConsoleFormatterTests.cs",
+      "bytes": 23510,
+      "blob": "adac4ffaefd903dac95f6285fc71d5debdfaac7a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Startup/StartupFailureAcceptanceTests.cs",
+      "bytes": 11500,
+      "blob": "f97841cc01ead4aa88f915ac47f46ea6ccb4af0a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/DependabotConfigurationContractTests.cs",
+      "bytes": 2443,
+      "blob": "780bd34817f7d79789963391f2d4a231763b6074"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+      "bytes": 19872,
+      "blob": "1afae92d98fc0e03a951cf7d59b670dbff88792f"
+    },
+    {
+      "path": "nuget.config",
+      "bytes": 197,
+      "blob": "765346e5343d46ac83654843869dc06b65b2bdc4"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6516,
+      "blob": "d37ca7d3fc67b60ae56d127370087847c63fa75e"
+    },
+    {
+      "path": "scripts/employee-authority-hosted-requirements.txt",
+      "bytes": 751,
+      "blob": "09d54b198c80f95237d59756cc4a25d75a5e29c8"
+    },
+    {
+      "path": "scripts/employee_authority.py",
+      "bytes": 9407,
+      "blob": "d64ba282b5457ca7e78ddd24517d458808f8adc2"
+    },
+    {
+      "path": "scripts/employee_fixture_compatibility.py",
+      "bytes": 55741,
+      "blob": "6d2d309b75ab87fe9d5f3dc6d173b28d52087bc7"
+    },
+    {
+      "path": "scripts/employee_fixture_registry_compatibility.py",
+      "bytes": 15006,
+      "blob": "4935e2a1e2107229cc77e56db56e2dbb642f20b6"
+    },
+    {
+      "path": "scripts/employee_linux_custody.py",
+      "bytes": 39148,
+      "blob": "580bfa5d9835bb3365ef31d68a2a0b27ec2e82d2"
+    },
+    {
+      "path": "scripts/employee_linux_qualification.py",
+      "bytes": 11323,
+      "blob": "d4e704cb79fdcae3685bb8c052e08de42733d009"
+    },
+    {
+      "path": "scripts/employee_linux_readonly_helpers.py",
+      "bytes": 8864,
+      "blob": "a6d614ebaf4df717b78366fdc94d9ccd1eb6adcb"
+    },
+    {
+      "path": "scripts/employee_linux_sdk_owner.py",
+      "bytes": 44102,
+      "blob": "69b69b196159bea8eb9b735e4108da5753643e67"
+    },
+    {
+      "path": "scripts/employee-metadata-roster.json",
+      "bytes": 142771,
+      "blob": "2f7fb9268c0c91d72678878541857e5fbfdac52a"
+    },
+    {
+      "path": "scripts/employee_no_sdk_controller.py",
+      "bytes": 4825,
+      "blob": "0c89aa6e8de92feba1a4c9419439b3e2f44395bd"
+    },
+    {
+      "path": "scripts/employee_owned_receipts.py",
+      "bytes": 6805,
+      "blob": "fe605c5c0889757c9014a1b10a4c4edc158300d6"
+    },
+    {
+      "path": "scripts/employee-pagination-focused-manifest.json",
+      "bytes": 31120,
+      "blob": "4cb60290c3bd9e1377f6f41cba513b98ebf4de19"
+    },
+    {
+      "path": "scripts/employee_phase_contract.py",
+      "bytes": 15302,
+      "blob": "9fd7137e326ee0f6a1c8a84e6755826813b70aba"
+    },
+    {
+      "path": "scripts/employee_qualification_controller.py",
+      "bytes": 8692,
+      "blob": "431f79bb4227cb40b901fe26fdf429ada20ddd9f"
+    },
+    {
+      "path": "scripts/employee_source_intake.py",
+      "bytes": 8151,
+      "blob": "8b061ce57af4d64de69ed1445f0dd3aeb0b81045"
+    },
+    {
+      "path": "scripts/employee-source-packet/baseline.zip",
+      "bytes": 178090,
+      "blob": "cdaede4e7e7f684043910394d862eab0a986f95c"
+    },
+    {
+      "path": "scripts/employee-source-packet/candidate.zip",
+      "bytes": 178143,
+      "blob": "6de816d32edeb0998c9915817946f9cc91bf182d"
+    },
+    {
+      "path": "scripts/employee-source-packet/dependencies.zip",
+      "bytes": 261264,
+      "blob": "b0aad7d0d6c52f553cc449dbf5847c895c4b034a"
+    },
+    {
+      "path": "scripts/employee-source-policy.json",
+      "bytes": 200627,
+      "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68"
+    },
+    {
+      "path": "scripts/sealed_source_capsule.py",
+      "bytes": 12296,
+      "blob": "cab6997ff2af48bdd4ac7e9240cd12d01e5b3190"
+    },
+    {
+      "path": "scripts/test_employee_authority.py",
+      "bytes": 8598,
+      "blob": "a7c33aa2e31235211ceff64e01b17bb099134969"
+    },
+    {
+      "path": "scripts/test_employee_custody_descriptors.py",
+      "bytes": 7336,
+      "blob": "2c7806460e9f3a82eb659e933c98797855588c14"
+    },
+    {
+      "path": "scripts/test_employee_fixture_compatibility.py",
+      "bytes": 26842,
+      "blob": "eb75f2a0b1dfadaf39fe21cd927c5c98b7a5b81c"
+    },
+    {
+      "path": "scripts/test_employee_fixture_registry_compatibility.py",
+      "bytes": 9135,
+      "blob": "1e4f93f5de70270ed4f94c57982f21b92ad35632"
+    },
+    {
+      "path": "scripts/test_employee_linux_custody.py",
+      "bytes": 16995,
+      "blob": "ec075b3faca43c2d20707235757f0024b3f2f85c"
+    },
+    {
+      "path": "scripts/test_employee_linux_qualification.py",
+      "bytes": 10407,
+      "blob": "8640eef6bcb1aae775b80f48dc607c9bc2ec1f9e"
+    },
+    {
+      "path": "scripts/test_employee_linux_sdk_owner.py",
+      "bytes": 14879,
+      "blob": "6bfa51ec2cabb5ae38d7e631617c110468d14b32"
+    },
+    {
+      "path": "scripts/test_employee_metadata_proof.py",
+      "bytes": 23822,
+      "blob": "519b2326d2bbf534bd90f31e9cc204dbf6551cda"
+    },
+    {
+      "path": "scripts/test_employee_no_sdk_controller.py",
+      "bytes": 7377,
+      "blob": "7a1d3bf94d6383db1c9a478f86d0740d39cd69ac"
+    },
+    {
+      "path": "scripts/test_employee_owned_receipts.py",
+      "bytes": 11466,
+      "blob": "499931184caa6a200ca1c72d07814dbd29dc7f97"
+    },
+    {
+      "path": "scripts/test_employee_pagination_focused_validator.py",
+      "bytes": 13511,
+      "blob": "fb9c1f34ab7c29d317a7bdc2807c6520a1c9e6b2"
+    },
+    {
+      "path": "scripts/test_employee_phase_contract.py",
+      "bytes": 9366,
+      "blob": "749bdb14dc6027fe45204e09a0c903c2c6564281"
+    },
+    {
+      "path": "scripts/test_employee_qualification_controller.py",
+      "bytes": 6615,
+      "blob": "2c35183cf469e838833d091ede1c644bb0983001"
+    },
+    {
+      "path": "scripts/test_employee_source_intake.py",
+      "bytes": 5892,
+      "blob": "46992796020f0a8fca4ecc375559605388000d20"
+    },
+    {
+      "path": "scripts/verify_employee_metadata_proof.py",
+      "bytes": 21243,
+      "blob": "02e2db9d1ee094a5dc27319f2ce6cd2ae760b64b"
+    },
+    {
+      "path": "scripts/verify_employee_pagination_focused.py",
+      "bytes": 9668,
+      "blob": "183ea34fb4ce95806faf3cf8585d6776d6a8010c"
+    },
+    {
+      "path": "scripts/verify-runner-coverage.py",
+      "bytes": 2073,
+      "blob": "6aae67d556e087177a75a80478abe37943c717a5"
+    },
+    {
+      "path": "tooling/Test-EmployeeScaffoldContract.ps1",
+      "bytes": 10503,
+      "blob": "4084d5406237df28bb094ccf6bba129fbdad7b2e"
+    }
+  ],
+  "baselineTestOverlay": [
+    "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+    "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingCases.cs",
+    "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingHttpTests.cs",
+    "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
+    "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
+    "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs"
+  ],
+  "productionHelper": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeMetadataJsonOptions.cs",
+  "admission": "Unchanged original49 guard before every hosted native phase; no SDK role or private custody execution",
+  "unrun": [
+    "Python controls",
+    "YAML parsing",
+    "Release builds",
+    "baseline176",
+    "reader119",
+    "candidate442",
+    "ordinary full/static/raw gates",
+    "actual schema runtime"
+  ],
+  "reviewCorrection": {
+    "predecessorManifest": "b314932277fe7d65b943439b90320ed1cc8948fd",
+    "predecessorTree": "0e3162710024ed83727263a894160f15dddac665",
+    "blockers": [
+      "Global TRX count/location census missing",
+      "Final source/baseline provenance and authoritative census missing"
+    ],
+    "scope": "validator +24 added control methods (60 total) +always-run final source/census workflow steps +docs +source bindings",
+    "preserved": "all36 original controls, existing selected identities/closed counters/RED72+16/4MiB+12MiB caps, seven preadmission guards, original49/deps/capsules; no broad kills or roles"
+  },
+  "generatedOutputDirectories": [
+    "Legacy.Maliev.EmployeeService.Api/bin",
+    "Legacy.Maliev.EmployeeService.Api/obj",
+    "Legacy.Maliev.EmployeeService.Application/bin",
+    "Legacy.Maliev.EmployeeService.Application/obj",
+    "Legacy.Maliev.EmployeeService.Data/bin",
+    "Legacy.Maliev.EmployeeService.Data/obj",
+    "Legacy.Maliev.EmployeeService.Domain/bin",
+    "Legacy.Maliev.EmployeeService.Domain/obj",
+    "Legacy.Maliev.EmployeeService.Tests/bin",
+    "Legacy.Maliev.EmployeeService.Tests/obj"
+  ]
+}
