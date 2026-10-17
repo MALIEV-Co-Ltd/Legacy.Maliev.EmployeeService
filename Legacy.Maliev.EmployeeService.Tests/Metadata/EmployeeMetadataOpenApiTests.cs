@@ -128,8 +128,18 @@ internal static class EmployeeMetadataNativeOptions
                 "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions"
             && action.Method.DeclaringType?.Assembly == typeof(Program).Assembly;
 
+    private static bool IsSignatureInputConfiguration(IConfigureOptions<MvcJsonOptions> configuration)
+        => configuration is ConfigureNamedOptions<MvcJsonOptions> { Name: "", Action: { } action }
+            && action.Target is null
+            && action.GetInvocationList().Length == 1
+            && action.Method.Name == "Configure"
+            && action.Method.DeclaringType?.FullName ==
+                "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeSignatureInputJsonOptions"
+            && action.Method.DeclaringType?.Assembly == typeof(Program).Assembly;
+
     private static bool IsCompatibilityConfiguration(IConfigureOptions<MvcJsonOptions> configuration)
-        => IsOwnedConfiguration(configuration) || IsAddressInputConfiguration(configuration);
+        => IsOwnedConfiguration(configuration) || IsAddressInputConfiguration(configuration)
+            || IsSignatureInputConfiguration(configuration);
 
     internal static JsonSerializerOptions Create(IServiceProvider services)
     {
@@ -140,6 +150,9 @@ internal static class EmployeeMetadataNativeOptions
         Assert.Equal(typeof(Program).Assembly.GetType(
             "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions", throwOnError: false) is null ? 0 : 1,
             source.Count(IsAddressInputConfiguration));
+        Assert.Equal(typeof(Program).Assembly.GetType(
+            "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeSignatureInputJsonOptions", throwOnError: false) is null ? 0 : 1,
+            source.Count(IsSignatureInputConfiguration));
         var retained = source.Where(configuration => !IsCompatibilityConfiguration(configuration)).ToArray();
         Assert.Equal(source.Length - owned.Length, retained.Length);
         var index = 0;
@@ -169,6 +182,10 @@ internal static class EmployeeMetadataNativeOptions
             "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions", throwOnError: false) is null ? 0 : 1,
             owned.Count(descriptor => descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
                 && IsAddressInputConfiguration(configuration)));
+        Assert.Equal(typeof(Program).Assembly.GetType(
+            "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeSignatureInputJsonOptions", throwOnError: false) is null ? 0 : 1,
+            owned.Count(descriptor => descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
+                && IsSignatureInputConfiguration(configuration)));
         foreach (var descriptor in owned) Assert.True(services.Remove(descriptor));
         var retained = before.Where(descriptor => !owned.Any(item => ReferenceEquals(descriptor, item))).ToArray();
         Assert.Equal(retained.Length, services.Count);

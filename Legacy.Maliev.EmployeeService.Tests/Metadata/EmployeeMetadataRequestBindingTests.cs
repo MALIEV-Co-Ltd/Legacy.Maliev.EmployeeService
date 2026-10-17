@@ -145,17 +145,16 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
     {
         var json = kind == "address"
             ? "{\"Building\":\"literal\",\"CountryId\":764,\"Employee\":[{}],\"Unknown\":{}}"
-            : "{\"Bucket\":\"literal\",\"ObjectName\":\"literal\",\"Id\":{},\"CreatedDate\":[],\"ModifiedDate\":true,\"Unknown\":{\"Bucket\":[]}}";
+            : "{\"Bucket\":\"literal\",\"ObjectName\":\"literal\",\"Unknown\":{\"Bucket\":[]}}";
         AssertNativeEquivalent(kind, json);
-        if (kind == "address")
+        foreach (var name in new[] { "Id", "CreatedDate", "ModifiedDate" })
         {
-            foreach (var name in new[] { "Id", "CreatedDate", "ModifiedDate" })
-            {
-                var invalid = "{\"Building\":\"literal\",\"CountryId\":764,\"" + name + "\":{}}";
-                Assert.NotNull(Bind(kind, invalid, NativeOptions()));
-                var error = Assert.Throws<JsonException>(() => Bind(kind, invalid, Options));
-                Assert.Equal("$." + name, error.Path);
-            }
+            var prefix = kind == "address" ? "{\"Building\":\"literal\",\"CountryId\":764,"
+                : "{\"Bucket\":\"literal\",\"ObjectName\":\"literal\",";
+            var invalid = prefix + "\"" + name + "\":{}}";
+            Assert.NotNull(Bind(kind, invalid, NativeOptions()));
+            var error = Assert.Throws<JsonException>(() => Bind(kind, invalid, Options));
+            Assert.Equal("$." + name, error.Path);
         }
     }
 
