@@ -35,6 +35,36 @@ jobs:
           ref: 78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7
           path: .dependencies/Legacy.Maliev.CompatibilityContracts
           persist-credentials: false
+      - name: Diagnose existing gitleaks finding without secret output
+        shell: bash
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          umask 077
+          private_dir="$(mktemp -d "${RUNNER_TEMP}/employee78-gitleaks-XXXXXX")"
+          report="${private_dir}/report.json"
+          scan_stdout="${private_dir}/scanner.stdout"
+          scan_stderr="${private_dir}/scanner.stderr"
+          trap 'rm -f -- "$report" "$scan_stdout" "$scan_stderr"; rmdir -- "$private_dir"' EXIT
+          go install github.com/zricethezav/gitleaks/v8@6eaad039603a4de39fddd1cf5f727391efe9974e # v8.30.0, identical to shared validator
+          export PATH="$(go env GOPATH)/bin:$PATH"
+          set +e
+          (
+            ulimit -f 4096 || exit 2
+            gitleaks git --redact --exit-code 1 --report-format json --report-path "$report"
+          ) > "$scan_stdout" 2> "$scan_stderr"
+          scan_status=$?
+          set -e
+          mkdir -p runner-results
+          set +e
+          python3 -B scripts/employee_gitleaks_provenance.py "$report" > runner-results/gitleaks-provenance.jsonl
+          parser_status=$?
+          set -e
+          cat runner-results/gitleaks-provenance.jsonl
+          if [ "$scan_status" -ne 0 ]; then
+            exit "$scan_status"
+          fi
+          exit "$parser_status"
       - name: Validate .NET solution
         uses: MALIEV-Co-Ltd/Legacy.Maliev.Workflows/actions/dotnet-validate@e3a6093324a24968876782153286f52db8b29fd8
         with:

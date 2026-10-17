@@ -24,6 +24,58 @@ COUNTERS = ("total", "executed", "passed", "failed", "error", "timeout", "aborte
             "disconnected", "warning", "completed", "inProgress", "pending")
 GRANTS = {"executionGranted": False, "sdkGranted": False, "runtimeQualified": False}
 
+
+# Exact declared checkout representations; historical Git objects remain canonical LF.
+CHECKOUT_REPRESENTATIONS = [
+    {
+        "path": "Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1",
+        "gitBytes": 2691,
+        "gitBlob": "2b4d2b41b10776fa5ce4450a7a2c9c0a007cfd31",
+        "checkoutBytes": 2746,
+        "checkoutBlob": "01ae0a297f09b5c9e3425c02c7c81f06de008a33",
+        "representation": "exact CRLF checkout from declared *.ps1 text eol=crlf"
+    },
+    {
+        "path": "tooling/Test-EmployeeScaffoldContract.ps1",
+        "gitBytes": 10503,
+        "gitBlob": "4084d5406237df28bb094ccf6bba129fbdad7b2e",
+        "checkoutBytes": 10667,
+        "checkoutBlob": "036e793a3b54cc6d65c38b274de65e5d638e92b6",
+        "representation": "exact CRLF checkout from declared *.ps1 text eol=crlf"
+    }
+]
+
+class SourceRefusal(ValueError):
+    def __init__(self, category, path=None):
+        self.category = category
+        self.path = path if (isinstance(path, str) and len(path) <= 256
+                             and re.fullmatch(r"[A-Za-z0-9_./-]+", path)
+                             and all(part not in ("", ".", "..") for part in path.split("/"))) else None
+        super().__init__(category)
+
+def source_need(value, category, path=None):
+    if not value:
+        raise SourceRefusal(category, path)
+
+def checkout_contracts(manifest):
+    declared = manifest["checkoutRepresentations"]
+    source_need(declared == CHECKOUT_REPRESENTATIONS, "checkout-contract-drift")
+    return declared
+
+def canonical_source_bytes(row, data, checkout):
+    pin = next((pin for pin in checkout if pin["path"] == row["path"]), None)
+    if pin is None:
+        return data
+    source_need(row["bytes"] == pin["gitBytes"] and row["blob"] == pin["gitBlob"],
+                "canonical-source-contract-drift", row["path"])
+    # Prove the raw checkout bytes/OID FIRST. No generic newline normalization.
+    source_need(len(data) == pin["checkoutBytes"] and git_blob(data) == pin["checkoutBlob"],
+                "checkout-representation-drift", row["path"])
+    canonical = data.replace(b"\r\n", b"\n")
+    source_need(len(canonical) == pin["gitBytes"] and git_blob(canonical) == pin["gitBlob"],
+                "canonical-source-drift", row["path"])
+    return canonical
+
 def need(value, message):
     if not value:
         raise ValueError(message)
@@ -68,16 +120,21 @@ def relative_file(root, name):
         need(not current.is_symlink(), "Source path link refused")
     return current
 
-def source_inventory(root, rows, excluded=()):
+def source_inventory(root, rows, excluded=(), checkout=()):
     """All tracked source bytes; generated outputs are excluded only after build."""
     expected = {row["path"]: row for row in rows}
     need(len(expected) == len(rows), "Duplicate source binding")
     budget = 0
     for name, row in expected.items():
-        data = bounded_read(relative_file(root, name))
+        try:
+            data = bounded_read(relative_file(root, name))
+        except (ValueError, OSError, UnicodeError):
+            raise SourceRefusal("source-input-unreadable", name) from None
         budget += len(data)
         need(budget <= AGGREGATE_CAP, "Source aggregate byte bound")
-        need(len(data) == row["bytes"] and git_blob(data) == row["blob"], "Source binding drift: " + name)
+        canonical = canonical_source_bytes(row, data, checkout)
+        source_need(len(canonical) == row["bytes"] and git_blob(canonical) == row["blob"],
+                    "source-binding-drift", name)
     actual = set()
     for directory, dirs, names in os.walk(root, followlinks=False):
         rel = Path(directory).relative_to(root)
@@ -85,7 +142,9 @@ def source_inventory(root, rows, excluded=()):
             need(not (Path(directory) / name).is_symlink(), "Unexpected source link")
         dirs[:] = [name for name in dirs if (rel / name).as_posix() not in excluded]
         actual.update((rel / name).as_posix() for name in names)
-    need(actual == set(expected) | set(excluded).intersection(actual), "Unexpected or missing source path")
+    allowed = set(expected) | set(excluded).intersection(actual)
+    difference = sorted(actual.symmetric_difference(allowed))
+    source_need(not difference, "source-path-set-drift", difference[0] if difference else None)
     return budget
 
 def verify_source(root=ROOT, baseline=None):
@@ -95,9 +154,9 @@ def verify_source(root=ROOT, baseline=None):
     own = CUSTODY.relative_to(ROOT).as_posix()
     # The enclosing immutable packet anchors this manifest, avoiding self-hash cycles.
     excluded = (".git", ".dependencies", ".metadata-baseline", "runner-metadata", own)
-    count = source_inventory(root, manifest["candidate"], excluded)
+    count = source_inventory(root, manifest["candidate"], excluded, checkout_contracts(manifest))
     if baseline is not None:
-        source_inventory(baseline, manifest["baseline"], (".git",))
+        source_inventory(baseline, manifest["baseline"], (".git",), checkout_contracts(manifest))
     return {"kind": "ordinary-source-only", "sourceBytes": count,
             "baseCommit": manifest["baseCommit"], "featureTree": manifest["featureTree"],
             "successorSha256": hashlib.sha256(manifest_data).hexdigest(), **GRANTS}
@@ -120,7 +179,7 @@ def prepare_baseline(destination):
     expected = dict(original)
     for name in copy_paths:
         expected[name] = candidate[name]
-    source_inventory(destination, list(expected.values()), (".git",))
+    source_inventory(destination, list(expected.values()), (".git",), checkout_contracts(manifest))
     need(not (destination / manifest["productionHelper"]).exists(), "Baseline converter must be absent")
     return {"kind": "tests-only-baseline", "sourcePaths": len(expected), "overlayPaths": copy_paths,
             "baseCommit": manifest["baseCommit"], **GRANTS}
@@ -156,7 +215,7 @@ def verify_final_source():
          and baseline_before["overlayPaths"] == copy_paths
          and all(baseline_before[key] is value for key, value in GRANTS.items()), "Initial baseline provenance changed")
     excluded = (".git", ".dependencies", ".metadata-baseline", "runner-metadata", own) + outputs
-    candidate_bytes = source_inventory(ROOT, manifest["candidate"], excluded)
+    candidate_bytes = source_inventory(ROOT, manifest["candidate"], excluded, checkout_contracts(manifest))
     candidate = {row["path"]: row for row in manifest["candidate"]}
     baseline_rows = {row["path"]: row for row in manifest["baseline"]}
     for name in copy_paths:
@@ -164,7 +223,7 @@ def verify_final_source():
     need(baseline_before["sourcePaths"] == len(baseline_rows), "Baseline source cardinality changed")
     baseline_root = relative_file(ROOT, ".metadata-baseline")
     need(baseline_root.is_dir(), "Baseline directory missing")
-    baseline_bytes = source_inventory(baseline_root, list(baseline_rows.values()), (".git",) + outputs)
+    baseline_bytes = source_inventory(baseline_root, list(baseline_rows.values()), (".git",) + outputs, checkout_contracts(manifest))
     need(not (baseline_root / manifest["productionHelper"]).exists(), "Native baseline helper must remain absent")
     return {"kind": "final-ordinary-source-only", "candidateBytes": candidate_bytes,
             "baselineBytes": baseline_bytes, "successorSha256": before["successorSha256"],
@@ -369,5 +428,9 @@ if __name__ == "__main__":
         main()
     except (ValueError, OSError, UnicodeError, ET.ParseError, KeyError, TypeError) as error:
         # No exception body/test payload/PII is printed; artifacts retain raw evidence.
-        print(json.dumps({"metadataProof": "refused", "category": type(error).__name__, **GRANTS}), file=sys.stderr)
+        diagnostic = {"metadataProof": "refused",
+                      "category": error.category if isinstance(error, SourceRefusal) else type(error).__name__, **GRANTS}
+        if isinstance(error, SourceRefusal) and error.path is not None:
+            diagnostic["path"] = error.path
+        print(json.dumps(diagnostic), file=sys.stderr)
         sys.exit(2)

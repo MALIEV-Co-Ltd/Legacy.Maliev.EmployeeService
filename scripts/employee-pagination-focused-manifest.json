@@ -264,8 +264,8 @@
     },
     {
       "path": ".github/workflows/_build-and-test.yml",
-      "bytes": 2174,
-      "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
+      "bytes": 3508,
+      "sha256": "564297fece8ef1bdde64b867e10f8bf21fc8a32c88b1ee43fbd8e502b922a2a4"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDefaultPageHttpTests.cs",
@@ -655,5 +655,30 @@
       "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj"
     ],
     "preserves": "selected49/dependencyPins/bindingRevision/historical witnesses/admission implementation"
+  },
+  "employee78Correction": {
+    "baseHead": "978d9eeca603d8535a52ca2cb9939bd3f0107d89",
+    "predecessorManifestBlob": "4cb60290c3bd9e1377f6f41cba513b98ebf4de19",
+    "scope": "temporary safe gitleaks provenance diagnostic, existing scan unchanged; remove after classification",
+    "changedPin": {
+      "preimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 2174,
+        "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
+      },
+      "postimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 3508,
+        "sha256": "564297fece8ef1bdde64b867e10f8bf21fc8a32c88b1ee43fbd8e502b922a2a4"
+      }
+    },
+    "selected49Unchanged": true,
+    "dependencyPinsUnchanged": true
+  },
+  "employee78PrivacyCorrection": {
+    "predecessorTree": "44ec6bd3acd94ed10d3b235c497e98bee5ced650",
+    "workflowPreimage": "93e3140747a77f15f2a471948799a01840261a78",
+    "scope": "capture both scanner streams in private bounded files; sanitized parser only; same scanner/rules/history/status",
+    "original49AndDependenciesUnchanged": true
   }
 }

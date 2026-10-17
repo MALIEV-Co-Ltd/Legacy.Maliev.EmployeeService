@@ -304,7 +304,7 @@ class FileControls(unittest.TestCase):
                 v.source_inventory(root, [row])
             extra.unlink()
             path.unlink()
-            with self.assertRaises(OSError):
+            with self.assertRaises(v.SourceRefusal):
                 v.source_inventory(root, [row])
     def test_evidence_cardinality_and_exit(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -373,6 +373,13 @@ class FinalSourceControls(unittest.TestCase):
         test_project = test_root + "/" + test_root + ".csproj"
         base_files = {project + "/" + project + ".csproj": b"project" for project in projects}
         base_files[program] = b"native-program"
+        checkout_files = {}
+        for pin in v.CHECKOUT_REPRESENTATIONS:
+            raw = v.bounded_read(HERE.parent / pin["path"])
+            canonical = v.canonical_source_bytes({"path": pin["path"], "bytes": pin["gitBytes"], "blob": pin["gitBlob"]},
+                                                 raw, v.CHECKOUT_REPRESENTATIONS)
+            base_files[pin["path"]] = canonical
+            checkout_files[pin["path"]] = raw
         candidate_files = dict(base_files)
         candidate_files[program] = b"candidate-program"
         candidate_files[test_project] = b"test-only-package"
@@ -388,13 +395,16 @@ class FinalSourceControls(unittest.TestCase):
                          "candidate": bindings(candidate_files), "baselineTestOverlay": overlay,
                          "productionHelper": helper,
                          "generatedOutputDirectories": sorted(project + "/" + leaf for project in projects for leaf in ("bin", "obj"))}
+        self.manifest["checkoutRepresentations"] = copy.deepcopy(v.CHECKOUT_REPRESENTATIONS)
         for name, data in candidate_files.items():
+            data = checkout_files.get(name, data)
             path = self.root / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(data)
         baseline_files = dict(base_files)
         baseline_files.update({name: candidate_files[name] for name in overlay})
         for name, data in baseline_files.items():
+            data = checkout_files.get(name, data)
             path = self.root / ".metadata-baseline" / name
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(data)
@@ -445,6 +455,126 @@ class FinalSourceControls(unittest.TestCase):
         receipt.write_text(json.dumps(body), encoding="utf-8")
         with self.assertRaises(ValueError):
             v.verify_final_source()
+
+class CheckoutRepresentationControls(unittest.TestCase):
+    def test_exact_two_checkout_representations_preserve_git_oid(self):
+        self.assertEqual(len(v.CHECKOUT_REPRESENTATIONS), 2)
+        for pin in v.CHECKOUT_REPRESENTATIONS:
+            raw = v.bounded_read(HERE.parent / pin["path"])
+            row = {"path": pin["path"], "bytes": pin["gitBytes"], "blob": pin["gitBlob"]}
+            canonical = v.canonical_source_bytes(row, raw, v.CHECKOUT_REPRESENTATIONS)
+            self.assertEqual((len(raw), v.git_blob(raw)), (pin["checkoutBytes"], pin["checkoutBlob"]))
+            self.assertEqual((len(canonical), v.git_blob(canonical)), (pin["gitBytes"], pin["gitBlob"]))
+    def test_lf_instead_of_expected_crlf_checkout_refused(self):
+        for pin in v.CHECKOUT_REPRESENTATIONS:
+            raw = v.bounded_read(HERE.parent / pin["path"]).replace(b"\r\n", b"\n")
+            row = {"path": pin["path"], "bytes": pin["gitBytes"], "blob": pin["gitBlob"]}
+            with self.assertRaises(v.SourceRefusal):
+                v.canonical_source_bytes(row, raw, v.CHECKOUT_REPRESENTATIONS)
+    def test_mixed_or_modified_ps1_checkout_refused(self):
+        for pin in v.CHECKOUT_REPRESENTATIONS:
+            raw = v.bounded_read(HERE.parent / pin["path"])
+            row = {"path": pin["path"], "bytes": pin["gitBytes"], "blob": pin["gitBlob"]}
+            for changed in (raw.replace(b"\r\n", b"\n", 1), raw + b"x"):
+                with self.subTest(path=pin["path"]), self.assertRaises(v.SourceRefusal):
+                    v.canonical_source_bytes(row, changed, v.CHECKOUT_REPRESENTATIONS)
+    def test_other_file_never_normalizes_newlines(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "other.ps1").write_bytes(b"line\r\n")
+            row = {"path": "other.ps1", "bytes": 5, "blob": v.git_blob(b"line\n")}
+            with self.assertRaises(v.SourceRefusal):
+                v.source_inventory(root, [row], checkout=v.CHECKOUT_REPRESENTATIONS)
+    def test_new_checkout_path_or_canonical_oid_drift_refused(self):
+        manifest = {"checkoutRepresentations": copy.deepcopy(v.CHECKOUT_REPRESENTATIONS)}
+        manifest["checkoutRepresentations"].append({"path": "other.ps1"})
+        with self.assertRaises(v.SourceRefusal):
+            v.checkout_contracts(manifest)
+        pin = v.CHECKOUT_REPRESENTATIONS[0]
+        raw = v.bounded_read(HERE.parent / pin["path"])
+        with self.assertRaises(v.SourceRefusal):
+            v.canonical_source_bytes({"path": pin["path"], "bytes": pin["gitBytes"], "blob": "0" * 40},
+                                     raw, v.CHECKOUT_REPRESENTATIONS)
+    def test_diagnostic_retains_only_fixed_category_and_safe_path(self):
+        error = v.SourceRefusal("checkout-representation-drift", "tooling/Test-EmployeeScaffoldContract.ps1")
+        self.assertEqual(str(error), "checkout-representation-drift")
+        self.assertEqual(error.path, "tooling/Test-EmployeeScaffoldContract.ps1")
+        for path in ("../secret", "/absolute", "unsafe\npayload", "payload: value"):
+            self.assertIsNone(v.SourceRefusal("source-binding-drift", path).path)
+
+class GitleaksProvenanceControls(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        report_spec = importlib.util.spec_from_file_location("employee_provenance", HERE / "employee_gitleaks_provenance.py")
+        cls.report = importlib.util.module_from_spec(report_spec)
+        report_spec.loader.exec_module(cls.report)
+    def provenance(self, data):
+        return self.report.safe_provenance(data, frozenset(("tests/Fixture.cs",)), frozenset(("a" * 40,)))
+    def test_only_four_provenance_fields_emitted(self):
+        finding = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12,
+                   "Commit": "a" * 40, "Secret": "SYNTHETIC", "Match": "SYNTHETIC",
+                   "Entropy": 9.9, "Message": "SYNTHETIC"}
+        rows = self.provenance(json.dumps([finding]).encode())
+        self.assertEqual(rows, [{key: finding[key] for key in ("RuleID", "File", "StartLine", "Commit")}])
+        self.assertNotIn("SYNTHETIC", json.dumps(rows))
+    def test_empty_report_emits_no_findings(self):
+        self.assertEqual(self.provenance(b"[]"), [])
+    def test_invalid_provenance_cannot_emit_partial_rows(self):
+        valid = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12, "Commit": "a" * 40}
+        for key, value in (("File", "../unsafe"), ("RuleID", "bad\nrule"), ("StartLine", True), ("Commit", "unknown")):
+            changed = dict(valid)
+            changed[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                self.provenance(json.dumps([valid, changed]).encode())
+    def test_scanner_streams_have_only_private_bounded_sinks(self):
+        workflow = v.bounded_read(HERE.parent / ".github/workflows/_build-and-test.yml").decode("utf-8")
+        block = workflow.split("      - name: Diagnose existing gitleaks finding without secret output\n", 1)[1]
+        block = block.split("      - name: Validate .NET solution\n", 1)[0]
+        self.assertEqual(block.count("gitleaks git --redact --exit-code 1 --report-format json"), 1)
+        self.assertIn('umask 077', block)
+        self.assertIn('private_dir="$(mktemp -d "${RUNNER_TEMP}/employee78-gitleaks-XXXXXX")"', block)
+        self.assertIn('ulimit -f 4096 || exit 2', block)
+        self.assertIn(') > "$scan_stdout" 2> "$scan_stderr"\n          scan_status=$?', block)
+        self.assertIn('trap \'rm -f -- "$report" "$scan_stdout" "$scan_stderr"; rmdir -- "$private_dir"\' EXIT', block)
+        self.assertIn('exit "$scan_status"', block)
+        self.assertEqual([line.strip() for line in block.splitlines() if line.strip().startswith(("cat ", "tee "))],
+                         ["cat runner-results/gitleaks-provenance.jsonl"])
+        for line in block.splitlines():
+            if "$scan_stdout" in line or "$scan_stderr" in line:
+                self.assertTrue(line.strip().startswith(("trap ", ") > ")), "Raw scanner stream has an unreviewed sink")
+
+    def test_finding_count_and_duplicate_json_keys_refused(self):
+        for raw in (b"{}", b'[{"RuleID":"x","RuleID":"y"}]', json.dumps([{}] * 1001).encode()):
+            with self.assertRaises(ValueError):
+                self.provenance(raw)
+
+    def test_unknown_safe_ascii_or_personlike_filename_refuses_whole_report(self):
+        valid = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12, "Commit": "a" * 40}
+        for path in ("staff/PersonalName/profile.txt", "fixtures/CredentialValue.txt", "tests/Invented.cs"):
+            invalid = dict(valid)
+            invalid["File"] = path
+            with self.subTest(path=path), self.assertRaises(ValueError):
+                self.provenance(json.dumps([valid, invalid]).encode())
+    def test_reviewed_scope_refuses_historical_only_path(self):
+        manifest = v.object_json(v.bounded_read(HERE / "employee-metadata-source-successor.json"))
+        manifest["baseline"].append({"path": "deleted/Historical.cs"})
+        with mock.patch.object(self.report, "object_json", return_value=manifest), self.assertRaises(ValueError):
+            self.report.reviewed_scope("a" * 40)
+
+    def test_unknown_commit_refuses_whole_report(self):
+        valid = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12, "Commit": "a" * 40}
+        invalid = dict(valid)
+        invalid["Commit"] = "b" * 40
+        with self.assertRaises(ValueError):
+            self.provenance(json.dumps([valid, invalid]).encode())
+    def test_reviewed_scope_uses_only_bound_inventory_and_actions_commit(self):
+        paths, commits = self.report.reviewed_scope("a" * 40)
+        self.assertEqual(commits, frozenset(("a" * 40,)))
+        self.assertIn("scripts/employee_gitleaks_provenance.py", paths)
+        self.assertNotIn("scripts/employee-metadata-source-successor.json", paths)
+        self.assertNotIn("staff/PersonalName/profile.txt", paths)
+        with self.assertRaises(ValueError):
+            self.report.reviewed_scope("unknown")
 
 if __name__ == "__main__":
     unittest.main()

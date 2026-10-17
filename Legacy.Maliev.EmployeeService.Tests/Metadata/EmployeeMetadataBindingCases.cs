@@ -65,12 +65,12 @@ public static class EmployeeMetadataBindingCases
 
     public static IEnumerable<object[]> TokenCases => Tokens.Keys.Select(x => new object[] { x });
     public static IEnumerable<object[]> FieldTokenCases =>
-        AllFields.SelectMany(field => Tokens.Keys.Select(token => new object[] { field, token }));
+        AllFields.SelectMany(fieldName => Tokens.Keys.Select(token => new object[] { fieldName, token }));
     public static IEnumerable<object[]> FieldOrderCases =>
-        AllFields.SelectMany(field => Orders.Keys.Select(order => new object[] { field, order }));
+        AllFields.SelectMany(fieldName => Orders.Keys.Select(order => new object[] { fieldName, order }));
     public static IEnumerable<object[]> MalformedCases =>
-        AllFields.SelectMany(field => new[] { "{}", "[]" }.SelectMany(token =>
-            new[] { "only", "before", "after" }.Select(position => new object[] { field, token, position })));
+        AllFields.SelectMany(fieldName => new[] { "{}", "[]" }.SelectMany(token =>
+            new[] { "only", "before", "after" }.Select(position => new object[] { fieldName, token, position })));
     public static IEnumerable<object[]> NativeIdCases =>
         new[] { "address", "signature" }.SelectMany(kind =>
             IdFragments.Keys.Select(id => new object[] { kind, id }));
@@ -78,8 +78,8 @@ public static class EmployeeMetadataBindingCases
         new[] { "address", "signature" }.SelectMany(kind =>
             new[] { "null", "[]", "true", "42", "\"text\"", "{", "{} {}" }.Select(json => new object[] { kind, json }));
     public static IEnumerable<object[]> HttpFieldCases =>
-        AddressFields.SelectMany(field => new[] { "post", "put" }.Select(verb => new object[] { field, verb }))
-            .Concat(SignatureFields.Select(field => new object[] { field, "put" }));
+        AddressFields.SelectMany(fieldName => new[] { "post", "put" }.Select(verb => new object[] { fieldName, verb }))
+            .Concat(SignatureFields.Select(fieldName => new object[] { fieldName, "put" }));
     public static IEnumerable<object[]> HttpMalformedCases =>
         new[] { new object[] { "Building", "{}" }, new object[] { "PostalCode", "[]" },
             new object[] { "Bucket", "{}" }, new object[] { "ObjectName", "[]" } };

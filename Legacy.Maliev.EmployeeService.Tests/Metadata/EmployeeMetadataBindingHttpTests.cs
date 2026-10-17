@@ -233,9 +233,18 @@ public sealed class EmployeeMetadataBindingHttpTests(EmployeeRouteAcceptanceFixt
         foreach (var table in new[] { "Employee", "Address", "SignatureImageFile" })
         {
             var id = table == "Address" ? exceptAddress : table == "SignatureImageFile" ? exceptSignature : null;
-            var filter = id.HasValue ? $" WHERE \"ID\" <> {id.Value}" : "";
-            rows.Add(table + ":" + await db.Database.SqlQueryRaw<string>(
-                $"SELECT COALESCE(jsonb_agg(to_jsonb(r) ORDER BY to_jsonb(r)::text)::text,'[]') AS \"Value\" FROM (SELECT * FROM public.\"{table}\"{filter}) r").SingleAsync());
+            var query = (table, id.HasValue) switch
+            {
+                ("Employee", false) => "SELECT COALESCE(jsonb_agg(to_jsonb(r) ORDER BY to_jsonb(r)::text)::text,'[]') AS \"Value\" FROM (SELECT * FROM public.\"Employee\") r",
+                ("Address", false) => "SELECT COALESCE(jsonb_agg(to_jsonb(r) ORDER BY to_jsonb(r)::text)::text,'[]') AS \"Value\" FROM (SELECT * FROM public.\"Address\") r",
+                ("Address", true) => "SELECT COALESCE(jsonb_agg(to_jsonb(r) ORDER BY to_jsonb(r)::text)::text,'[]') AS \"Value\" FROM (SELECT * FROM public.\"Address\" WHERE \"ID\" <> {0}) r",
+                ("SignatureImageFile", false) => "SELECT COALESCE(jsonb_agg(to_jsonb(r) ORDER BY to_jsonb(r)::text)::text,'[]') AS \"Value\" FROM (SELECT * FROM public.\"SignatureImageFile\") r",
+                ("SignatureImageFile", true) => "SELECT COALESCE(jsonb_agg(to_jsonb(r) ORDER BY to_jsonb(r)::text)::text,'[]') AS \"Value\" FROM (SELECT * FROM public.\"SignatureImageFile\" WHERE \"ID\" <> {0}) r",
+                _ => throw new InvalidOperationException("Unexpected snapshot table/filter combination."),
+            };
+            rows.Add(table + ":" + await (id.HasValue
+                ? db.Database.SqlQueryRaw<string>(query, id.Value)
+                : db.Database.SqlQueryRaw<string>(query)).SingleAsync());
         }
         return string.Join("\n", rows);
     }

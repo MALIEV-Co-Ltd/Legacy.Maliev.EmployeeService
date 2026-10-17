@@ -913,8 +913,8 @@
     },
     {
       "path": "docs/employee-metadata-proof.md",
-      "bytes": 4745,
-      "blob": "a4fd49113eb14e979dff147027642c9f62fbfda0"
+      "bytes": 7579,
+      "blob": "533b5b50111786b43c2894e97ab5e93caa0e25bf"
     },
     {
       "path": "docs/employee-no-sdk-controller.md",
@@ -983,8 +983,8 @@
     },
     {
       "path": ".github/workflows/_build-and-test.yml",
-      "bytes": 2174,
-      "blob": "73010a448f78253ce9b56a33ca7cc7a7b1254eac"
+      "bytes": 3508,
+      "blob": "027e76eb16b075ed36fbd8a1f950d10812455538"
     },
     {
       "path": ".github/workflows/ci-develop.yml",
@@ -1438,13 +1438,13 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingCases.cs",
-      "bytes": 6669,
-      "blob": "f2616a507bc4842adc1faa97e65036ac5e2f962c"
+      "bytes": 6709,
+      "blob": "dbc9f2e1259539a710cfda611cafd159063d3c87"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingHttpTests.cs",
-      "bytes": 13234,
-      "blob": "ed2f3bb0498505373f5e89fa883aa21cb53f8603"
+      "bytes": 14244,
+      "blob": "2eac3adb9d72f9608e2afaf80fcf762159bc4bba"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
@@ -1553,8 +1553,8 @@
     },
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
-      "bytes": 31120,
-      "blob": "4cb60290c3bd9e1377f6f41cba513b98ebf4de19"
+      "bytes": 32238,
+      "blob": "63aa8dba846ed9edfb560142d95201c0b43d198a"
     },
     {
       "path": "scripts/employee_phase_contract.py",
@@ -1633,8 +1633,8 @@
     },
     {
       "path": "scripts/test_employee_metadata_proof.py",
-      "bytes": 23822,
-      "blob": "519b2326d2bbf534bd90f31e9cc204dbf6551cda"
+      "bytes": 32617,
+      "blob": "f229bc85d19ac0625814dd442932195829a977df"
     },
     {
       "path": "scripts/test_employee_no_sdk_controller.py",
@@ -1668,8 +1668,8 @@
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 21243,
-      "blob": "02e2db9d1ee094a5dc27319f2ce6cd2ae760b64b"
+      "bytes": 24267,
+      "blob": "e479bdad7b01f101b12848cd9b4f6ae8b1d1f169"
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
@@ -1685,6 +1685,11 @@
       "path": "tooling/Test-EmployeeScaffoldContract.ps1",
       "bytes": 10503,
       "blob": "4084d5406237df28bb094ccf6bba129fbdad7b2e"
+    },
+    {
+      "path": "scripts/employee_gitleaks_provenance.py",
+      "bytes": 3256,
+      "blob": "915e2da329bd09d093b75ef355c1800ad521facb"
     }
   ],
   "baselineTestOverlay": [
@@ -1708,14 +1713,11 @@
     "actual schema runtime"
   ],
   "reviewCorrection": {
-    "predecessorManifest": "b314932277fe7d65b943439b90320ed1cc8948fd",
-    "predecessorTree": "0e3162710024ed83727263a894160f15dddac665",
-    "blockers": [
-      "Global TRX count/location census missing",
-      "Final source/baseline provenance and authoritative census missing"
-    ],
-    "scope": "validator +24 added control methods (60 total) +always-run final source/census workflow steps +docs +source bindings",
-    "preserved": "all36 original controls, existing selected identities/closed counters/RED72+16/4MiB+12MiB caps, seven preadmission guards, original49/deps/capsules; no broad kills or roles"
+    "baseHead": "978d9eeca603d8535a52ca2cb9939bd3f0107d89",
+    "baseTree": "448e68f03ebcc6497090c4c5ce68fd0a10b2bd55",
+    "source": "official jobs117237501785/117237501734/117237501730",
+    "changes": "test-only C#14 accessor identifiers; literal table/filter SQL plus parameterized ID; exact2 PS1 dual checkout/canonical bindings; path/category diagnostics; temporary safe same-rules hosted gitleaks provenance; all explicit source pins",
+    "status": "SOURCE ONLY, NOT RUN, gitleaks finding UNCLASSIFIED; no scanner rule/scope/allowlist change"
   },
   "generatedOutputDirectories": [
     "Legacy.Maliev.EmployeeService.Api/bin",
@@ -1728,5 +1730,31 @@
     "Legacy.Maliev.EmployeeService.Domain/obj",
     "Legacy.Maliev.EmployeeService.Tests/bin",
     "Legacy.Maliev.EmployeeService.Tests/obj"
-  ]
+  ],
+  "checkoutRepresentations": [
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1",
+      "gitBytes": 2691,
+      "gitBlob": "2b4d2b41b10776fa5ce4450a7a2c9c0a007cfd31",
+      "checkoutBytes": 2746,
+      "checkoutBlob": "01ae0a297f09b5c9e3425c02c7c81f06de008a33",
+      "representation": "exact CRLF checkout from declared *.ps1 text eol=crlf"
+    },
+    {
+      "path": "tooling/Test-EmployeeScaffoldContract.ps1",
+      "gitBytes": 10503,
+      "gitBlob": "4084d5406237df28bb094ccf6bba129fbdad7b2e",
+      "checkoutBytes": 10667,
+      "checkoutBlob": "036e793a3b54cc6d65c38b274de65e5d638e92b6",
+      "representation": "exact CRLF checkout from declared *.ps1 text eol=crlf"
+    }
+  ],
+  "privacyCorrection": {
+    "predecessorManifest": "07761a745c21947bda2981435ba70150e687be7c",
+    "predecessorTree": "44ec6bd3acd94ed10d3b235c497e98bee5ced650",
+    "scope": "both scanner streams privately captured/file-size bounded; exact3 files/dir removed; emitted File only173 current candidate paths, baseline subset required; self-manifest/unknown/deleted paths excluded; current Actions SHA only; whole-report validation;5 added controls (75 total)",
+    "rawExposureClaim": "NONE from prior nonverbose logs; defensive raw-error/filename scope correction",
+    "reviewRequired": true,
+    "runtime": "NOT RUN"
+  }
 }
