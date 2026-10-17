@@ -112,6 +112,44 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
             Body("signature").Insert(1, "\"Employee\":[{\"RoleId\":{}}],"),
             "success", "success", Projection("signature"));
 
+        // Source JsonTextReader normalizes lone escaped surrogates before
+        // model/controller validation. Literal replacement characters stay valid.
+        foreach (var kind in new[] { "employee", "address", "signature" })
+        {
+            var fields = kind switch
+            {
+                "employee" => new[] { "FirstName", "LastName" },
+                "address" => new[] { "Building", "City" },
+                _ => new[] { "Bucket", "ObjectName" }
+            };
+            foreach (var field in fields)
+                foreach (var sample in new[]
+                {
+                    (Label: "lone high escape", Json: "\"\\ud800\"", Parsed: "\uFFFD", Native: "failure"),
+                    (Label: "lone low escape", Json: "\"\\udc00\"", Parsed: "\uFFFD", Native: "failure"),
+                    (Label: "valid escaped pair", Json: "\"\\ud83d\\ude00\"", Parsed: "\U0001F600", Native: "success"),
+                    (Label: "literal replacement", Json: "\"\uFFFD\"", Parsed: "\uFFFD", Native: "success")
+                })
+                {
+                    var body = Body(kind);
+                    var json = body[..^1] + ",\"" + field + "\":" + sample.Json + "}";
+                    var expected = kind switch
+                    {
+                        "employee" => System.Text.Json.JsonSerializer.Serialize(new object?[] { null,
+                            field == "FirstName" ? sample.Parsed : "N",
+                            field == "LastName" ? sample.Parsed : "L", null, "e@x", null, null }),
+                        "address" => System.Text.Json.JsonSerializer.Serialize(new object?[] {
+                            field == "Building" ? sample.Parsed : "B", null, null,
+                            field == "City" ? sample.Parsed : null, null, null, 7 }),
+                        _ => System.Text.Json.JsonSerializer.Serialize(new object?[] {
+                            field == "Bucket" ? sample.Parsed : "B",
+                            field == "ObjectName" ? sample.Parsed : "O", 7 })
+                    };
+                    yield return Row(kind, field + " " + sample.Label, json,
+                        "success", sample.Native, expected, sample.Native == "success" ? expected : null);
+                }
+        }
+
         foreach (var kind in new[] { "address", "signature" })
         {
             var field = kind == "address" ? "CountryId" : "EmployeeId";
