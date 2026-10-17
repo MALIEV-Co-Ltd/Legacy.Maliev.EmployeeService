@@ -314,8 +314,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 2727,
-      "sha256": "31932fd59e02c2c7911e27f61012c10f56dbb43fdbe75d25f5ec9d7d26d7e60c"
+      "bytes": 2915,
+      "sha256": "3d111fb7adbb83680982af103c7a9998e078cc3f809b79dba1bcbf8ae1bcaaee"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -519,8 +519,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
-      "bytes": 24278,
-      "sha256": "ba3e8128643e67a29f44a0c5e359682a617d3271416eb0992a3b110e7a60dc32"
+      "bytes": 26119,
+      "sha256": "546bea8a4abb70a0e88e2f9460324d4c0758b4c5315bfd76e67bc22947733295"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",

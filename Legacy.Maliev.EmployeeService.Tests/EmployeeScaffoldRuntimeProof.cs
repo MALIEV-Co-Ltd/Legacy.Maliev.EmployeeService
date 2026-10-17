@@ -63,6 +63,13 @@ internal static class EmployeeScaffoldRuntimeProof
         {
             await ExecuteAsync("dotnet", ["tool", "install", "dotnet-ef", "--version", "10.0.12", "--tool-path", tools], "exact-tool-install", repository, environment, phases);
             environment["PATH"] = tools + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH");
+            var apiProject = Path.Combine(repository, "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj");
+            var ordinaryPackages = await ExecuteAsync("dotnet", ["msbuild", apiProject, "-getItem:PackageReference", "-p:EnableEmployeeScaffoldDesignTime=false", "-nodeReuse:false"],
+                "ordinary-package-evaluation", repository, environment, phases);
+            RequirePackageGraph(ordinaryPackages, designTime: false);
+            var designPackages = await ExecuteAsync("dotnet", ["msbuild", apiProject, "-getItem:PackageReference", "-p:EnableEmployeeScaffoldDesignTime=true", "-nodeReuse:false"],
+                "design-package-evaluation", repository, environment, phases);
+            RequirePackageGraph(designPackages, designTime: true);
             var build = await ExecuteAsync("dotnet", ["build", Path.Combine(repository, "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj"), "-c", "Release", "--disable-build-servers", "-p:UseSharedCompilation=false", "-nodeReuse:false"], "isolated-design-startup-build", repository, environment, phases);
             RequireStrictBuild(build);
             await ExecuteAsync("pwsh", ["-NoProfile", "-File", Path.Combine(repository, "Legacy.Maliev.EmployeeService.Data/ScaffoldContext.ps1"), "-OutputDirectory", output], "actual-named-connection-scaffold", repository, environment, phases);
@@ -276,6 +283,26 @@ internal static class EmployeeScaffoldRuntimeProof
 
     private static bool StillOwned(OwnedProcess expected, string lease) =>
         ObserveLease(lease).Any(actual => actual == expected);
+
+    private static void RequirePackageGraph(string output, bool designTime)
+    {
+        Assert.True(output.Length <= 262144, "Evaluated package graph exceeded its finite bound.");
+        using var document = JsonDocument.Parse(output, new JsonDocumentOptions { MaxDepth = 32 });
+        var packages = document.RootElement.GetProperty("Items").GetProperty("PackageReference").EnumerateArray().ToArray();
+        var readers = packages.Where(item => item.GetProperty("Identity").GetString() == "Newtonsoft.Json").ToArray();
+        Assert.Single(readers);
+        Assert.Equal(designTime ? "13.0.4" : "13.0.3", readers[0].GetProperty("Version").GetString());
+        var designers = packages.Where(item => item.GetProperty("Identity").GetString() == "Microsoft.EntityFrameworkCore.Design").ToArray();
+        if (designTime)
+        {
+            Assert.Single(designers);
+            Assert.Equal("10.0.12", designers[0].GetProperty("Version").GetString());
+        }
+        else
+        {
+            Assert.Empty(designers);
+        }
+    }
 
     private static void RequireStrictBuild(string output)
     {

@@ -973,8 +973,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 2727,
-      "blob": "0a5689a11a91d93fd6136203d98840b760303aa6"
+      "bytes": 2915,
+      "blob": "999e325642cc0f19ea86c5450394521b42eb1a76"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -1273,8 +1273,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
-      "bytes": 24278,
-      "blob": "73fef5c818fdc8a5c47c3dd262e7a7c44427e28c"
+      "bytes": 26119,
+      "blob": "2fe4024838efef6b6775e4b7b5664ec1361287fd"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
@@ -1549,7 +1549,7 @@
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
       "bytes": 34974,
-      "blob": "5a2b1eb0eedc3de8109132e9f19563881896a34b"
+      "blob": "9023c17c71e8b36647a05e5e3210ddd2df225e9a"
     },
     {
       "path": "scripts/employee-source-packet/baseline.zip",
