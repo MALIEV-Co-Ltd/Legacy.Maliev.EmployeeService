@@ -913,8 +913,8 @@
     },
     {
       "path": "docs/employee-metadata-proof.md",
-      "bytes": 7710,
-      "blob": "b07a66594a4a183c207ad4a5f954c7b1f8601f5d"
+      "bytes": 8235,
+      "blob": "1a1f02f1049c9867f57b13872031dd516860889f"
     },
     {
       "path": "docs/employee-no-sdk-controller.md",
@@ -1123,8 +1123,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 2784,
-      "blob": "a4acb05aac9cf8a74734ddcd900661d222a0cc55"
+      "bytes": 2846,
+      "blob": "4ce460f0d79df42b1c5e7bb3fe82d75101c61206"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
@@ -1448,8 +1448,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
-      "bytes": 7877,
-      "blob": "eebdceb214dfe253b85e3f74264ea40e6b7c58d5"
+      "bytes": 9088,
+      "blob": "f6ef1381a248eb9ce83906a2c97ac336fde01aa9"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
@@ -1458,8 +1458,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs",
-      "bytes": 14285,
-      "blob": "fe18c708e370e649ee337c7e49a1f3a5d711e2f7"
+      "bytes": 12785,
+      "blob": "903360eea3b6905b3a15ed8b36e3ab3c36d698aa"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
@@ -1795,5 +1795,14 @@
     "previousOracle": "top-only removal insufficient; prior native/schema equality not accepted",
     "productionAnd83Controls": "unchanged",
     "runtime": "NOT RUN; Root review/fresh checks required"
+  },
+  "nativeFactorySuccessor": {
+    "baseHead": "a56022b093c2906d23df8435ede858a1066e28c0",
+    "baseTree": "f4fa73b133a1882c1e02c5f811bf0ab6d8a0ae8b",
+    "diagnosis": "framework AddedModifiers hides owned resolver from public chain; a560 candidate329P113F/full772P113F; prior native/schema unqualified",
+    "scope": "separate same static Configure methodgroup registration; fresh OptionsFactory replays every other setup plus all postsetups/validators; native OpenAPI removes exact action descriptor before startup; no private framework reflection",
+    "identity": "public ConfigureNamedOptions default Name/static single Action exact method/type/API assembly; registrationFact exactly1candidate; baseline0 allowed",
+    "preserved": "helper c3ff,83 controls,442/18/885 identities,4 malformed literal paths,actual schema projection,workflows/deps/roles/49/sealed policy",
+    "runtime": "NOT RUN; source review and fresh exact-head hosted qualification required"
   }
 }

@@ -16,9 +16,6 @@ namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture fixture, ITestOutputHelper output)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
-    private const string ResolverName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataRequestJsonTypeInfoResolver";
-    private const string PropertyReaderName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedMetadataStringJsonConverter";
-
     [Theory]
     [InlineData("UpsertAddressRequest")]
     [InlineData("UpsertSignatureImageFileRequest")]
@@ -28,14 +25,11 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
         await using var native = fixture.Factory.WithWebHostBuilder(builder =>
         {
             builder.UseEnvironment("Development");
-            builder.ConfigureTestServices(services => services.PostConfigure<MvcJsonOptions>(options =>
-            {
-                RemoveOwnedResolver(options.JsonSerializerOptions);
-            }));
+            builder.ConfigureTestServices(EmployeeMetadataNativeOptions.RemoveOwnedConfiguration);
         });
         using var candidateClient = candidate.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
         using var nativeClient = native.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
-        AssertNativeScope(native.Services.GetRequiredService<IOptions<MvcJsonOptions>>().Value.JsonSerializerOptions);
+        EmployeeMetadataNativeOptions.AssertNativeScope(native.Services.GetRequiredService<IOptions<MvcJsonOptions>>().Value.JsonSerializerOptions);
         var candidateDocument = await DocumentAsync(candidateClient);
         var nativeDocument = await DocumentAsync(nativeClient);
         var actual = Projection(candidateDocument, schemaName);
@@ -43,38 +37,6 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
         output.WriteLine("METADATA-SCHEMA-NATIVE " + expected);
         output.WriteLine("METADATA-SCHEMA-CANDIDATE " + actual);
         Assert.Equal(expected, actual);
-    }
-
-    private static bool IsOwnedResolver(IJsonTypeInfoResolver resolver) => resolver.GetType().FullName == ResolverName;
-    private static void RemoveOwnedResolver(JsonSerializerOptions options)
-    {
-        var before = options.TypeInfoResolverChain.ToArray();
-        var owned = before.Select((resolver, index) => (resolver, index))
-            .Where(item => IsOwnedResolver(item.resolver)).ToArray();
-        Assert.InRange(owned.Length, 0, 1);
-        var expected = before.ToArray();
-        foreach (var (resolver, index) in owned)
-        {
-            var inner = resolver.GetType().GetProperty("Inner");
-            Assert.NotNull(inner);
-            expected[index] = Assert.IsAssignableFrom<IJsonTypeInfoResolver>(inner.GetValue(resolver));
-            options.TypeInfoResolverChain[index] = expected[index];
-        }
-        Assert.Equal(before.Length, options.TypeInfoResolverChain.Count);
-        for (var index = 0; index < before.Length; index++) Assert.Same(expected[index], options.TypeInfoResolverChain[index]);
-        Assert.DoesNotContain(options.TypeInfoResolverChain, IsOwnedResolver);
-    }
-    private static void AssertNativeScope(JsonSerializerOptions options)
-    {
-        Assert.DoesNotContain(options.TypeInfoResolverChain, IsOwnedResolver);
-        foreach (var type in new[] { typeof(UpsertAddressRequest), typeof(UpsertSignatureImageFileRequest) })
-        {
-            var metadata = options.GetTypeInfo(type);
-            Assert.Equal(JsonTypeInfoKind.Object, metadata.Kind);
-            Assert.Null(metadata.CreateObject);
-            Assert.DoesNotContain(metadata.Properties, property =>
-                property.CustomConverter?.GetType().FullName == PropertyReaderName);
-        }
     }
 
     private static async Task<JsonElement> DocumentAsync(HttpClient client)
@@ -142,4 +104,64 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
         JsonValueKind.String => JsonSerializer.Serialize(value.GetString()),
         _ => value.GetRawText(),
     };
+}
+
+internal static class EmployeeMetadataNativeOptions
+{
+    private const string ConfigurationName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataJsonOptions";
+    private const string PropertyReaderName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedMetadataStringJsonConverter";
+
+    internal static bool IsOwnedConfiguration(IConfigureOptions<MvcJsonOptions> configuration)
+        => configuration is ConfigureNamedOptions<MvcJsonOptions> { Name: "", Action: { } action }
+            && action.Target is null
+            && action.GetInvocationList().Length == 1
+            && action.Method.Name == "Configure"
+            && action.Method.DeclaringType?.FullName == ConfigurationName
+            && action.Method.DeclaringType?.Assembly == typeof(Program).Assembly;
+
+    internal static JsonSerializerOptions Create(IServiceProvider services)
+    {
+        var source = services.GetServices<IConfigureOptions<MvcJsonOptions>>().ToArray();
+        var owned = source.Where(IsOwnedConfiguration).ToArray();
+        Assert.InRange(owned.Length, 0, 1); // Baseline overlay has no compatibility registration.
+        var retained = source.Where(configuration => !IsOwnedConfiguration(configuration)).ToArray();
+        Assert.Equal(source.Length - owned.Length, retained.Length);
+        var index = 0;
+        foreach (var configuration in source)
+        {
+            if (IsOwnedConfiguration(configuration)) continue;
+            Assert.Same(configuration, retained[index++]);
+        }
+        // Recreate fresh MVC options through every other original setup, post-setup,
+        // and validator. Never clone metadata already changed by the owned reader.
+        var factory = new OptionsFactory<MvcJsonOptions>(retained,
+            services.GetServices<IPostConfigureOptions<MvcJsonOptions>>(),
+            services.GetServices<IValidateOptions<MvcJsonOptions>>());
+        return factory.Create(Microsoft.Extensions.Options.Options.DefaultName).JsonSerializerOptions;
+    }
+
+    internal static void RemoveOwnedConfiguration(IServiceCollection services)
+    {
+        var before = services.ToArray();
+        var owned = Assert.Single(before.Where(descriptor =>
+            descriptor.ServiceType == typeof(IConfigureOptions<MvcJsonOptions>)
+            && descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
+            && IsOwnedConfiguration(configuration)));
+        Assert.True(services.Remove(owned));
+        var retained = before.Where(descriptor => !ReferenceEquals(descriptor, owned)).ToArray();
+        Assert.Equal(retained.Length, services.Count);
+        for (var index = 0; index < retained.Length; index++) Assert.Same(retained[index], services[index]);
+    }
+
+    internal static void AssertNativeScope(JsonSerializerOptions options)
+    {
+        foreach (var type in new[] { typeof(UpsertAddressRequest), typeof(UpsertSignatureImageFileRequest) })
+        {
+            var metadata = options.GetTypeInfo(type);
+            Assert.Equal(JsonTypeInfoKind.Object, metadata.Kind);
+            Assert.Null(metadata.CreateObject);
+            Assert.DoesNotContain(metadata.Properties, property =>
+                property.CustomConverter?.GetType().FullName == PropertyReaderName);
+        }
+    }
 }

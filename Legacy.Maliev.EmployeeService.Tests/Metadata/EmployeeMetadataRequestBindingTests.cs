@@ -11,7 +11,6 @@ namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
-    private const string ResolverName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataRequestJsonTypeInfoResolver";
     private const string PropertyReaderName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedMetadataStringJsonConverter";
     private JsonSerializerOptions Options => fixture.Factory.Services
         .GetRequiredService<IOptions<Microsoft.AspNetCore.Mvc.JsonOptions>>().Value.JsonSerializerOptions;
@@ -95,7 +94,8 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
     [Fact]
     public void Registration_IsMvcRequestSpecificAndWriterUnchanged()
     {
-        Assert.Single(Options.TypeInfoResolverChain, IsOwnedResolver);
+        Assert.Single(fixture.Factory.Services.GetServices<IConfigureOptions<Microsoft.AspNetCore.Mvc.JsonOptions>>(),
+            EmployeeMetadataNativeOptions.IsOwnedConfiguration);
         Assert.DoesNotContain(Options.Converters, converter => converter.CanConvert(typeof(string))
             || converter.CanConvert(typeof(UpsertAddressRequest))
             || converter.CanConvert(typeof(UpsertSignatureImageFileRequest)));
@@ -172,43 +172,15 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
 
     private JsonSerializerOptions NativeOptions()
     {
-        var source = Options.TypeInfoResolverChain.ToArray();
-        var native = new JsonSerializerOptions(Options);
-        var before = native.TypeInfoResolverChain.ToArray();
-        Assert.Equal(source.Length, before.Length);
-        for (var index = 0; index < before.Length; index++) Assert.Same(source[index], before[index]);
-        var owned = before.Select((resolver, index) => (resolver, index))
-            .Where(item => IsOwnedResolver(item.resolver)).ToArray();
-        Assert.InRange(owned.Length, 0, 1); // The tests-only baseline has no owned resolver.
-        var expected = before.ToArray();
-        foreach (var (resolver, index) in owned)
-        {
-            var inner = resolver.GetType().GetProperty("Inner");
-            Assert.NotNull(inner);
-            expected[index] = Assert.IsAssignableFrom<IJsonTypeInfoResolver>(inner.GetValue(resolver));
-            native.TypeInfoResolverChain[index] = expected[index];
-        }
-        Assert.Equal(before.Length, native.TypeInfoResolverChain.Count);
-        for (var index = 0; index < before.Length; index++)
-        {
-            Assert.Same(expected[index], native.TypeInfoResolverChain[index]);
-            Assert.Same(source[index], Options.TypeInfoResolverChain[index]);
-        }
-        AssertNativeScope(native);
+        var resolver = Options.TypeInfoResolver;
+        var chain = Options.TypeInfoResolverChain.ToArray();
+        var native = EmployeeMetadataNativeOptions.Create(fixture.Factory.Services);
+        EmployeeMetadataNativeOptions.AssertNativeScope(native);
+        Assert.NotSame(Options, native);
+        Assert.Same(resolver, Options.TypeInfoResolver);
+        Assert.Equal(chain.Length, Options.TypeInfoResolverChain.Count);
+        for (var index = 0; index < chain.Length; index++) Assert.Same(chain[index], Options.TypeInfoResolverChain[index]);
         return native;
-    }
-    private static bool IsOwnedResolver(IJsonTypeInfoResolver resolver) => resolver.GetType().FullName == ResolverName;
-    private static void AssertNativeScope(JsonSerializerOptions options)
-    {
-        Assert.DoesNotContain(options.TypeInfoResolverChain, IsOwnedResolver);
-        foreach (var type in new[] { typeof(UpsertAddressRequest), typeof(UpsertSignatureImageFileRequest) })
-        {
-            var metadata = options.GetTypeInfo(type);
-            Assert.Equal(JsonTypeInfoKind.Object, metadata.Kind);
-            Assert.Null(metadata.CreateObject);
-            Assert.DoesNotContain(metadata.Properties, property =>
-                property.CustomConverter?.GetType().FullName == PropertyReaderName);
-        }
     }
     private void AssertScopedProperties(Type type, string[] names)
     {
