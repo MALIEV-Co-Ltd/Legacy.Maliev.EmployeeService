@@ -1,9 +1,11 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
+using Legacy.Maliev.EmployeeService.Application.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Xunit.Abstractions;
 
 using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
@@ -15,6 +17,7 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
     private const string ResolverName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataRequestJsonTypeInfoResolver";
+    private const string PropertyReaderName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedMetadataStringJsonConverter";
 
     [Theory]
     [InlineData("UpsertAddressRequest")]
@@ -27,17 +30,12 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
             builder.UseEnvironment("Development");
             builder.ConfigureTestServices(services => services.PostConfigure<MvcJsonOptions>(options =>
             {
-                var resolver = options.JsonSerializerOptions.TypeInfoResolver;
-                if (resolver?.GetType().FullName == ResolverName)
-                {
-                    var inner = resolver.GetType().GetProperty("Inner");
-                    Assert.NotNull(inner);
-                    options.JsonSerializerOptions.TypeInfoResolver = Assert.IsAssignableFrom<IJsonTypeInfoResolver>(inner.GetValue(resolver));
-                }
+                RemoveOwnedResolver(options.JsonSerializerOptions);
             }));
         });
         using var candidateClient = candidate.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
         using var nativeClient = native.CreateClient(new() { BaseAddress = new Uri("https://localhost") });
+        AssertNativeScope(native.Services.GetRequiredService<IOptions<MvcJsonOptions>>().Value.JsonSerializerOptions);
         var candidateDocument = await DocumentAsync(candidateClient);
         var nativeDocument = await DocumentAsync(nativeClient);
         var actual = Projection(candidateDocument, schemaName);
@@ -45,6 +43,38 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
         output.WriteLine("METADATA-SCHEMA-NATIVE " + expected);
         output.WriteLine("METADATA-SCHEMA-CANDIDATE " + actual);
         Assert.Equal(expected, actual);
+    }
+
+    private static bool IsOwnedResolver(IJsonTypeInfoResolver resolver) => resolver.GetType().FullName == ResolverName;
+    private static void RemoveOwnedResolver(JsonSerializerOptions options)
+    {
+        var before = options.TypeInfoResolverChain.ToArray();
+        var owned = before.Select((resolver, index) => (resolver, index))
+            .Where(item => IsOwnedResolver(item.resolver)).ToArray();
+        Assert.InRange(owned.Length, 0, 1);
+        var expected = before.ToArray();
+        foreach (var (resolver, index) in owned)
+        {
+            var inner = resolver.GetType().GetProperty("Inner");
+            Assert.NotNull(inner);
+            expected[index] = Assert.IsAssignableFrom<IJsonTypeInfoResolver>(inner.GetValue(resolver));
+            options.TypeInfoResolverChain[index] = expected[index];
+        }
+        Assert.Equal(before.Length, options.TypeInfoResolverChain.Count);
+        for (var index = 0; index < before.Length; index++) Assert.Same(expected[index], options.TypeInfoResolverChain[index]);
+        Assert.DoesNotContain(options.TypeInfoResolverChain, IsOwnedResolver);
+    }
+    private static void AssertNativeScope(JsonSerializerOptions options)
+    {
+        Assert.DoesNotContain(options.TypeInfoResolverChain, IsOwnedResolver);
+        foreach (var type in new[] { typeof(UpsertAddressRequest), typeof(UpsertSignatureImageFileRequest) })
+        {
+            var metadata = options.GetTypeInfo(type);
+            Assert.Equal(JsonTypeInfoKind.Object, metadata.Kind);
+            Assert.Null(metadata.CreateObject);
+            Assert.DoesNotContain(metadata.Properties, property =>
+                property.CustomConverter?.GetType().FullName == PropertyReaderName);
+        }
     }
 
     private static async Task<JsonElement> DocumentAsync(HttpClient client)

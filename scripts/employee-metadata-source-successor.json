@@ -913,8 +913,8 @@
     },
     {
       "path": "docs/employee-metadata-proof.md",
-      "bytes": 5561,
-      "blob": "995408ba4932ba398c6893832a90e3e1fd5cfc6f"
+      "bytes": 7710,
+      "blob": "b07a66594a4a183c207ad4a5f954c7b1f8601f5d"
     },
     {
       "path": "docs/employee-no-sdk-controller.md",
@@ -1448,8 +1448,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
-      "bytes": 6162,
-      "blob": "38fdb8f349e0c2be64be374a483ed288d6df4561"
+      "bytes": 7877,
+      "blob": "eebdceb214dfe253b85e3f74264ea40e6b7c58d5"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
@@ -1458,8 +1458,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs",
-      "bytes": 11866,
-      "blob": "d19ef76cdf5abdc26751350e2d626b0beb8ce56c"
+      "bytes": 14285,
+      "blob": "fe18c708e370e649ee337c7e49a1f3a5d711e2f7"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
@@ -1787,5 +1787,13 @@
       "parentPublishedHead": "1683936d40dea5641d250c3936770920971af617",
       "referenceStatus": "unreferenced notice commit; no branch/queue"
     }
+  },
+  "chainOracleSuccessor": {
+    "baseHead": "83cb314db55668e7672a089e25b24937c8aceb0b",
+    "baseTree": "36933cf9f98d73004a64d86ec923513dd13a010d",
+    "scope": "test-only public resolver-chain single owned entry/only-Inner replacement/other references+order preserved; zero owned readers/plain constructor after removal; independent resolved OpenAPI native host proof after startup",
+    "previousOracle": "top-only removal insufficient; prior native/schema equality not accepted",
+    "productionAnd83Controls": "unchanged",
+    "runtime": "NOT RUN; Root review/fresh checks required"
   }
 }
