@@ -115,7 +115,7 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         update ? "/employees/17/signature" : "/employees/17");
 
     private static Task<HttpResponseMessage> SendAsync(HttpClient client, bool update, string bucket, string objectName) => update
-        ? client.PutAsJsonAsync("/employees/signatures/17", new { Bucket = bucket, ObjectName = objectName })
+        ? client.PutAsJsonAsync("/employees/signatures/17", new { Bucket = bucket, ObjectName = objectName, EmployeeId = 17 })
         : client.PostAsync($"/employees/17/signatures?bucket={Uri.EscapeDataString(bucket)}&objectName={Uri.EscapeDataString(objectName)}", null);
 
     private async Task SeedAsync(bool signature)

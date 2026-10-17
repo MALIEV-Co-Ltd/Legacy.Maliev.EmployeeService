@@ -140,7 +140,7 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
     private static string Permission(bool update) => update ? "legacy-employee.signatures.write" : "legacy-employee.signatures.read";
 
     private static Task<HttpResponseMessage> SendAsync(HttpClient client, bool update) => update
-        ? client.PutAsJsonAsync(Route, new { Bucket = "replacement-bucket", ObjectName = "replacement.png" })
+        ? client.PutAsJsonAsync(Route, new { Bucket = "replacement-bucket", ObjectName = "replacement.png", EmployeeId = OwnerId })
         : client.GetAsync(Route);
 
     private async Task SeedAsync(int matches)

@@ -30,7 +30,7 @@ public sealed class EmployeeSignatureInputHttpTests(EmployeeRouteAcceptanceFixtu
     public async Task ValidBodyIdentityAndAudit_HaveNoWriteAuthority()
     {
         var seed = await ResetAndSeedAsync();
-        await AssertRequestAsync("{\"Bucket\":\"literal ไทย\",\"ObjectName\":\"literal ไทย.png\",\"Id\":"
+        await AssertRequestAsync("{\"Bucket\":\"literal ไทย\",\"ObjectName\":\"literal ไทย.png\",\"EmployeeId\":" + seed.EmployeeId + ",\"Id\":"
             + seed.OtherSignatureId + ",\"CreatedDate\":\"1901-02-03T04:05:06Z\",\"ModifiedDate\":\"1902-03-04T05:06:07Z\"}",
             true, seed);
     }
