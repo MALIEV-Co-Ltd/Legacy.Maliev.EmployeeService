@@ -913,8 +913,8 @@
     },
     {
       "path": "docs/employee-metadata-proof.md",
-      "bytes": 4915,
-      "blob": "e64de826b6b40b2f74a98fa74a3f36d1a2bfafcf"
+      "bytes": 5902,
+      "blob": "13fa1a07aa90e95db953f2a7a784eaa24e724f54"
     },
     {
       "path": "docs/employee-no-sdk-controller.md",
@@ -1633,8 +1633,8 @@
     },
     {
       "path": "scripts/test_employee_metadata_proof.py",
-      "bytes": 30490,
-      "blob": "3a9d2184ab30ce9be1fc2c755fb27de5b09a8499"
+      "bytes": 34093,
+      "blob": "4e8eaa3ed9e061fad54320248df353711bf2b93d"
     },
     {
       "path": "scripts/test_employee_no_sdk_controller.py",
@@ -1668,8 +1668,8 @@
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 25066,
-      "blob": "c73e82f60cd8d060b5bb51aeabde2c53d111e344"
+      "bytes": 26508,
+      "blob": "fa2cd242481ac0a24528d0696393cbf8b1f85e57"
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
@@ -1761,5 +1761,16 @@
     "restore": "explicit existing local-dependency MSBuild property/workspace root +per-step CI environment export; no production project change",
     "temporaryDiagnostic": "removed helper/step/control family after known Git-identity false-positive classification; original scanner/workflow restored",
     "runtime": "NOT RUN; previous75/49 evidence historical only"
+  },
+  "baselineNoticeSuccessor": {
+    "predecessorHead": "1683936d40dea5641d250c3936770920971af617",
+    "predecessorTree": "9d6ca5bbdb2f5c4143931ed370de4221f015e60e",
+    "officialRun": 38987335814,
+    "officialJob": 117261752162,
+    "trxSha256": "3070f13af28bb30d51d4a71de279f901c47e4f84ed72e6fd62fd0c4362d35789",
+    "scope": "baseline-only exact88 Error RunInfo notices bijectively joined to already-classified failed result display identities; strict elapsedtimestamp/prefix/suffix; reader/candidate Error notices always refused",
+    "controlsAuthored": 83,
+    "newControlRuntime": "NOT RUN",
+    "separateProductionMalformedPathDefect": "ordinary168 full881P4F/885; not changed or claimed fixed by this notice-only packet"
   }
 }

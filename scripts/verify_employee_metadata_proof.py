@@ -330,6 +330,31 @@ def exact_locations(root, count, phase):
     exact("ErrorInfo", errors)
     return summary, counters, infos
 
+def validate_run_infos(infos, expected, phase):
+    """Baseline error notices must bijectively identify already classified failures."""
+    failed = {name for name, (_, outcome) in expected.items() if outcome == "Failed"}
+    if phase == "baseline":
+        need(len(infos) == 88 and all(info.get("outcome") == "Error" for info in infos),
+             "Exact eighty-eight baseline failure notices required")
+    observed = set()
+    for info in infos:
+        outcome = info.get("outcome")
+        if outcome == "Error":
+            need(phase == "baseline", "Error RunInfo forbidden outside baseline")
+            need(len(list(info)) == 1, "Exact baseline failure notice shape")
+            text = one(info, "Text")
+            need(not list(text), "Failure notice Text must be scalar")
+            match = re.fullmatch(r"\[xUnit\.net [0-9]{2}:[0-5][0-9]:[0-5][0-9]\.[0-9]{2}\] {5}(.+) \[FAIL\]", text.text or "")
+            need(match is not None, "Exact xUnit baseline failure notice syntax")
+            name = match.group(1)
+            need(name in failed and name not in observed, "Unique selected failed RunInfo join")
+            observed.add(name)
+        else:
+            need(outcome in ("Passed", "Completed", "Information"), "Infrastructure RunInfo refused")
+    need(observed == failed and len(observed) == (88 if phase == "baseline" else 0),
+         "Complete baseline failed-result/RunInfo bijection")
+    return len(observed)
+
 def validate_trx(data, roster, phase):
     need(isinstance(data, bytes) and 0 < len(data) <= FILE_CAP, "TRX byte bound")
     text = data.decode("utf-8", errors="strict")
@@ -400,15 +425,15 @@ def validate_trx(data, roster, phase):
     wanted = {name: 0 for name in COUNTERS}
     wanted.update(total=len(expected), executed=len(expected), passed=outcomes["Passed"], failed=outcomes["Failed"])
     need(values == wanted, "Contradictory summary counters")
-    for info in infos:
-        need(info.get("outcome") in ("Passed", "Completed", "Information"), "Infrastructure RunInfo refused")
+    failure_notices = validate_run_infos(infos, expected, phase)
     need(not summary.findall(".//t:ErrorInfo", NS), "Infrastructure summary error refused")
     allowed_errors = 88 if phase == "baseline" else 0
     need(len(root.findall(".//t:ErrorInfo", NS)) == allowed_errors, "Unowned error refused")
     if phase == "baseline":
         need(categories == {"native-consumed-primitive-path": 72, "ordered-null-overwrite": 16}, "Exact RED categories")
     return {"phase": phase, "selected": len(expected), "passed": outcomes["Passed"], "failed": outcomes["Failed"],
-            "categories": dict(categories), "trxSha256": hashlib.sha256(data).hexdigest(),
+            "categories": dict(categories), "baselineFailureNoticesJoined": failure_notices,
+            "trxSha256": hashlib.sha256(data).hexdigest(),
             "measured": True, **GRANTS}
 
 def verify_phase(phase, directory, exit_code):

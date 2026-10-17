@@ -23,6 +23,7 @@ def fixture(phase):
     definitions = ET.SubElement(root, q("TestDefinitions"))
     entries = ET.SubElement(root, q("TestEntries"))
     counts = {"Passed": 0, "Failed": 0}
+    failed_names = []
     for index, (row, outcome) in enumerate(v.select(ROSTER, phase), 1):
         identity = str(uuid.UUID(int=index))
         execution = str(uuid.UUID(int=index + 10000))
@@ -36,6 +37,7 @@ def fixture(phase):
                       codeBase="Legacy.Maliev.EmployeeService.Tests.dll")
         ET.SubElement(entries, q("TestEntry"), testId=identity, executionId=execution)
         if outcome == "Failed":
+            failed_names.append(row["name"])
             error = ET.SubElement(ET.SubElement(result, q("Output")), q("ErrorInfo"))
             if row["m"] == 4:
                 message = ("System.Text.Json.JsonException : The JSON value could not be converted to System.String. "
@@ -50,6 +52,11 @@ def fixture(phase):
     values.update(total=str(sum(counts.values())), executed=str(sum(counts.values())),
                   passed=str(counts["Passed"]), failed=str(counts["Failed"]))
     ET.SubElement(summary, q("Counters"), **values)
+    if failed_names:
+        infos = ET.SubElement(summary, q("RunInfos"))
+        for name in failed_names:
+            info = ET.SubElement(infos, q("RunInfo"), outcome="Error", computerName="synthetic-runner", timestamp="2026-10-17T00:40:49Z")
+            ET.SubElement(info, q("Text")).text = "[xUnit.net 00:00:22.11]     " + name + " [FAIL]"
     return root
 
 def encoded(root):
@@ -68,6 +75,7 @@ class TrxControls(unittest.TestCase):
     def test_exact_baseline_88_pass_88_classified_fail(self):
         result = v.validate_trx(encoded(fixture("baseline")), ROSTER, "baseline")
         self.assertEqual((result["passed"], result["failed"]), (88, 88))
+        self.assertEqual(result["baselineFailureNoticesJoined"], 88)
         self.assertEqual(result["categories"], {"native-consumed-primitive-path": 72, "ordered-null-overwrite": 16})
     def test_missing_result(self):
         self.root[0].remove(self.root[0][-1])
@@ -255,6 +263,54 @@ class TrxControls(unittest.TestCase):
                 root[index].remove(item)
                 ET.SubElement(root, q("Hidden")).append(item)
                 self.refuse(root)
+    def test_baseline_failure_runinfo_missing_refused(self):
+        root = fixture("baseline")
+        infos = root[3].find("t:RunInfos", v.NS)
+        infos.remove(infos[0])
+        self.refuse(root, "baseline")
+    def test_baseline_failure_runinfo_duplicate_refused(self):
+        root = fixture("baseline")
+        infos = root[3].find("t:RunInfos", v.NS)
+        infos[1].find("t:Text", v.NS).text = infos[0].find("t:Text", v.NS).text
+        self.refuse(root, "baseline")
+    def test_baseline_failure_runinfo_unknown_passed_or_fixture_refused(self):
+        for name in ("Infrastructure.Fixture.Start", next(row["name"] for row, outcome in v.select(ROSTER, "baseline") if outcome == "Passed")):
+            with self.subTest(name=name):
+                root = fixture("baseline")
+                root[3].find("t:RunInfos/t:RunInfo/t:Text", v.NS).text = "[xUnit.net 00:00:22.11]     " + name + " [FAIL]"
+                self.refuse(root, "baseline")
+    def test_baseline_failure_runinfo_prefix_timestamp_suffix_or_newline_refused(self):
+        for mutation in ("prefix", "timestamp", "suffix", "newline"):
+            with self.subTest(mutation=mutation):
+                root = fixture("baseline")
+                text = root[3].find("t:RunInfos/t:RunInfo/t:Text", v.NS)
+                text.text = (text.text.replace("xUnit.net", "fixture") if mutation == "prefix"
+                             else text.text.replace("00:00:22.11", "00:99:22.11") if mutation == "timestamp"
+                             else text.text.replace("[FAIL]", "[ERROR]") if mutation == "suffix"
+                             else text.text + "\n")
+                self.refuse(root, "baseline")
+    def test_baseline_failure_runinfo_extra_child_refused(self):
+        root = fixture("baseline")
+        ET.SubElement(root[3].find("t:RunInfos/t:RunInfo", v.NS), q("Text")).text = "fixture failed"
+        self.refuse(root, "baseline")
+    def test_baseline_extra_benign_runinfo_refused(self):
+        root = fixture("baseline")
+        info = ET.SubElement(root[3].find("t:RunInfos", v.NS), q("RunInfo"), outcome="Information")
+        ET.SubElement(info, q("Text")).text = "unexpected fixture notice"
+        self.refuse(root, "baseline")
+    def test_baseline_failure_runinfo_wrong_outcome_refused(self):
+        root = fixture("baseline")
+        root[3].find("t:RunInfos/t:RunInfo", v.NS).set("outcome", "Information")
+        self.refuse(root, "baseline")
+    def test_candidate_error_runinfo_refused_even_for_known_display(self):
+        info = ET.SubElement(ET.SubElement(self.root[3], q("RunInfos")), q("RunInfo"), outcome="Error")
+        ET.SubElement(info, q("Text")).text = "[xUnit.net 00:00:22.11]     " + ROSTER["rows"][0]["name"] + " [FAIL]"
+        self.refuse()
+    def test_reader_error_runinfo_refused_even_for_known_display(self):
+        root = fixture("reader")
+        info = ET.SubElement(ET.SubElement(root[3], q("RunInfos")), q("RunInfo"), outcome="Error")
+        ET.SubElement(info, q("Text")).text = "[xUnit.net 00:00:22.11]     " + ROSTER["rows"][0]["name"] + " [FAIL]"
+        self.refuse(root, "reader")
     def test_invalid_utf8(self):
         with self.assertRaises(UnicodeError):
             v.validate_trx(b"\xff", ROSTER, "candidate")
