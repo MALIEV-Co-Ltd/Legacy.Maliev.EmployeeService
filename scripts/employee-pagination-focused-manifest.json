@@ -329,8 +329,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 2784,
-      "sha256": "659cd00cb03822e6b5f34eb68e4d249f4dafccefa0a6525e1bf2e1ebf5d247ee"
+      "bytes": 2846,
+      "sha256": "fda322d1af830331d9d8cc8c8fe0bda3adfddac5081789e0b474004a38d73abf"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
@@ -698,5 +698,22 @@
     },
     "originalScannerAndWorkflowRestored": true,
     "selected49AndDependenciesUnchanged": true
+  },
+  "employee78FactoryBindingCorrection": {
+    "baseHead": "29427e685eba8d06afee4df3be27648f2c845c55",
+    "changedPin": {
+      "preimage": {
+        "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+        "bytes": 2784,
+        "sha256": "659cd00cb03822e6b5f34eb68e4d249f4dafccefa0a6525e1bf2e1ebf5d247ee"
+      },
+      "postimage": {
+        "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+        "bytes": 2846,
+        "sha256": "fda322d1af830331d9d8cc8c8fe0bda3adfddac5081789e0b474004a38d73abf"
+      }
+    },
+    "scope": "bind reviewed callback registration relocation only; selected49/dependencyPins/guard/historical witnesses unchanged",
+    "runtime": "NOT RUN"
   }
 }

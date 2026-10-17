@@ -143,10 +143,10 @@ internal static class EmployeeMetadataNativeOptions
     internal static void RemoveOwnedConfiguration(IServiceCollection services)
     {
         var before = services.ToArray();
-        var owned = Assert.Single(before.Where(descriptor =>
+        var owned = Assert.Single(before, descriptor =>
             descriptor.ServiceType == typeof(IConfigureOptions<MvcJsonOptions>)
             && descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
-            && IsOwnedConfiguration(configuration)));
+            && IsOwnedConfiguration(configuration));
         Assert.True(services.Remove(owned));
         var retained = before.Where(descriptor => !ReferenceEquals(descriptor, owned)).ToArray();
         Assert.Equal(retained.Length, services.Count);

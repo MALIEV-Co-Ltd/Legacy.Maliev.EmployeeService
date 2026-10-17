@@ -1448,8 +1448,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
-      "bytes": 9088,
-      "blob": "f6ef1381a248eb9ce83906a2c97ac336fde01aa9"
+      "bytes": 9082,
+      "blob": "718a5691dd38ca9b826dd3ed01447617874f3a98"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
@@ -1553,8 +1553,8 @@
     },
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
-      "bytes": 32974,
-      "blob": "e5eae0266a3aff948d219359a78398395c704d5d"
+      "bytes": 33667,
+      "blob": "1a0f462d96a5593d553b967ff206316ea8320f1f"
     },
     {
       "path": "scripts/employee_phase_contract.py",
@@ -1804,5 +1804,17 @@
     "identity": "public ConfigureNamedOptions default Name/static single Action exact method/type/API assembly; registrationFact exactly1candidate; baseline0 allowed",
     "preserved": "helper c3ff,83 controls,442/18/885 identities,4 malformed literal paths,actual schema projection,workflows/deps/roles/49/sealed policy",
     "runtime": "NOT RUN; source review and fresh exact-head hosted qualification required"
+  },
+  "factoryQualificationCorrection": {
+    "baseHead": "29427e685eba8d06afee4df3be27648f2c845c55",
+    "baseTree": "f08b25daea7387833122a06fcff3cfcdacd31606",
+    "officialTerminalJobs": [
+      117292704864,
+      117292704602,
+      117292704787
+    ],
+    "observed": "83controlsPASS; focusedguard staleProgramcodePin refusal; ordinary0W1E xUnit2031; runtime/native/schema NOT RUN",
+    "scope": "Assert.Single predicate overload same predicate; exactProgrambytesSHA256 active49pin; all corresponding source tuples",
+    "runtime": "NOT RUN"
   }
 }
