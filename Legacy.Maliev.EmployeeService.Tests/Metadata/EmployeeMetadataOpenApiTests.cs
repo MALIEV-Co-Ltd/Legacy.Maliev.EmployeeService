@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,7 @@ namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture fixture, ITestOutputHelper output)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
-    private const string ConverterPrefix = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedStringRequestJsonConverter";
+    private const string ResolverName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataRequestJsonTypeInfoResolver";
 
     [Theory]
     [InlineData("UpsertAddressRequest")]
@@ -26,10 +27,13 @@ public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture 
             builder.UseEnvironment("Development");
             builder.ConfigureTestServices(services => services.PostConfigure<MvcJsonOptions>(options =>
             {
-                for (var index = options.JsonSerializerOptions.Converters.Count - 1; index >= 0; index--)
-                    if (options.JsonSerializerOptions.Converters[index].GetType().FullName?.StartsWith(
-                        ConverterPrefix, StringComparison.Ordinal) == true)
-                        options.JsonSerializerOptions.Converters.RemoveAt(index);
+                var resolver = options.JsonSerializerOptions.TypeInfoResolver;
+                if (resolver?.GetType().FullName == ResolverName)
+                {
+                    var inner = resolver.GetType().GetProperty("Inner");
+                    Assert.NotNull(inner);
+                    options.JsonSerializerOptions.TypeInfoResolver = Assert.IsAssignableFrom<IJsonTypeInfoResolver>(inner.GetValue(resolver));
+                }
             }));
         });
         using var candidateClient = candidate.CreateClient(new() { BaseAddress = new Uri("https://localhost") });

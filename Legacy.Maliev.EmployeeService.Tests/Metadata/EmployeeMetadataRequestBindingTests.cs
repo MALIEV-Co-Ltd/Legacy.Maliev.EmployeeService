@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Legacy.Maliev.EmployeeService.Application.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,7 +11,8 @@ namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
-    private const string ConverterPrefix = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedStringRequestJsonConverter";
+    private const string ResolverName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataRequestJsonTypeInfoResolver";
+    private const string PropertyReaderName = "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeConsumedMetadataStringJsonConverter";
     private JsonSerializerOptions Options => fixture.Factory.Services
         .GetRequiredService<IOptions<Microsoft.AspNetCore.Mvc.JsonOptions>>().Value.JsonSerializerOptions;
 
@@ -80,21 +82,43 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
     [InlineData("signature_text")]
     public void MalformedSyntax_ReplaysNativeFieldFailure(string caseId)
     {
-        var (kind, json) = caseId switch
+        var (kind, json, expectedPath) = caseId switch
         {
-            "address_id" => ("address", "{\"Building\":\"literal\",\"CountryId\":"),
-            "signature_id" => ("signature", "{\"Bucket\":\"literal\",\"ObjectName\":\"literal\",\"EmployeeId\":"),
-            "address_unknown" => ("address", "{\"Building\":\"literal\",\"Unknown\":{\"deep\":[1,"),
-            _ => ("signature", "{\"Bucket\":\"unfinished"),
+            "address_id" => ("address", "{\"Building\":\"literal\",\"CountryId\":", "$.CountryId"),
+            "signature_id" => ("signature", "{\"Bucket\":\"literal\",\"ObjectName\":\"literal\",\"EmployeeId\":", "$.EmployeeId"),
+            "address_unknown" => ("address", "{\"Building\":\"literal\",\"Unknown\":{\"deep\":[1,", "$.Unknown"),
+            _ => ("signature", "{\"Bucket\":\"unfinished", "$.Bucket"),
         };
-        AssertNativeEquivalent(kind, json);
+        AssertNativeEquivalent(kind, json, expectedPath);
     }
 
     [Fact]
     public void Registration_IsMvcRequestSpecificAndWriterUnchanged()
     {
-        Assert.Single(Options.Converters, converter => IsOwned(converter) && converter.CanConvert(typeof(UpsertAddressRequest)));
-        Assert.Single(Options.Converters, converter => IsOwned(converter) && converter.CanConvert(typeof(UpsertSignatureImageFileRequest)));
+        Assert.Equal(ResolverName, Options.TypeInfoResolver?.GetType().FullName);
+        Assert.DoesNotContain(Options.Converters, converter => converter.CanConvert(typeof(string))
+            || converter.CanConvert(typeof(UpsertAddressRequest))
+            || converter.CanConvert(typeof(UpsertSignatureImageFileRequest)));
+        AssertScopedProperties(typeof(UpsertAddressRequest), EmployeeMetadataBindingCases.AddressFields);
+        AssertScopedProperties(typeof(UpsertSignatureImageFileRequest), EmployeeMetadataBindingCases.SignatureFields);
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<string>("123", Options));
+        foreach (var type in new[] { typeof(UpsertRoleRequest), typeof(EmployeeHomeAddressEditRequest), typeof(AddressResponse) })
+            Assert.DoesNotContain(Options.GetTypeInfo(type).Properties, property =>
+                property.CustomConverter?.GetType().FullName == PropertyReaderName);
+        AssertNativeEquivalent("address", "{}");
+        AssertNativeEquivalent("signature", "{}");
+        AssertNativeEquivalent("address", "null");
+        AssertNativeEquivalent("signature", "null");
+        var omittedAddress = Assert.IsType<UpsertAddressRequest>(Bind("address", "{}", Options));
+        Assert.Equal(0, omittedAddress.CountryId);
+        var omittedSignature = Assert.IsType<UpsertSignatureImageFileRequest>(Bind("signature", "{}", Options));
+        Assert.Null(omittedSignature.Bucket);
+        Assert.Null(omittedSignature.ObjectName);
+        Assert.Null(omittedSignature.EmployeeId);
+        Assert.Equal(JsonSerializer.Serialize<UpsertAddressRequest?>(null, NativeOptions()),
+            JsonSerializer.Serialize<UpsertAddressRequest?>(null, Options));
+        Assert.Equal(JsonSerializer.Serialize<UpsertSignatureImageFileRequest?>(null, NativeOptions()),
+            JsonSerializer.Serialize<UpsertSignatureImageFileRequest?>(null, Options));
         var minimal = fixture.Factory.Services.GetRequiredService<IOptions<Microsoft.AspNetCore.Http.Json.JsonOptions>>().Value.SerializerOptions;
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpsertAddressRequest>("{\"Building\":123}", minimal));
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<EmployeeHomeAddressEditRequest>("{\"AddressId\":1,\"Building\":123}", Options));
@@ -117,7 +141,7 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         AssertNativeEquivalent(kind, json);
     }
 
-    private void AssertNativeEquivalent(string kind, string json)
+    private void AssertNativeEquivalent(string kind, string json, string? expectedPath = null)
     {
         object? expected = null;
         object? actual = null;
@@ -132,19 +156,45 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         {
             Assert.NotNull(actualError);
             Assert.Equal(baselineError.GetType(), actualError.GetType());
-            Assert.Equal(Assert.IsType<JsonException>(baselineError).Path, Assert.IsType<JsonException>(actualError).Path);
+            var nativePath = Assert.IsType<JsonException>(baselineError).Path;
+            Assert.Equal(nativePath, Assert.IsType<JsonException>(actualError).Path);
+            if (expectedPath is not null) Assert.Equal(expectedPath, nativePath);
         }
     }
 
     private JsonSerializerOptions NativeOptions()
     {
         var native = new JsonSerializerOptions(Options);
-        for (var index = native.Converters.Count - 1; index >= 0; index--)
-            if (IsOwned(native.Converters[index])) native.Converters.RemoveAt(index);
+        var resolver = native.TypeInfoResolver;
+        if (resolver?.GetType().FullName == ResolverName)
+        {
+            var inner = resolver.GetType().GetProperty("Inner");
+            Assert.NotNull(inner);
+            native.TypeInfoResolver = Assert.IsAssignableFrom<IJsonTypeInfoResolver>(inner.GetValue(resolver));
+        }
         return native;
     }
-    private static bool IsOwned(System.Text.Json.Serialization.JsonConverter converter)
-        => converter.GetType().FullName?.StartsWith(ConverterPrefix, StringComparison.Ordinal) == true;
+    private void AssertScopedProperties(Type type, string[] names)
+    {
+        var metadata = Options.GetTypeInfo(type);
+        var create = metadata.CreateObject;
+        Assert.NotNull(create);
+        var owned = metadata.Properties.Where(property => property.CustomConverter?.GetType().FullName == PropertyReaderName).ToArray();
+        Assert.Equal(names.Order(StringComparer.Ordinal).ToArray(), owned.Select(property => property.Name).Order(StringComparer.Ordinal).ToArray());
+        Assert.All(owned, property =>
+        {
+            var set = property.Set;
+            Assert.NotNull(set);
+            var target = create();
+            set(target, "first");
+            set(target, null);
+            Assert.Equal("first", EmployeeMetadataBindingCases.Field(target, property.Name));
+            set(target, "");
+            Assert.Equal("", EmployeeMetadataBindingCases.Field(target, property.Name));
+        });
+        Assert.DoesNotContain(metadata.Properties.Where(property => !names.Contains(property.Name, StringComparer.Ordinal)),
+            property => property.CustomConverter?.GetType().FullName == PropertyReaderName);
+    }
     private static string Kind(string field) => EmployeeMetadataBindingCases.IsAddress(field) ? "address" : "signature";
     private static object? Bind(string kind, string json, JsonSerializerOptions options)
         => kind == "address" ? JsonSerializer.Deserialize<UpsertAddressRequest>(json, options)

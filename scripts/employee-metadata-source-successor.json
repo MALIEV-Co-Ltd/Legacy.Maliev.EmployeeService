@@ -913,8 +913,8 @@
     },
     {
       "path": "docs/employee-metadata-proof.md",
-      "bytes": 5902,
-      "blob": "13fa1a07aa90e95db953f2a7a784eaa24e724f54"
+      "bytes": 5561,
+      "blob": "995408ba4932ba398c6893832a90e3e1fd5cfc6f"
     },
     {
       "path": "docs/employee-no-sdk-controller.md",
@@ -1133,8 +1133,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeMetadataJsonOptions.cs",
-      "bytes": 5030,
-      "blob": "1c09bc324c4ab875d44a0ea8cd8f5282b251eb31"
+      "bytes": 4847,
+      "blob": "c3ff6e23a7565ac1895fa350f9540f8710da8096"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Interfaces/IEmployeeBoundaries.cs",
@@ -1448,8 +1448,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
-      "bytes": 6045,
-      "blob": "cf7df37f45ecdde07b777862194f6b3858c8f8fb"
+      "bytes": 6162,
+      "blob": "38fdb8f349e0c2be64be374a483ed288d6df4561"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
@@ -1458,8 +1458,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs",
-      "bytes": 8657,
-      "blob": "e9cb8945d344cb13a1d971d6aa83f502829a9a8d"
+      "bytes": 11866,
+      "blob": "d19ef76cdf5abdc26751350e2d626b0beb8ce56c"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
@@ -1772,5 +1772,20 @@
     "controlsAuthored": 83,
     "newControlRuntime": "NOT RUN",
     "separateProductionMalformedPathDefect": "ordinary168 full881P4F/885; not changed or claimed fixed by this notice-only packet"
+  },
+  "propertyReaderSuccessor": {
+    "predecessorNoticeTree": "a69ec0aabd3da172be0a3d7b9339eb444b641f7a",
+    "basePublishedHead": "1683936d40dea5641d250c3936770920971af617",
+    "scope": "MVC resolver exact2 request DTOs; native default object traversal/CreateObject omitted defaults;8 property primitive string readers/null-skipping setters; no T/global converter/rebuffer/manualPath",
+    "tests": "all442/18/885 identities preserved; four native property paths literal-frozen; same registration Fact exact scope/defaults/null/write assertions; exact owned-layer removal in native comparisons/OpenAPI",
+    "framework": "runtime/aspnetcore10.0.13 public metadata APIs/default init setters/default converter traversal verified from source",
+    "noticeSlice": "83 controls and exact88 baseline notice adjudication unchanged",
+    "runtime": "NOT RUN; source review +one fresh composed head required",
+    "integrationBase": {
+      "commit": "4229499bc770204bb031753056931a811ac2b999",
+      "tree": "a69ec0aabd3da172be0a3d7b9339eb444b641f7a",
+      "parentPublishedHead": "1683936d40dea5641d250c3936770920971af617",
+      "referenceStatus": "unreferenced notice commit; no branch/queue"
+    }
   }
 }
