@@ -913,8 +913,8 @@
     },
     {
       "path": "docs/employee-metadata-proof.md",
-      "bytes": 7579,
-      "blob": "533b5b50111786b43c2894e97ab5e93caa0e25bf"
+      "bytes": 4915,
+      "blob": "e64de826b6b40b2f74a98fa74a3f36d1a2bfafcf"
     },
     {
       "path": "docs/employee-no-sdk-controller.md",
@@ -983,8 +983,8 @@
     },
     {
       "path": ".github/workflows/_build-and-test.yml",
-      "bytes": 3508,
-      "blob": "027e76eb16b075ed36fbd8a1f950d10812455538"
+      "bytes": 2174,
+      "blob": "73010a448f78253ce9b56a33ca7cc7a7b1254eac"
     },
     {
       "path": ".github/workflows/ci-develop.yml",
@@ -1008,8 +1008,8 @@
     },
     {
       "path": ".github/workflows/employee-metadata-focused.yml",
-      "bytes": 7580,
-      "blob": "181763dd8c4afffcc92239e2ac480a51b20d311d"
+      "bytes": 8337,
+      "blob": "6778968d332815f1cdce5244cdc41816b3354838"
     },
     {
       "path": ".github/workflows/employee-owned-receipts.yml",
@@ -1538,8 +1538,8 @@
     },
     {
       "path": "scripts/employee-metadata-roster.json",
-      "bytes": 142771,
-      "blob": "2f7fb9268c0c91d72678878541857e5fbfdac52a"
+      "bytes": 143021,
+      "blob": "4932749bf6d83ddf3b56dada38986e1e7fefe67c"
     },
     {
       "path": "scripts/employee_no_sdk_controller.py",
@@ -1553,8 +1553,8 @@
     },
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
-      "bytes": 32238,
-      "blob": "63aa8dba846ed9edfb560142d95201c0b43d198a"
+      "bytes": 32974,
+      "blob": "e5eae0266a3aff948d219359a78398395c704d5d"
     },
     {
       "path": "scripts/employee_phase_contract.py",
@@ -1633,8 +1633,8 @@
     },
     {
       "path": "scripts/test_employee_metadata_proof.py",
-      "bytes": 32617,
-      "blob": "f229bc85d19ac0625814dd442932195829a977df"
+      "bytes": 30490,
+      "blob": "3a9d2184ab30ce9be1fc2c755fb27de5b09a8499"
     },
     {
       "path": "scripts/test_employee_no_sdk_controller.py",
@@ -1668,8 +1668,8 @@
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 24267,
-      "blob": "e479bdad7b01f101b12848cd9b4f6ae8b1d1f169"
+      "bytes": 25066,
+      "blob": "c73e82f60cd8d060b5bb51aeabde2c53d111e344"
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
@@ -1685,11 +1685,6 @@
       "path": "tooling/Test-EmployeeScaffoldContract.ps1",
       "bytes": 10503,
       "blob": "4084d5406237df28bb094ccf6bba129fbdad7b2e"
-    },
-    {
-      "path": "scripts/employee_gitleaks_provenance.py",
-      "bytes": 3256,
-      "blob": "915e2da329bd09d093b75ef355c1800ad521facb"
     }
   ],
   "baselineTestOverlay": [
@@ -1756,5 +1751,15 @@
     "rawExposureClaim": "NONE from prior nonverbose logs; defensive raw-error/filename scope correction",
     "reviewRequired": true,
     "runtime": "NOT RUN"
+  },
+  "provenanceSuccessor": {
+    "predecessorHead": "37e38792542b67dbbf5da10473ed80d8de25d95f",
+    "predecessorTree": "bf3ab8122055c2c1cad7661996d1af4fdf9c6f44",
+    "rosterSchema": 2,
+    "baseRepresentation": "typed sha1 commit /20 octets /strict exact decoder",
+    "identitiesUnchanged": "442 rows /18 methods /176 baseline classifications",
+    "restore": "explicit existing local-dependency MSBuild property/workspace root +per-step CI environment export; no production project change",
+    "temporaryDiagnostic": "removed helper/step/control family after known Git-identity false-positive classification; original scanner/workflow restored",
+    "runtime": "NOT RUN; previous75/49 evidence historical only"
   }
 }

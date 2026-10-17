@@ -240,7 +240,21 @@ def one(parent, name):
     need(len(items) == 1, "Exactly one " + name + " required")
     return items[0]
 
+def roster_base_commit(roster):
+    need(roster["schemaVersion"] == 2, "Exact typed roster schema required")
+    value = roster["base"]
+    need(isinstance(value, dict) and set(value) == {"objectFormat", "objectType", "bytes"},
+         "Exact Git object identity schema required")
+    need(value["objectFormat"] == "sha1" and value["objectType"] == "commit", "Git commit object format required")
+    octets = value["bytes"]
+    need(isinstance(octets, list) and len(octets) == 20
+         and all(type(octet) is int and 0 <= octet <= 255 for octet in octets), "Exact twenty Git identity octets required")
+    identity = bytes(octets).hex()
+    need(identity == "972cc8f9a8e0cd8da69642f8423c14443f4236f7", "Exact frozen baseline commit required")
+    return identity
+
 def select(roster, phase):
+    roster_base_commit(roster)
     need(phase in ("reader", "baseline", "candidate"), "Unknown phase")
     rows = roster["rows"]
     need(len(rows) == 442 and len({row["name"] for row in rows}) == 442, "Exact 442 forecast roster required")

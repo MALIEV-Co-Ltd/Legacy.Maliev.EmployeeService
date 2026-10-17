@@ -264,8 +264,8 @@
     },
     {
       "path": ".github/workflows/_build-and-test.yml",
-      "bytes": 3508,
-      "sha256": "564297fece8ef1bdde64b867e10f8bf21fc8a32c88b1ee43fbd8e502b922a2a4"
+      "bytes": 2174,
+      "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeDefaultPageHttpTests.cs",
@@ -680,5 +680,23 @@
     "workflowPreimage": "93e3140747a77f15f2a471948799a01840261a78",
     "scope": "capture both scanner streams in private bounded files; sanitized parser only; same scanner/rules/history/status",
     "original49AndDependenciesUnchanged": true
+  },
+  "employee78ProvenanceSuccessor": {
+    "predecessorHead": "37e38792542b67dbbf5da10473ed80d8de25d95f",
+    "scope": "typed exact Git identity +explicit local restore properties; temporary duplicate diagnostic removed",
+    "workflowPin": {
+      "preimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 3508,
+        "sha256": "564297fece8ef1bdde64b867e10f8bf21fc8a32c88b1ee43fbd8e502b922a2a4"
+      },
+      "postimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 2174,
+        "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
+      }
+    },
+    "originalScannerAndWorkflowRestored": true,
+    "selected49AndDependenciesUnchanged": true
   }
 }

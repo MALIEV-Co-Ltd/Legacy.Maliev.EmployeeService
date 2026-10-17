@@ -502,79 +502,53 @@ class CheckoutRepresentationControls(unittest.TestCase):
         for path in ("../secret", "/absolute", "unsafe\npayload", "payload: value"):
             self.assertIsNone(v.SourceRefusal("source-binding-drift", path).path)
 
-class GitleaksProvenanceControls(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        report_spec = importlib.util.spec_from_file_location("employee_provenance", HERE / "employee_gitleaks_provenance.py")
-        cls.report = importlib.util.module_from_spec(report_spec)
-        report_spec.loader.exec_module(cls.report)
-    def provenance(self, data):
-        return self.report.safe_provenance(data, frozenset(("tests/Fixture.cs",)), frozenset(("a" * 40,)))
-    def test_only_four_provenance_fields_emitted(self):
-        finding = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12,
-                   "Commit": "a" * 40, "Secret": "SYNTHETIC", "Match": "SYNTHETIC",
-                   "Entropy": 9.9, "Message": "SYNTHETIC"}
-        rows = self.provenance(json.dumps([finding]).encode())
-        self.assertEqual(rows, [{key: finding[key] for key in ("RuleID", "File", "StartLine", "Commit")}])
-        self.assertNotIn("SYNTHETIC", json.dumps(rows))
-    def test_empty_report_emits_no_findings(self):
-        self.assertEqual(self.provenance(b"[]"), [])
-    def test_invalid_provenance_cannot_emit_partial_rows(self):
-        valid = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12, "Commit": "a" * 40}
-        for key, value in (("File", "../unsafe"), ("RuleID", "bad\nrule"), ("StartLine", True), ("Commit", "unknown")):
-            changed = dict(valid)
-            changed[key] = value
-            with self.subTest(key=key), self.assertRaises(ValueError):
-                self.provenance(json.dumps([valid, changed]).encode())
-    def test_scanner_streams_have_only_private_bounded_sinks(self):
-        workflow = v.bounded_read(HERE.parent / ".github/workflows/_build-and-test.yml").decode("utf-8")
-        block = workflow.split("      - name: Diagnose existing gitleaks finding without secret output\n", 1)[1]
-        block = block.split("      - name: Validate .NET solution\n", 1)[0]
-        self.assertEqual(block.count("gitleaks git --redact --exit-code 1 --report-format json"), 1)
-        self.assertIn('umask 077', block)
-        self.assertIn('private_dir="$(mktemp -d "${RUNNER_TEMP}/employee78-gitleaks-XXXXXX")"', block)
-        self.assertIn('ulimit -f 4096 || exit 2', block)
-        self.assertIn(') > "$scan_stdout" 2> "$scan_stderr"\n          scan_status=$?', block)
-        self.assertIn('trap \'rm -f -- "$report" "$scan_stdout" "$scan_stderr"; rmdir -- "$private_dir"\' EXIT', block)
-        self.assertIn('exit "$scan_status"', block)
-        self.assertEqual([line.strip() for line in block.splitlines() if line.strip().startswith(("cat ", "tee "))],
-                         ["cat runner-results/gitleaks-provenance.jsonl"])
-        for line in block.splitlines():
-            if "$scan_stdout" in line or "$scan_stderr" in line:
-                self.assertTrue(line.strip().startswith(("trap ", ") > ")), "Raw scanner stream has an unreviewed sink")
-
-    def test_finding_count_and_duplicate_json_keys_refused(self):
-        for raw in (b"{}", b'[{"RuleID":"x","RuleID":"y"}]', json.dumps([{}] * 1001).encode()):
+class TypedGitProvenanceControls(unittest.TestCase):
+    def test_exact_typed_base_reconstructs_frozen_commit(self):
+        self.assertEqual(v.roster_base_commit(ROSTER), "972cc8f9a8e0cd8da69642f8423c14443f4236f7")
+    def test_old_scalar_and_unknown_keys_refused(self):
+        for value in ("972cc8f9a8e0cd8da69642f8423c14443f4236f7",
+                      {**ROSTER["base"], "extra": True}):
+            roster = copy.deepcopy(ROSTER)
+            roster["base"] = value
             with self.assertRaises(ValueError):
-                self.provenance(raw)
-
-    def test_unknown_safe_ascii_or_personlike_filename_refuses_whole_report(self):
-        valid = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12, "Commit": "a" * 40}
-        for path in ("staff/PersonalName/profile.txt", "fixtures/CredentialValue.txt", "tests/Invented.cs"):
-            invalid = dict(valid)
-            invalid["File"] = path
-            with self.subTest(path=path), self.assertRaises(ValueError):
-                self.provenance(json.dumps([valid, invalid]).encode())
-    def test_reviewed_scope_refuses_historical_only_path(self):
-        manifest = v.object_json(v.bounded_read(HERE / "employee-metadata-source-successor.json"))
-        manifest["baseline"].append({"path": "deleted/Historical.cs"})
-        with mock.patch.object(self.report, "object_json", return_value=manifest), self.assertRaises(ValueError):
-            self.report.reviewed_scope("a" * 40)
-
-    def test_unknown_commit_refuses_whole_report(self):
-        valid = {"RuleID": "generic-api-key", "File": "tests/Fixture.cs", "StartLine": 12, "Commit": "a" * 40}
-        invalid = dict(valid)
-        invalid["Commit"] = "b" * 40
+                v.roster_base_commit(roster)
+    def test_wrong_type_or_object_format_refused(self):
+        for key, value in (("objectType", "blob"), ("objectFormat", "sha256")):
+            roster = copy.deepcopy(ROSTER)
+            roster["base"][key] = value
+            with self.assertRaises(ValueError):
+                v.roster_base_commit(roster)
+    def test_octet_count_and_scalar_type_refused(self):
+        for value in (ROSTER["base"]["bytes"][:-1], ROSTER["base"]["bytes"] + [0], "not-octets"):
+            roster = copy.deepcopy(ROSTER)
+            roster["base"]["bytes"] = value
+            with self.assertRaises(ValueError):
+                v.roster_base_commit(roster)
+    def test_invalid_or_wrong_octet_refused(self):
+        for value in (-1, 256, True, 1.0, 0):
+            roster = copy.deepcopy(ROSTER)
+            roster["base"]["bytes"][0] = value
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                v.roster_base_commit(roster)
+    def test_roster_schema_version_refused(self):
+        roster = copy.deepcopy(ROSTER)
+        roster["schemaVersion"] = 1
         with self.assertRaises(ValueError):
-            self.provenance(json.dumps([valid, invalid]).encode())
-    def test_reviewed_scope_uses_only_bound_inventory_and_actions_commit(self):
-        paths, commits = self.report.reviewed_scope("a" * 40)
-        self.assertEqual(commits, frozenset(("a" * 40,)))
-        self.assertIn("scripts/employee_gitleaks_provenance.py", paths)
-        self.assertNotIn("scripts/employee-metadata-source-successor.json", paths)
-        self.assertNotIn("staff/PersonalName/profile.txt", paths)
-        with self.assertRaises(ValueError):
-            self.report.reviewed_scope("unknown")
+            v.roster_base_commit(roster)
+    def test_every_metadata_native_command_uses_explicit_local_dependencies(self):
+        workflow = v.bounded_read(HERE.parent / ".github/workflows/employee-metadata-focused.yml").decode("utf-8")
+        commands = [line for line in workflow.splitlines() if "timeout --signal=TERM" in line and "dotnet " in line]
+        self.assertEqual(len(commands), 7)
+        for line in commands:
+            self.assertIn("-p:UseLocalMalievDependencies=true", line)
+            self.assertIn('-p:MalievWorkspaceRoot="$MalievWorkspaceRoot"', line)
+        self.assertEqual(workflow.count("export GITHUB_ACTIONS=false"), 5)
+    def test_temporary_diagnostic_is_removed_from_ordinary_workflow(self):
+        workflow = v.bounded_read(HERE.parent / ".github/workflows/_build-and-test.yml").decode("utf-8")
+        self.assertNotIn("Diagnose existing", workflow)
+        self.assertNotIn("employee_gitleaks_provenance", workflow)
+        self.assertIn("Legacy.Maliev.Workflows/actions/dotnet-validate@e3a6093324a24968876782153286f52db8b29fd8", workflow)
+        self.assertFalse((HERE / "employee_gitleaks_provenance.py").exists())
 
 if __name__ == "__main__":
     unittest.main()

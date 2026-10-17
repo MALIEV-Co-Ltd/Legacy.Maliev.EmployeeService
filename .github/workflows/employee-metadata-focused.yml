@@ -68,37 +68,42 @@ jobs:
       - name: Restore and build baseline Release with zero warnings and errors
         timeout-minutes: 9
         run: |
+          export GITHUB_ACTIONS=false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/baseline-restore-admission.json
-          timeout --signal=TERM --kill-after=15s 180s dotnet restore .metadata-baseline/Legacy.Maliev.EmployeeService.slnx -nodeReuse:false
+          timeout --signal=TERM --kill-after=15s 180s dotnet restore .metadata-baseline/Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -nodeReuse:false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/baseline-build-admission.json
-          timeout --signal=TERM --kill-after=15s 300s dotnet build .metadata-baseline/Legacy.Maliev.EmployeeService.slnx -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/baseline-build.log
+          timeout --signal=TERM --kill-after=15s 300s dotnet build .metadata-baseline/Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/baseline-build.log
       - name: Require actual baseline176 with exactly88 passing and88 classified failures
         timeout-minutes: 10
         run: |
+          export GITHUB_ACTIONS=false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/baseline-test-admission.json
           set +e
-          timeout --signal=TERM --kill-after=15s 540s dotnet test .metadata-baseline/Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader|FullyQualifiedName~EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection" --logger "trx;LogFileName=baseline.trx" --results-directory "${GITHUB_WORKSPACE}/runner-metadata/baseline"
+          timeout --signal=TERM --kill-after=15s 540s dotnet test .metadata-baseline/Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader|FullyQualifiedName~EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection" --logger "trx;LogFileName=baseline.trx" --results-directory "${GITHUB_WORKSPACE}/runner-metadata/baseline"
           result=$?
           set -e
           python3 -B scripts/verify_employee_metadata_proof.py verify baseline runner-metadata/baseline "$result" | tee runner-metadata/baseline-receipt.json
       - name: Restore and build candidate Release with zero warnings and errors
         timeout-minutes: 9
         run: |
+          export GITHUB_ACTIONS=false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/candidate-restore-admission.json
-          timeout --signal=TERM --kill-after=15s 180s dotnet restore Legacy.Maliev.EmployeeService.slnx -nodeReuse:false
+          timeout --signal=TERM --kill-after=15s 180s dotnet restore Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -nodeReuse:false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/candidate-build-admission.json
-          timeout --signal=TERM --kill-after=15s 300s dotnet build Legacy.Maliev.EmployeeService.slnx -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/candidate-build.log
+          timeout --signal=TERM --kill-after=15s 300s dotnet build Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/candidate-build.log
       - name: Require separate actual public-reader119 characterization
         timeout-minutes: 4
         run: |
+          export GITHUB_ACTIONS=false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/reader-admission.json
-          timeout --signal=TERM --kill-after=15s 180s dotnet test Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeMetadataPublicReaderTests" --logger "trx;LogFileName=reader.trx" --results-directory "${GITHUB_WORKSPACE}/runner-metadata/reader"
+          timeout --signal=TERM --kill-after=15s 180s dotnet test Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeMetadataPublicReaderTests" --logger "trx;LogFileName=reader.trx" --results-directory "${GITHUB_WORKSPACE}/runner-metadata/reader"
           python3 -B scripts/verify_employee_metadata_proof.py verify reader runner-metadata/reader 0 | tee runner-metadata/reader-receipt.json
       - name: Require separate actual candidate442 including both HTTP OpenAPI schemas
         timeout-minutes: 10
         run: |
+          export GITHUB_ACTIONS=false
           python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/candidate-test-admission.json
-          timeout --signal=TERM --kill-after=15s 540s dotnet test Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -c Release --no-build --no-restore --filter "FullyQualifiedName~Legacy.Maliev.EmployeeService.Tests.Metadata" --logger "trx;LogFileName=candidate.trx" --results-directory "${GITHUB_WORKSPACE}/runner-metadata/candidate"
+          timeout --signal=TERM --kill-after=15s 540s dotnet test Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~Legacy.Maliev.EmployeeService.Tests.Metadata" --logger "trx;LogFileName=candidate.trx" --results-directory "${GITHUB_WORKSPACE}/runner-metadata/candidate"
           python3 -B scripts/verify_employee_metadata_proof.py verify candidate runner-metadata/candidate 0 | tee runner-metadata/candidate-receipt.json
       - name: Record ordinary hosted tool versions
         if: always()

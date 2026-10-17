@@ -1,7 +1,32 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "status": "SOURCE-AUTHORED FORECAST ONLY; no discovery/runtime pass claim",
-  "base": "972cc8f9a8e0cd8da69642f8423c14443f4236f7",
+  "base": {
+    "objectFormat": "sha1",
+    "objectType": "commit",
+    "bytes": [
+      151,
+      44,
+      200,
+      249,
+      168,
+      224,
+      205,
+      141,
+      166,
+      150,
+      66,
+      248,
+      66,
+      60,
+      20,
+      68,
+      63,
+      66,
+      54,
+      247
+    ]
+  },
   "counts": {
     "publicReader": 119,
     "binding": 287,
