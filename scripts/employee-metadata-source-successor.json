@@ -863,8 +863,8 @@
     },
     {
       "path": ".github/workflows/employee-address-input-focused.yml",
-      "bytes": 9325,
-      "blob": "1e20e8e510e5a94b8acec9ed0585c698fb4c3ef9"
+      "bytes": 18443,
+      "blob": "75e8f484ba74f0750e0e0cf78f043b2eed982eaf"
     },
     {
       "path": ".github/workflows/employee-authority-hosted-preflight.yml",
@@ -988,8 +988,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 3016,
-      "blob": "91f2a3ac3281146d5c026f971dbedd8918f4c875"
+      "bytes": 3188,
+      "blob": "a71bda164c0d33acaadb3d5c5f12e688e5798fd0"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
@@ -1005,6 +1005,11 @@
       "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeMetadataJsonOptions.cs",
       "bytes": 4847,
       "blob": "c3ff6e23a7565ac1895fa350f9540f8710da8096"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeSignatureInputJsonOptions.cs",
+      "blob": "23b506e53b1550b12fb2623bf3ab82158cd5f9db",
+      "bytes": 4057
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
@@ -1343,8 +1348,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
-      "bytes": 10808,
-      "blob": "5022a9c0bca086fbcca306cedebb0ced9f12f2cc"
+      "bytes": 12077,
+      "blob": "bf96a84577fef138cad2c96cb134e6ab5c37a54e"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
@@ -1354,12 +1359,32 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs",
       "bytes": 13225,
-      "blob": "8ddb91941ec1447950aa6de49443ed07e4f486c2"
+      "blob": "4df1cbdba02d357f3a3ab86af52b771a31e73615"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
       "bytes": 2298,
       "blob": "01e806502cbd975562bfeb1fdac33d4a38cdf0bc"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/SignatureInput/EmployeeSignatureInputBindingTests.cs",
+      "blob": "83c0153d772e0bc82baacffb2dc0b83d80f4b1ff",
+      "bytes": 8021
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/SignatureInput/EmployeeSignatureInputCases.cs",
+      "blob": "0fbc3d20e8f0dd133640da10081e37beeab16dd9",
+      "bytes": 5801
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/SignatureInput/EmployeeSignatureInputHttpTests.cs",
+      "blob": "a53b0620686e70c9eea2f24551f56c07dfeca7b8",
+      "bytes": 10012
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/SignatureInput/EmployeeSignatureInputOracleTests.cs",
+      "blob": "e5f2562943536ad22f31bea5f3dd190e5c91087b",
+      "bytes": 2549
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Startup/EmployeeDiagnosticConsoleFormatterTests.cs",
@@ -1507,6 +1532,11 @@
       "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
     },
     {
+      "path": "docs/employee-signature-input-proof.md",
+      "blob": "0d785576739657579c652b3d0cbb9f0aab64b1e7",
+      "bytes": 2850
+    },
+    {
       "path": "docs/employee-significant-search-source-20261006.md",
       "bytes": 1928,
       "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
@@ -1549,7 +1579,12 @@
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
       "bytes": 34974,
-      "blob": "9023c17c71e8b36647a05e5e3210ddd2df225e9a"
+      "blob": "bad1efac363ebeee700ac5df4d2cdb4f90a42d64"
+    },
+    {
+      "path": "scripts/employee-signature-input-proof.json",
+      "blob": "45bd70de06821f3273692204dd4d700a43d28a2a",
+      "bytes": 208593
     },
     {
       "path": "scripts/employee-source-packet/baseline.zip",
@@ -1707,6 +1742,11 @@
       "blob": "2c35183cf469e838833d091ede1c644bb0983001"
     },
     {
+      "path": "scripts/test_employee_signature_input_proof.py",
+      "blob": "e7740a839ca5dcbc4ab121291aa7c7f0f17572a3",
+      "bytes": 10208
+    },
+    {
       "path": "scripts/test_employee_source_intake.py",
       "bytes": 5892,
       "blob": "46992796020f0a8fca4ecc375559605388000d20"
@@ -1730,6 +1770,11 @@
       "path": "scripts/verify_employee_pagination_focused.py",
       "bytes": 9668,
       "blob": "183ea34fb4ce95806faf3cf8585d6776d6a8010c"
+    },
+    {
+      "path": "scripts/verify_employee_signature_input_proof.py",
+      "blob": "a82e3c565be68e2c345ae212515059ce08d0c481",
+      "bytes": 8904
     },
     {
       "path": "tooling/Test-EmployeeScaffoldContract.ps1",

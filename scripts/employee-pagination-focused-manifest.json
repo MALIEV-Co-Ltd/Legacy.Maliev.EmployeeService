@@ -329,8 +329,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 3016,
-      "sha256": "79caa8e65e0095db43b0d2f11fd4223a4ac297271e2633d7e2b5853c680a2f53"
+      "bytes": 3188,
+      "sha256": "76272b4a279922e2342a6add2ab7a98db40706f563db2123278b54e1b2779df3"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
