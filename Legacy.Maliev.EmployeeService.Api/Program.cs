@@ -56,6 +56,8 @@ static async Task RunHostAsync(string[] startupArgs)
         Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions.Configure);
     builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(
         Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeSignatureInputJsonOptions.Configure);
+    builder.Services.AddSingleton<Microsoft.Extensions.Options.IConfigureOptions<Microsoft.AspNetCore.Mvc.MvcOptions>,
+        Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeOriginalBodyMvcOptionsSetup>();
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
     builder.Services.AddScoped<IEmployeeCache, DistributedEmployeeCache>();

@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" Condition="'$(EnableEmployeeScaffoldDesignTime)' != 'true'" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" Condition="'$(EnableEmployeeScaffoldDesignTime)' == 'true'" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12" Condition="'$(EnableEmployeeScaffoldDesignTime)' == 'true'">

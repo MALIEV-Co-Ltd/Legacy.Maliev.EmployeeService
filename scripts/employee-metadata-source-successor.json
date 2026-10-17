@@ -973,8 +973,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 2915,
-      "blob": "999e325642cc0f19ea86c5450394521b42eb1a76"
+      "bytes": 3008,
+      "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -988,8 +988,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 3188,
-      "blob": "a71bda164c0d33acaadb3d5c5f12e688e5798fd0"
+      "bytes": 3403,
+      "blob": "10912353de3e66a43669278190757f372d4504f9"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
@@ -1005,6 +1005,16 @@
       "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeMetadataJsonOptions.cs",
       "bytes": 4847,
       "blob": "c3ff6e23a7565ac1895fa350f9540f8710da8096"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeOriginalBodyBinding.cs",
+      "bytes": 2340,
+      "blob": "1ae383dacee45ba97e2ec1670219b12c37cf4897"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeOriginalBodyInputFormatter.cs",
+      "bytes": 12560,
+      "blob": "7325e5848ffe333ecad88a616432f1a1e35e5e5b"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeSignatureInputJsonOptions.cs",
@@ -1298,13 +1308,13 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureAmbiguityHttpTests.cs",
-      "bytes": 9731,
-      "blob": "2e86642f1379d6c69fdb3ea95d4504abab563b26"
+      "bytes": 9753,
+      "blob": "7130c505d29fac4dd5d799e421cee5657f3d5585"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureBucketLiteralHttpTests.cs",
-      "bytes": 9556,
-      "blob": "35026cf460989164cc683783979f7caac430ce18"
+      "bytes": 9573,
+      "blob": "78b33c3d834058c27703d52ef4f5ffac2c505610"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureDeletionTruthHttpTests.cs",
@@ -1313,8 +1323,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignaturePersistenceHttpTests.cs",
-      "bytes": 10722,
-      "blob": "07b502f394344490bc971fbe104020021ef35931"
+      "bytes": 10739,
+      "blob": "ae087f717a61080e455e3941d7520c62b463b8a9"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignificantSearchHttpTests.cs",
@@ -1362,6 +1372,41 @@
       "blob": "4df1cbdba02d357f3a3ab86af52b771a31e73615"
     },
     {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalBodyBindingTests.cs",
+      "bytes": 14376,
+      "blob": "5cc2a864da8a38298e86cadf1487209f059da242"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalBodyBoundaryTests.cs",
+      "bytes": 16242,
+      "blob": "bca8048bfe8a583f0d50d5b36731912e6f5e2c14"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalBodyHttpTests.cs",
+      "bytes": 26569,
+      "blob": "946b9063478b8feda27d9dc673c69b1db45589f8"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalBodyNative.cs",
+      "bytes": 3673,
+      "blob": "04c7b151c01570da68024179721ceb27866b4048"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalBodyReaderTests.cs",
+      "bytes": 17168,
+      "blob": "1ae65c91af2a9d466737e929201f0497be3fd4a4"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalBodyResourceTests.cs",
+      "bytes": 7928,
+      "blob": "dc4a94d40b5e044bcd04ca13daae5ffca0057163"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/OriginalInput/EmployeeOriginalInputOracle.cs",
+      "bytes": 7646,
+      "blob": "a7664820947b67989bcb407e2d0596d7a2d02cff"
+    },
+    {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
       "bytes": 2298,
       "blob": "01e806502cbd975562bfeb1fdac33d4a38cdf0bc"
@@ -1378,8 +1423,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/SignatureInput/EmployeeSignatureInputHttpTests.cs",
-      "blob": "a53b0620686e70c9eea2f24551f56c07dfeca7b8",
-      "bytes": 10012
+      "bytes": 10051,
+      "blob": "4cc676efeb437668e69563a683033eafe435c011"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/SignatureInput/EmployeeSignatureInputOracleTests.cs",
@@ -1579,7 +1624,7 @@
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
       "bytes": 34974,
-      "blob": "bad1efac363ebeee700ac5df4d2cdb4f90a42d64"
+      "blob": "07f5b9dc2d486e935149fe001df705d98ace8203"
     },
     {
       "path": "scripts/employee-signature-input-proof.json",
