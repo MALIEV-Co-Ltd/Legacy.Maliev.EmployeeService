@@ -314,8 +314,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 2659,
-      "sha256": "c99a659d36a6794386c09a535a80c598944d671f5c39699ed979dda00f9ea326"
+      "bytes": 2727,
+      "sha256": "31932fd59e02c2c7911e27f61012c10f56dbb43fdbe75d25f5ec9d7d26d7e60c"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -329,8 +329,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 2846,
-      "sha256": "fda322d1af830331d9d8cc8c8fe0bda3adfddac5081789e0b474004a38d73abf"
+      "bytes": 3016,
+      "sha256": "79caa8e65e0095db43b0d2f11fd4223a4ac297271e2633d7e2b5853c680a2f53"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
@@ -715,5 +715,36 @@
     },
     "scope": "bind reviewed callback registration relocation only; selected49/dependencyPins/guard/historical witnesses unchanged",
     "runtime": "NOT RUN"
+  },
+  "employee79InputValidation": {
+    "baseHead": "b34700f3d65b5055bc9991a1fd6656b5e3259e87",
+    "scope": "request-local Address Id/audit validation; reviewed exact13.0.3 property-local API package and separate static MVC action",
+    "changedPins": [
+      {
+        "preimage": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 2659,
+          "sha256": "c99a659d36a6794386c09a535a80c598944d671f5c39699ed979dda00f9ea326"
+        },
+        "postimage": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 2727,
+          "sha256": "31932fd59e02c2c7911e27f61012c10f56dbb43fdbe75d25f5ec9d7d26d7e60c"
+        }
+      },
+      {
+        "preimage": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+          "bytes": 2846,
+          "sha256": "fda322d1af830331d9d8cc8c8fe0bda3adfddac5081789e0b474004a38d73abf"
+        },
+        "postimage": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+          "bytes": 3016,
+          "sha256": "79caa8e65e0095db43b0d2f11fd4223a4ac297271e2633d7e2b5853c680a2f53"
+        }
+      }
+    ],
+    "preserves": "selected49/dependencies/originalguard/thresholds/historicalwitnesses; allruntimeNOTRUN"
   }
 }

@@ -119,17 +119,33 @@ internal static class EmployeeMetadataNativeOptions
             && action.Method.DeclaringType?.FullName == ConfigurationName
             && action.Method.DeclaringType?.Assembly == typeof(Program).Assembly;
 
+    private static bool IsAddressInputConfiguration(IConfigureOptions<MvcJsonOptions> configuration)
+        => configuration is ConfigureNamedOptions<MvcJsonOptions> { Name: "", Action: { } action }
+            && action.Target is null
+            && action.GetInvocationList().Length == 1
+            && action.Method.Name == "Configure"
+            && action.Method.DeclaringType?.FullName ==
+                "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions"
+            && action.Method.DeclaringType?.Assembly == typeof(Program).Assembly;
+
+    private static bool IsCompatibilityConfiguration(IConfigureOptions<MvcJsonOptions> configuration)
+        => IsOwnedConfiguration(configuration) || IsAddressInputConfiguration(configuration);
+
     internal static JsonSerializerOptions Create(IServiceProvider services)
     {
         var source = services.GetServices<IConfigureOptions<MvcJsonOptions>>().ToArray();
-        var owned = source.Where(IsOwnedConfiguration).ToArray();
-        Assert.InRange(owned.Length, 0, 1); // Baseline overlay has no compatibility registration.
-        var retained = source.Where(configuration => !IsOwnedConfiguration(configuration)).ToArray();
+        var owned = source.Where(IsCompatibilityConfiguration).ToArray();
+        Assert.Equal(typeof(Program).Assembly.GetType(ConfigurationName, throwOnError: false) is null ? 0 : 1,
+            source.Count(IsOwnedConfiguration));
+        Assert.Equal(typeof(Program).Assembly.GetType(
+            "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions", throwOnError: false) is null ? 0 : 1,
+            source.Count(IsAddressInputConfiguration));
+        var retained = source.Where(configuration => !IsCompatibilityConfiguration(configuration)).ToArray();
         Assert.Equal(source.Length - owned.Length, retained.Length);
         var index = 0;
         foreach (var configuration in source)
         {
-            if (IsOwnedConfiguration(configuration)) continue;
+            if (IsCompatibilityConfiguration(configuration)) continue;
             Assert.Same(configuration, retained[index++]);
         }
         // Recreate fresh MVC options through every other original setup, post-setup,
@@ -143,12 +159,18 @@ internal static class EmployeeMetadataNativeOptions
     internal static void RemoveOwnedConfiguration(IServiceCollection services)
     {
         var before = services.ToArray();
-        var owned = Assert.Single(before, descriptor =>
+        var owned = before.Where(descriptor =>
             descriptor.ServiceType == typeof(IConfigureOptions<MvcJsonOptions>)
             && descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
+            && IsCompatibilityConfiguration(configuration)).ToArray();
+        Assert.Single(owned, descriptor => descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
             && IsOwnedConfiguration(configuration));
-        Assert.True(services.Remove(owned));
-        var retained = before.Where(descriptor => !ReferenceEquals(descriptor, owned)).ToArray();
+        Assert.Equal(typeof(Program).Assembly.GetType(
+            "Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeAddressInputJsonOptions", throwOnError: false) is null ? 0 : 1,
+            owned.Count(descriptor => descriptor.ImplementationInstance is IConfigureOptions<MvcJsonOptions> configuration
+                && IsAddressInputConfiguration(configuration)));
+        foreach (var descriptor in owned) Assert.True(services.Remove(descriptor));
+        var retained = before.Where(descriptor => !owned.Any(item => ReferenceEquals(descriptor, item))).ToArray();
         Assert.Equal(retained.Length, services.Count);
         for (var index = 0; index < retained.Length; index++) Assert.Same(retained[index], services[index]);
     }

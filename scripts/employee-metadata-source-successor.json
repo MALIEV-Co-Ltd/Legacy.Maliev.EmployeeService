@@ -827,149 +827,9 @@
   ],
   "candidate": [
     {
-      "path": "AGENTS.md",
-      "bytes": 1565,
-      "blob": "942a549b0b11e10981dd9823433824b9865e6684"
-    },
-    {
-      "path": "deploy/base/deployment.yaml",
-      "bytes": 1985,
-      "blob": "0d67140c2473ac056e7c106d64c8ad68234017b4"
-    },
-    {
-      "path": "deploy/base/kustomization.yaml",
-      "bytes": 375,
-      "blob": "6a693dbe647ba19cf1393c355a175c19f3f50d22"
-    },
-    {
-      "path": "deploy/base/network-policy.yaml",
-      "bytes": 828,
-      "blob": "f883ec7384e6d0749b37febd7b8eb29ac4a1d4e0"
-    },
-    {
-      "path": "deploy/base/service-account.yaml",
-      "bytes": 140,
-      "blob": "a2ad4e30f2b5f20e6e3ca7d760c24cfe210b074d"
-    },
-    {
-      "path": "deploy/base/service.yaml",
-      "bytes": 246,
-      "blob": "30f07e52e22f429167116e3b9558aacd114df571"
-    },
-    {
-      "path": "deploy/README.md",
-      "bytes": 2382,
-      "blob": "2e6388d2ce05c31cbe2b7de5514d3cff838d549d"
-    },
-    {
-      "path": "Directory.Build.props",
-      "bytes": 515,
-      "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
-    },
-    {
       "path": ".dockerignore",
       "bytes": 110,
       "blob": "d5af0a28be33bd79cec97b55069a347d35c1febf"
-    },
-    {
-      "path": "docs/administrative-conditional-edits.md",
-      "bytes": 5454,
-      "blob": "afdfe143b06bfbc49e83bfb9e673dcd61bfe64f9"
-    },
-    {
-      "path": "docs/coupled-home-address-edits.md",
-      "bytes": 3514,
-      "blob": "939e9b5742285c3e9700dae05c02147b5f5b96f0"
-    },
-    {
-      "path": "docs/employee-actual-scaffold-proof-20261006.md",
-      "bytes": 2926,
-      "blob": "b0faeb18a45df62d6b1682cd6e1c7fd7339dbf9b"
-    },
-    {
-      "path": "docs/employee-administrative-email-literal-source-20261011.md",
-      "bytes": 2331,
-      "blob": "70166a03527f5f0fd7ab1f168b7007902cc9826e"
-    },
-    {
-      "path": "docs/employee-authority-readonly-preflight.md",
-      "bytes": 4015,
-      "blob": "abd59fd079e53809c0f6923472a1f506db53ed9a"
-    },
-    {
-      "path": "docs/employee-directory-parity-design-20261001.md",
-      "bytes": 12392,
-      "blob": "283df12696a46f8d5c72732a75dbd652646386d6"
-    },
-    {
-      "path": "docs/employee-fixture-compatibility.md",
-      "bytes": 9176,
-      "blob": "b2d494089932c916a5b73553c4ef663873e9c190"
-    },
-    {
-      "path": "docs/employee-linux-custody.md",
-      "bytes": 5708,
-      "blob": "3938357df60ca69e3e18bdb38ab147721bf47542"
-    },
-    {
-      "path": "docs/employee-metadata-proof.md",
-      "bytes": 8235,
-      "blob": "1a1f02f1049c9867f57b13872031dd516860889f"
-    },
-    {
-      "path": "docs/employee-no-sdk-controller.md",
-      "bytes": 2157,
-      "blob": "d3c64a813015ab066521f798a9ee7b2356fec963"
-    },
-    {
-      "path": "docs/employee-owned-receipts.md",
-      "bytes": 3887,
-      "blob": "e09daaaa2a1cfab1341dfc1f2b79bbea5e119e99"
-    },
-    {
-      "path": "docs/employee-owner-source-intake.md",
-      "bytes": 3863,
-      "blob": "a4d949e49c7eea01e1fc26e33e596e6cf2732809"
-    },
-    {
-      "path": "docs/employee-qualification-controller.md",
-      "bytes": 3013,
-      "blob": "b47289d31341592410e00b075eb6b019c0eb86c7"
-    },
-    {
-      "path": "docs/employee-route-acceptance-design-20261001.md",
-      "bytes": 16633,
-      "blob": "1abd2284af5b44d22e5b85ca2b62baf55f3195ee"
-    },
-    {
-      "path": "docs/employee-self-profile-null-phone-20261001.md",
-      "bytes": 10090,
-      "blob": "36db0948a5d1ba04cbd14a0b8d268ef4b15d41d8"
-    },
-    {
-      "path": "docs/employee-signature-bucket-literal-source-20261011.md",
-      "bytes": 2290,
-      "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
-    },
-    {
-      "path": "docs/employee-significant-search-source-20261006.md",
-      "bytes": 1928,
-      "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
-    },
-    {
-      "path": "docs/employee-stored-search-field-proof-20261006.md",
-      "bytes": 2165,
-      "blob": "0a31b6b98ee95b353b69ff3e5b4a113cf3f8c879"
-    },
-    {
-      "path": "docs/original-native-logging-source-cohort.json",
-      "bytes": 10973,
-      "blob": "6164594c18838fa1f4864146bc7302a0e0d65118"
-    },
-    {
-      "path": "docs/original-native-logging-source-cohort.md",
-      "bytes": 759,
-      "blob": "3596485a0e20fb922bffc68579fc7a9e2062763b"
     },
     {
       "path": ".gitattributes",
@@ -1000,6 +860,11 @@
       "path": ".github/workflows/ci-staging.yml",
       "bytes": 246,
       "blob": "a069e91ab4fbd614302a6a1f73e1182a181ebb2c"
+    },
+    {
+      "path": ".github/workflows/employee-address-input-focused.yml",
+      "bytes": 9325,
+      "blob": "1e20e8e510e5a94b8acec9ed0585c698fb4c3ef9"
     },
     {
       "path": ".github/workflows/employee-authority-hosted-preflight.yml",
@@ -1047,14 +912,14 @@
       "blob": "968e06b6f0ed18358d0427d0e9b5232c15f58e1a"
     },
     {
-      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
-      "bytes": 119,
-      "blob": "0c208ae9181e5e5717e47ec1bd59368aebc6066e"
+      "path": "AGENTS.md",
+      "bytes": 1565,
+      "blob": "942a549b0b11e10981dd9823433824b9865e6684"
     },
     {
-      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.json",
-      "bytes": 398,
-      "blob": "b057873ee272efdfc5311a0179a6214f4e1768b7"
+      "path": "Directory.Build.props",
+      "bytes": 515,
+      "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
@@ -1108,8 +973,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 2659,
-      "blob": "0d3808825f8711e2083bd35c0c2cad32f57647bb"
+      "bytes": 2727,
+      "blob": "0a5689a11a91d93fd6136203d98840b760303aa6"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -1123,8 +988,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 2846,
-      "blob": "4ce460f0d79df42b1c5e7bb3fe82d75101c61206"
+      "bytes": 3016,
+      "blob": "91f2a3ac3281146d5c026f971dbedd8918f4c875"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
@@ -1132,9 +997,24 @@
       "blob": "5b49ab6aa8f800b7ed4a376abb9ccf0942625251"
     },
     {
+      "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeAddressInputJsonOptions.cs",
+      "bytes": 5930,
+      "blob": "0b415c4beced78eb25ed2814501516f579789fe5"
+    },
+    {
       "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeMetadataJsonOptions.cs",
       "bytes": 4847,
       "blob": "c3ff6e23a7565ac1895fa350f9540f8710da8096"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
+      "bytes": 119,
+      "blob": "0c208ae9181e5e5717e47ec1bd59368aebc6066e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.json",
+      "bytes": 398,
+      "blob": "b057873ee272efdfc5311a0179a6214f4e1768b7"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Interfaces/IEmployeeBoundaries.cs",
@@ -1192,24 +1072,24 @@
       "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
     },
     {
-      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
-      "bytes": 7037,
-      "blob": "93f998ba11d4b97069a25b7f1415b9f46147ada4"
-    },
-    {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
       "bytes": 9690,
       "blob": "f82ed9ac464b97ae061bc417d53b6bd83d24feb3"
     },
     {
-      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
-      "bytes": 5889,
-      "blob": "fc15921ce75bf1be80334eb4744da5879ec87828"
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
+      "bytes": 7037,
+      "blob": "93f998ba11d4b97069a25b7f1415b9f46147ada4"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.Designer.cs",
       "bytes": 9858,
       "blob": "d3b2652c3b8dc1c379254e120eef00948ab5fc5e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
+      "bytes": 5889,
+      "blob": "fc15921ce75bf1be80334eb4744da5879ec87828"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/EmployeeDbContextModelSnapshot.cs",
@@ -1232,9 +1112,24 @@
       "blob": "51addf44ecf979d69d9d77527d402f14c06a4fa5"
     },
     {
-      "path": "Legacy.Maliev.EmployeeService.slnx",
-      "bytes": 531,
-      "blob": "bbe22dd2cdaeba7edcf0e2778d522e81f91a0e2a"
+      "path": "Legacy.Maliev.EmployeeService.Tests/AddressInput/EmployeeAddressInputBindingTests.cs",
+      "bytes": 7927,
+      "blob": "98cd8da9b92bf3ce71466fde81437d0602bbc99e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/AddressInput/EmployeeAddressInputCases.cs",
+      "bytes": 14190,
+      "blob": "c2de0051c2eae2ea135d1865d93bf5b8becfd78a"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/AddressInput/EmployeeAddressInputHttpTests.cs",
+      "bytes": 14513,
+      "blob": "8e89a10f25246b1f41e3a49e3356d2529f630c63"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/AddressInput/EmployeeAddressInputOracleTests.cs",
+      "bytes": 4375,
+      "blob": "2e690f38a164be7a20354ba10c1e4557d9b5e329"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Application/EmployeeApplicationServiceTests.cs",
@@ -1448,8 +1343,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
-      "bytes": 9082,
-      "blob": "718a5691dd38ca9b826dd3ed01447617874f3a98"
+      "bytes": 10808,
+      "blob": "5022a9c0bca086fbcca306cedebb0ced9f12f2cc"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataPublicReaderTests.cs",
@@ -1458,8 +1353,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataRequestBindingTests.cs",
-      "bytes": 12785,
-      "blob": "903360eea3b6905b3a15ed8b36e3ab3c36d698aa"
+      "bytes": 13225,
+      "blob": "8ddb91941ec1447950aa6de49443ed07e4f486c2"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
@@ -1487,9 +1382,9 @@
       "blob": "1afae92d98fc0e03a951cf7d59b670dbff88792f"
     },
     {
-      "path": "nuget.config",
-      "bytes": 197,
-      "blob": "765346e5343d46ac83654843869dc06b65b2bdc4"
+      "path": "Legacy.Maliev.EmployeeService.slnx",
+      "bytes": 531,
+      "blob": "bbe22dd2cdaeba7edcf0e2778d522e81f91a0e2a"
     },
     {
       "path": "README.md",
@@ -1497,9 +1392,184 @@
       "blob": "d37ca7d3fc67b60ae56d127370087847c63fa75e"
     },
     {
+      "path": "deploy/README.md",
+      "bytes": 2382,
+      "blob": "2e6388d2ce05c31cbe2b7de5514d3cff838d549d"
+    },
+    {
+      "path": "deploy/base/deployment.yaml",
+      "bytes": 1985,
+      "blob": "0d67140c2473ac056e7c106d64c8ad68234017b4"
+    },
+    {
+      "path": "deploy/base/kustomization.yaml",
+      "bytes": 375,
+      "blob": "6a693dbe647ba19cf1393c355a175c19f3f50d22"
+    },
+    {
+      "path": "deploy/base/network-policy.yaml",
+      "bytes": 828,
+      "blob": "f883ec7384e6d0749b37febd7b8eb29ac4a1d4e0"
+    },
+    {
+      "path": "deploy/base/service-account.yaml",
+      "bytes": 140,
+      "blob": "a2ad4e30f2b5f20e6e3ca7d760c24cfe210b074d"
+    },
+    {
+      "path": "deploy/base/service.yaml",
+      "bytes": 246,
+      "blob": "30f07e52e22f429167116e3b9558aacd114df571"
+    },
+    {
+      "path": "docs/administrative-conditional-edits.md",
+      "bytes": 5454,
+      "blob": "afdfe143b06bfbc49e83bfb9e673dcd61bfe64f9"
+    },
+    {
+      "path": "docs/coupled-home-address-edits.md",
+      "bytes": 3514,
+      "blob": "939e9b5742285c3e9700dae05c02147b5f5b96f0"
+    },
+    {
+      "path": "docs/employee-actual-scaffold-proof-20261006.md",
+      "bytes": 2926,
+      "blob": "b0faeb18a45df62d6b1682cd6e1c7fd7339dbf9b"
+    },
+    {
+      "path": "docs/employee-address-input-proof.md",
+      "bytes": 5154,
+      "blob": "05414e705f14937b62bc788b93fe5175b31de273"
+    },
+    {
+      "path": "docs/employee-administrative-email-literal-source-20261011.md",
+      "bytes": 2331,
+      "blob": "70166a03527f5f0fd7ab1f168b7007902cc9826e"
+    },
+    {
+      "path": "docs/employee-authority-readonly-preflight.md",
+      "bytes": 4015,
+      "blob": "abd59fd079e53809c0f6923472a1f506db53ed9a"
+    },
+    {
+      "path": "docs/employee-directory-parity-design-20261001.md",
+      "bytes": 12392,
+      "blob": "283df12696a46f8d5c72732a75dbd652646386d6"
+    },
+    {
+      "path": "docs/employee-fixture-compatibility.md",
+      "bytes": 9176,
+      "blob": "b2d494089932c916a5b73553c4ef663873e9c190"
+    },
+    {
+      "path": "docs/employee-linux-custody.md",
+      "bytes": 5708,
+      "blob": "3938357df60ca69e3e18bdb38ab147721bf47542"
+    },
+    {
+      "path": "docs/employee-metadata-proof.md",
+      "bytes": 8235,
+      "blob": "1a1f02f1049c9867f57b13872031dd516860889f"
+    },
+    {
+      "path": "docs/employee-no-sdk-controller.md",
+      "bytes": 2157,
+      "blob": "d3c64a813015ab066521f798a9ee7b2356fec963"
+    },
+    {
+      "path": "docs/employee-owned-receipts.md",
+      "bytes": 3887,
+      "blob": "e09daaaa2a1cfab1341dfc1f2b79bbea5e119e99"
+    },
+    {
+      "path": "docs/employee-owner-source-intake.md",
+      "bytes": 3863,
+      "blob": "a4d949e49c7eea01e1fc26e33e596e6cf2732809"
+    },
+    {
+      "path": "docs/employee-qualification-controller.md",
+      "bytes": 3013,
+      "blob": "b47289d31341592410e00b075eb6b019c0eb86c7"
+    },
+    {
+      "path": "docs/employee-route-acceptance-design-20261001.md",
+      "bytes": 16633,
+      "blob": "1abd2284af5b44d22e5b85ca2b62baf55f3195ee"
+    },
+    {
+      "path": "docs/employee-self-profile-null-phone-20261001.md",
+      "bytes": 10090,
+      "blob": "36db0948a5d1ba04cbd14a0b8d268ef4b15d41d8"
+    },
+    {
+      "path": "docs/employee-signature-bucket-literal-source-20261011.md",
+      "bytes": 2290,
+      "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
+    },
+    {
+      "path": "docs/employee-significant-search-source-20261006.md",
+      "bytes": 1928,
+      "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
+    },
+    {
+      "path": "docs/employee-stored-search-field-proof-20261006.md",
+      "bytes": 2165,
+      "blob": "0a31b6b98ee95b353b69ff3e5b4a113cf3f8c879"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.json",
+      "bytes": 10973,
+      "blob": "6164594c18838fa1f4864146bc7302a0e0d65118"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.md",
+      "bytes": 759,
+      "blob": "3596485a0e20fb922bffc68579fc7a9e2062763b"
+    },
+    {
+      "path": "nuget.config",
+      "bytes": 197,
+      "blob": "765346e5343d46ac83654843869dc06b65b2bdc4"
+    },
+    {
+      "path": "scripts/employee-address-input-proof.json",
+      "bytes": 254408,
+      "blob": "408eb6e8a5022c57ad4e11221de78eb717595789"
+    },
+    {
       "path": "scripts/employee-authority-hosted-requirements.txt",
       "bytes": 751,
       "blob": "09d54b198c80f95237d59756cc4a25d75a5e29c8"
+    },
+    {
+      "path": "scripts/employee-metadata-roster.json",
+      "bytes": 143021,
+      "blob": "4932749bf6d83ddf3b56dada38986e1e7fefe67c"
+    },
+    {
+      "path": "scripts/employee-pagination-focused-manifest.json",
+      "bytes": 34974,
+      "blob": "5a2b1eb0eedc3de8109132e9f19563881896a34b"
+    },
+    {
+      "path": "scripts/employee-source-packet/baseline.zip",
+      "bytes": 178090,
+      "blob": "cdaede4e7e7f684043910394d862eab0a986f95c"
+    },
+    {
+      "path": "scripts/employee-source-packet/candidate.zip",
+      "bytes": 178143,
+      "blob": "6de816d32edeb0998c9915817946f9cc91bf182d"
+    },
+    {
+      "path": "scripts/employee-source-packet/dependencies.zip",
+      "bytes": 261264,
+      "blob": "b0aad7d0d6c52f553cc449dbf5847c895c4b034a"
+    },
+    {
+      "path": "scripts/employee-source-policy.json",
+      "bytes": 200627,
+      "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68"
     },
     {
       "path": "scripts/employee_authority.py",
@@ -1537,11 +1607,6 @@
       "blob": "69b69b196159bea8eb9b735e4108da5753643e67"
     },
     {
-      "path": "scripts/employee-metadata-roster.json",
-      "bytes": 143021,
-      "blob": "4932749bf6d83ddf3b56dada38986e1e7fefe67c"
-    },
-    {
       "path": "scripts/employee_no_sdk_controller.py",
       "bytes": 4825,
       "blob": "0c89aa6e8de92feba1a4c9419439b3e2f44395bd"
@@ -1550,11 +1615,6 @@
       "path": "scripts/employee_owned_receipts.py",
       "bytes": 6805,
       "blob": "fe605c5c0889757c9014a1b10a4c4edc158300d6"
-    },
-    {
-      "path": "scripts/employee-pagination-focused-manifest.json",
-      "bytes": 33667,
-      "blob": "1a0f462d96a5593d553b967ff206316ea8320f1f"
     },
     {
       "path": "scripts/employee_phase_contract.py",
@@ -1572,29 +1632,14 @@
       "blob": "8b061ce57af4d64de69ed1445f0dd3aeb0b81045"
     },
     {
-      "path": "scripts/employee-source-packet/baseline.zip",
-      "bytes": 178090,
-      "blob": "cdaede4e7e7f684043910394d862eab0a986f95c"
-    },
-    {
-      "path": "scripts/employee-source-packet/candidate.zip",
-      "bytes": 178143,
-      "blob": "6de816d32edeb0998c9915817946f9cc91bf182d"
-    },
-    {
-      "path": "scripts/employee-source-packet/dependencies.zip",
-      "bytes": 261264,
-      "blob": "b0aad7d0d6c52f553cc449dbf5847c895c4b034a"
-    },
-    {
-      "path": "scripts/employee-source-policy.json",
-      "bytes": 200627,
-      "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68"
-    },
-    {
       "path": "scripts/sealed_source_capsule.py",
       "bytes": 12296,
       "blob": "cab6997ff2af48bdd4ac7e9240cd12d01e5b3190"
+    },
+    {
+      "path": "scripts/test_employee_address_input_proof.py",
+      "bytes": 8969,
+      "blob": "76bab5e6a9c31a07cb5736fc79124b5a943ab9e8"
     },
     {
       "path": "scripts/test_employee_authority.py",
@@ -1667,6 +1712,16 @@
       "blob": "46992796020f0a8fca4ecc375559605388000d20"
     },
     {
+      "path": "scripts/verify-runner-coverage.py",
+      "bytes": 2073,
+      "blob": "6aae67d556e087177a75a80478abe37943c717a5"
+    },
+    {
+      "path": "scripts/verify_employee_address_input_proof.py",
+      "bytes": 21772,
+      "blob": "e42339e0e6a6179af1fba3cee6243800feee5c50"
+    },
+    {
       "path": "scripts/verify_employee_metadata_proof.py",
       "bytes": 26508,
       "blob": "fa2cd242481ac0a24528d0696393cbf8b1f85e57"
@@ -1675,11 +1730,6 @@
       "path": "scripts/verify_employee_pagination_focused.py",
       "bytes": 9668,
       "blob": "183ea34fb4ce95806faf3cf8585d6776d6a8010c"
-    },
-    {
-      "path": "scripts/verify-runner-coverage.py",
-      "bytes": 2073,
-      "blob": "6aae67d556e087177a75a80478abe37943c717a5"
     },
     {
       "path": "tooling/Test-EmployeeScaffoldContract.ps1",
@@ -1824,5 +1874,18 @@
     "observed": "Release0W0E/full885P0F0S PASS; format10WHITESPACE in3 object initializers lines167/171/178; later gates skipped",
     "scope": "replace exactly10 comma-following spaces with newline+12spaces in3 object initializers; semantics/token stream unchanged; refresh only corresponding source tuple",
     "runtime": "NOT RUN; all fresh exact-head gates required"
+  },
+  "addressInput79Successor": {
+    "baseHead": "b34700f3d65b5055bc9991a1fd6656b5e3259e87",
+    "baseTree": "fcc2fda97b255b09415886b895c70e9faca93417",
+    "issue": 79,
+    "scope": "Address only virtualId/CreatedDate/ModifiedDate read-validation; noCLRDTO/globalformatter/schema/writer/resourceidentity/persistedaudit authority",
+    "publicLibrary": "Rootcorrected priorownno-productionNewtonsoftplan afteractualAGENTSread; exact13.0.3 property-local typedreaders only",
+    "newForecast": "347characterizer/118baseline65P53F/614candidate;30newPythoncontrols; ordinary1499 withold885identities retained; ALLNOTRUN",
+    "existingMetadata442": "sameidentities; Addressignored3inputs explicitlysplit whileSignature/navigation/unknowncontrolsretained; trueNativefactoryremovesbothownedactions publiconly",
+    "oldGates": "83controls/176+88notices/119/442/49/full/static/security/audits/scaffold/raw80 unchangedauthority",
+    "newBaseline": "completeb347173 canonicalGitfiles +4testonlyoverlay outsidecheckout, productionunchanged/guardedcleanup",
+    "holds": "75STOP/76ABSOLUTEruntimeheld/navigation/fullmodel/individualSHAsunclosed/globalgain0",
+    "runtime": "NOT RUN; Rootindependentreview/exacthostedhead/protectedmainrequired"
   }
 }
