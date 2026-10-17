@@ -50,6 +50,8 @@ static async Task RunHostAsync(string[] startupArgs)
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
         options.JsonSerializerOptions.DictionaryKeyPolicy = null;
     });
+    builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(
+        Legacy.Maliev.EmployeeService.Api.Serialization.EmployeeMetadataJsonOptions.Configure);
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
     builder.Services.AddScoped<IEmployeeCache, DistributedEmployeeCache>();

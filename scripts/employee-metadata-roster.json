@@ -1,0 +1,4964 @@
+{
+  "schemaVersion": 2,
+  "status": "SOURCE-AUTHORED FORECAST ONLY; no discovery/runtime pass claim",
+  "base": {
+    "objectFormat": "sha1",
+    "objectType": "commit",
+    "bytes": [
+      151,
+      44,
+      200,
+      249,
+      168,
+      224,
+      205,
+      141,
+      166,
+      150,
+      66,
+      248,
+      66,
+      60,
+      20,
+      68,
+      63,
+      66,
+      54,
+      247
+    ]
+  },
+  "counts": {
+    "publicReader": 119,
+    "binding": 287,
+    "http": 34,
+    "total": 442,
+    "baselineRed": 176,
+    "forecastBaselineFailures": 88,
+    "openApi": 2
+  },
+  "methods": [
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests",
+      "method": "PublicTypedReader_PreservesReferenceLexeme",
+      "argumentNames": [
+        "tokenId"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests",
+      "method": "PublicMutableProjection_IgnoresNullInOccurrenceOrder",
+      "argumentNames": [
+        "field",
+        "orderId"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests",
+      "method": "PublicMutableProjection_CannotHideUnsupportedOccurrence",
+      "argumentNames": [
+        "field",
+        "token",
+        "position"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "OccurrenceOrder_MatchesNullIgnoringProjection",
+      "argumentNames": [
+        "field",
+        "orderId"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "ConsumedField_MatchesPublicTypedReader",
+      "argumentNames": [
+        "field",
+        "tokenId"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "UnsupportedOccurrence_KeepsNativeFailurePath",
+      "argumentNames": [
+        "field",
+        "token",
+        "position"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "NonStringIdPolicy_DelegatesToExistingMvcReader",
+      "argumentNames": [
+        "kind",
+        "idCase"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "RootAndMalformedJson_KeepNativeOutcome",
+      "argumentNames": [
+        "kind",
+        "json"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "IgnoredMembers_KeepCurrentDtoPolicyWithoutClaimingSourceGraphParity",
+      "argumentNames": [
+        "kind"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "RepeatedIdPolicy_CannotBeReplacedByStringNullPolicy",
+      "argumentNames": [
+        "caseId"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "Registration_IsMvcRequestSpecificAndWriterUnchanged",
+      "argumentNames": []
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests",
+      "method": "HttpOrderedNull_KeepsConsumedTextAndUnrelatedState",
+      "argumentNames": [
+        "field",
+        "verb"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests",
+      "method": "HttpPrimitive_KeepsPublicReaderLexeme",
+      "argumentNames": [
+        "field",
+        "verb"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests",
+      "method": "HttpMalformedOccurrenceBeforeValid_Is400WithoutMutation",
+      "argumentNames": [
+        "field",
+        "token"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests",
+      "method": "HttpDeniedActor_HasNoMetadataEffects",
+      "argumentNames": [
+        "field",
+        "authority",
+        "expected"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests",
+      "method": "VersionedAddress_KeepsPreconditionsCacheAndTextBinding",
+      "argumentNames": [
+        "condition",
+        "expected"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests",
+      "method": "MalformedSyntax_ReplaysNativeFieldFailure",
+      "argumentNames": [
+        "caseId"
+      ]
+    },
+    {
+      "class": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataOpenApiTests",
+      "method": "ActualDocument_KeepsNamedRequestSchemaAndNativeRequiredNullability",
+      "argumentNames": [
+        "schemaName"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "m": 0,
+      "a": [
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"null\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"empty\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"padded\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"thai\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"escaped\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"date_text\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"integer\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"decimal\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"exponent\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"large_integer\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"true\")"
+    },
+    {
+      "m": 0,
+      "a": [
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicTypedReader_PreservesReferenceLexeme(tokenId: \"false\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Building",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Building\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Building",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Building\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Building",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Building\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Building",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Building\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Building",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Building\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Building",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Building\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Building",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Building\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine1",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine1\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine1",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine1\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine1",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine1\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine1",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine1\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine1",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine1\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine1",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine1\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine1",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine1\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "AddressLine2",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"AddressLine2\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine2",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine2\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine2",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine2\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine2",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine2\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine2",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine2\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine2",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine2\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "AddressLine2",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"AddressLine2\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "City",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"City\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "City",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"City\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "City",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"City\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "City",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"City\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "City",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"City\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "City",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"City\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "City",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"City\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "State",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"State\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "State",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"State\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "State",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"State\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "State",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"State\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "State",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"State\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "State",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"State\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "State",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"State\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "PostalCode",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"PostalCode\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "PostalCode",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"PostalCode\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "PostalCode",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"PostalCode\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "PostalCode",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"PostalCode\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "PostalCode",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"PostalCode\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "PostalCode",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"PostalCode\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "PostalCode",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"PostalCode\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "Bucket",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"Bucket\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Bucket",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Bucket\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Bucket",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Bucket\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Bucket",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Bucket\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Bucket",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Bucket\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Bucket",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Bucket\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "Bucket",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"Bucket\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"replace\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"null_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"null_before\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"all_null\")"
+    },
+    {
+      "m": 1,
+      "a": [
+        "ObjectName",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_IgnoresNullInOccurrenceOrder(field: \"ObjectName\", orderId: \"omitted\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "ObjectName",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"ObjectName\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "ObjectName",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"ObjectName\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "ObjectName",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"ObjectName\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "ObjectName",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"ObjectName\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "ObjectName",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"ObjectName\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 2,
+      "a": [
+        "ObjectName",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataPublicReaderTests.PublicMutableProjection_CannotHideUnsupportedOccurrence(field: \"ObjectName\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Building",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Building\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Building",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Building\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Building",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Building\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Building",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Building\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Building",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Building\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Building",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Building\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Building",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Building\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Building",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Building\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine1",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine1\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine1",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine1\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine1",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine1\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine1",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine1\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine1",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine1\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine1",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine1\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine1",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine1\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine1",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine1\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "AddressLine2",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"AddressLine2\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "AddressLine2",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"AddressLine2\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine2",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine2\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine2",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine2\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine2",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine2\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine2",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine2\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine2",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine2\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "AddressLine2",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"AddressLine2\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "City",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"City\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "City",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"City\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "City",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"City\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "City",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"City\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "City",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"City\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "City",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"City\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "City",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"City\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "City",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"City\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "State",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"State\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "State",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"State\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "State",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"State\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "State",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"State\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "State",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"State\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "State",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"State\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "State",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"State\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "State",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"State\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "PostalCode",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"PostalCode\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "PostalCode",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"PostalCode\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "PostalCode",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"PostalCode\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "PostalCode",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"PostalCode\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "PostalCode",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"PostalCode\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "PostalCode",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"PostalCode\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "PostalCode",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"PostalCode\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "PostalCode",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"PostalCode\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "Bucket",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"Bucket\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "Bucket",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"Bucket\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Bucket",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Bucket\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Bucket",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Bucket\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Bucket",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Bucket\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Bucket",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Bucket\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Bucket",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Bucket\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "Bucket",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"Bucket\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "replace"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"replace\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "null_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"null_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "null_before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"null_before\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "empty_after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"empty_after\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "repeat_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"repeat_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "all_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"all_null\")"
+    },
+    {
+      "m": 3,
+      "a": [
+        "ObjectName",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.OccurrenceOrder_MatchesNullIgnoringProjection(field: \"ObjectName\", orderId: \"omitted\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"null\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"empty\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "padded"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"padded\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "thai"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"thai\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "escaped"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"escaped\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "date_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"date_text\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "decimal"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"decimal\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "negative_zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"negative_zero\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "capital_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"capital_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "large_integer"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"large_integer\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "large_exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"large_exponent\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"true\")"
+    },
+    {
+      "m": 4,
+      "a": [
+        "ObjectName",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.ConsumedField_MatchesPublicTypedReader(field: \"ObjectName\", tokenId: \"false\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "ObjectName",
+        "{}",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"ObjectName\", token: \"{}\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "ObjectName",
+        "{}",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"ObjectName\", token: \"{}\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "ObjectName",
+        "{}",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"ObjectName\", token: \"{}\", position: \"after\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "ObjectName",
+        "[]",
+        "only"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"ObjectName\", token: \"[]\", position: \"only\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "ObjectName",
+        "[]",
+        "before"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"ObjectName\", token: \"[]\", position: \"before\")"
+    },
+    {
+      "m": 5,
+      "a": [
+        "ObjectName",
+        "[]",
+        "after"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.UnsupportedOccurrence_KeepsNativeFailurePath(field: \"ObjectName\", token: \"[]\", position: \"after\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"omitted\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"null\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"zero\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "negative"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"negative\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "positive"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"positive\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "quoted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"quoted\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "quoted_spaces"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"quoted_spaces\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "quoted_plus"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"quoted_plus\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"empty\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "blank"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"blank\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "fraction"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"fraction\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "integral_float"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"integral_float\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"exponent\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "overflow"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"overflow\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"true\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"false\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "object"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"object\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "array"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"array\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "address",
+        "minimum"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"address\", idCase: \"minimum\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"null\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "[]"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"[]\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"true\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "42"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"42\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "\"text\""
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"\\\"text\\\"\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "{"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"{\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "address",
+        "{} {}"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"address\", json: \"{} {}\")"
+    },
+    {
+      "m": 8,
+      "a": [
+        "address"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.IgnoredMembers_KeepCurrentDtoPolicyWithoutClaimingSourceGraphParity(kind: \"address\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "omitted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"omitted\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"null\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "zero"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"zero\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "negative"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"negative\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "positive"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"positive\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "quoted"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"quoted\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "quoted_spaces"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"quoted_spaces\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "quoted_plus"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"quoted_plus\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "empty"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"empty\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "blank"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"blank\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "fraction"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"fraction\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "integral_float"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"integral_float\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "exponent"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"exponent\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "overflow"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"overflow\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"true\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "false"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"false\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "object"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"object\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "array"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"array\")"
+    },
+    {
+      "m": 6,
+      "a": [
+        "signature",
+        "minimum"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.NonStringIdPolicy_DelegatesToExistingMvcReader(kind: \"signature\", idCase: \"minimum\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"null\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "[]"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"[]\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "true"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"true\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "42"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"42\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "\"text\""
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"\\\"text\\\"\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "{"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"{\")"
+    },
+    {
+      "m": 7,
+      "a": [
+        "signature",
+        "{} {}"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RootAndMalformedJson_KeepNativeOutcome(kind: \"signature\", json: \"{} {}\")"
+    },
+    {
+      "m": 8,
+      "a": [
+        "signature"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.IgnoredMembers_KeepCurrentDtoPolicyWithoutClaimingSourceGraphParity(kind: \"signature\")"
+    },
+    {
+      "m": 9,
+      "a": [
+        "address_bad_then_valid"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RepeatedIdPolicy_CannotBeReplacedByStringNullPolicy(caseId: \"address_bad_then_valid\")"
+    },
+    {
+      "m": 9,
+      "a": [
+        "address_valid_then_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RepeatedIdPolicy_CannotBeReplacedByStringNullPolicy(caseId: \"address_valid_then_null\")"
+    },
+    {
+      "m": 9,
+      "a": [
+        "signature_bad_then_valid"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RepeatedIdPolicy_CannotBeReplacedByStringNullPolicy(caseId: \"signature_bad_then_valid\")"
+    },
+    {
+      "m": 9,
+      "a": [
+        "signature_valid_then_null"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.RepeatedIdPolicy_CannotBeReplacedByStringNullPolicy(caseId: \"signature_valid_then_null\")"
+    },
+    {
+      "m": 10,
+      "a": [],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.Registration_IsMvcRequestSpecificAndWriterUnchanged"
+    },
+    {
+      "m": 11,
+      "a": [
+        "Building",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"Building\", verb: \"post\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "Building",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"Building\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "AddressLine1",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"AddressLine1\", verb: \"post\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "AddressLine1",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"AddressLine1\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "AddressLine2",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"AddressLine2\", verb: \"post\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "AddressLine2",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"AddressLine2\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "City",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"City\", verb: \"post\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "City",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"City\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "State",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"State\", verb: \"post\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "State",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"State\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "PostalCode",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"PostalCode\", verb: \"post\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "PostalCode",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"PostalCode\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "Bucket",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"Bucket\", verb: \"put\")"
+    },
+    {
+      "m": 11,
+      "a": [
+        "ObjectName",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(field: \"ObjectName\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "Building",
+        "post"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"Building\", verb: \"post\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "AddressLine1",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"AddressLine1\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "AddressLine2",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"AddressLine2\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "City",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"City\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "State",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"State\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "PostalCode",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"PostalCode\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "Bucket",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"Bucket\", verb: \"put\")"
+    },
+    {
+      "m": 12,
+      "a": [
+        "ObjectName",
+        "put"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpPrimitive_KeepsPublicReaderLexeme(field: \"ObjectName\", verb: \"put\")"
+    },
+    {
+      "m": 13,
+      "a": [
+        "Building",
+        "{}"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpMalformedOccurrenceBeforeValid_Is400WithoutMutation(field: \"Building\", token: \"{}\")"
+    },
+    {
+      "m": 13,
+      "a": [
+        "PostalCode",
+        "[]"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpMalformedOccurrenceBeforeValid_Is400WithoutMutation(field: \"PostalCode\", token: \"[]\")"
+    },
+    {
+      "m": 13,
+      "a": [
+        "Bucket",
+        "{}"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpMalformedOccurrenceBeforeValid_Is400WithoutMutation(field: \"Bucket\", token: \"{}\")"
+    },
+    {
+      "m": 13,
+      "a": [
+        "ObjectName",
+        "[]"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpMalformedOccurrenceBeforeValid_Is400WithoutMutation(field: \"ObjectName\", token: \"[]\")"
+    },
+    {
+      "m": 14,
+      "a": [
+        "Building",
+        "anonymous",
+        {
+          "enum": "Unauthorized"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpDeniedActor_HasNoMetadataEffects(field: \"Building\", authority: \"anonymous\", expected: Unauthorized)"
+    },
+    {
+      "m": 14,
+      "a": [
+        "Building",
+        "missing-permission",
+        {
+          "enum": "Forbidden"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpDeniedActor_HasNoMetadataEffects(field: \"Building\", authority: \"missing-permission\", expected: Forbidden)"
+    },
+    {
+      "m": 14,
+      "a": [
+        "Bucket",
+        "anonymous",
+        {
+          "enum": "Unauthorized"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpDeniedActor_HasNoMetadataEffects(field: \"Bucket\", authority: \"anonymous\", expected: Unauthorized)"
+    },
+    {
+      "m": 14,
+      "a": [
+        "Bucket",
+        "missing-permission",
+        {
+          "enum": "Forbidden"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.HttpDeniedActor_HasNoMetadataEffects(field: \"Bucket\", authority: \"missing-permission\", expected: Forbidden)"
+    },
+    {
+      "m": 15,
+      "a": [
+        "missing",
+        {
+          "enum": "PreconditionRequired"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.VersionedAddress_KeepsPreconditionsCacheAndTextBinding(condition: \"missing\", expected: PreconditionRequired)"
+    },
+    {
+      "m": 15,
+      "a": [
+        "malformed",
+        {
+          "enum": "BadRequest"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.VersionedAddress_KeepsPreconditionsCacheAndTextBinding(condition: \"malformed\", expected: BadRequest)"
+    },
+    {
+      "m": 15,
+      "a": [
+        "stale",
+        {
+          "enum": "PreconditionFailed"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.VersionedAddress_KeepsPreconditionsCacheAndTextBinding(condition: \"stale\", expected: PreconditionFailed)"
+    },
+    {
+      "m": 15,
+      "a": [
+        "current",
+        {
+          "enum": "NoContent"
+        }
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataBindingHttpTests.VersionedAddress_KeepsPreconditionsCacheAndTextBinding(condition: \"current\", expected: NoContent)"
+    },
+    {
+      "m": 16,
+      "a": [
+        "address_id"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.MalformedSyntax_ReplaysNativeFieldFailure(caseId: \"address_id\")"
+    },
+    {
+      "m": 16,
+      "a": [
+        "signature_id"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.MalformedSyntax_ReplaysNativeFieldFailure(caseId: \"signature_id\")"
+    },
+    {
+      "m": 16,
+      "a": [
+        "address_unknown"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.MalformedSyntax_ReplaysNativeFieldFailure(caseId: \"address_unknown\")"
+    },
+    {
+      "m": 16,
+      "a": [
+        "signature_text"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataRequestBindingTests.MalformedSyntax_ReplaysNativeFieldFailure(caseId: \"signature_text\")"
+    },
+    {
+      "m": 17,
+      "a": [
+        "UpsertAddressRequest"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataOpenApiTests.ActualDocument_KeepsNamedRequestSchemaAndNativeRequiredNullability(schemaName: \"UpsertAddressRequest\")"
+    },
+    {
+      "m": 17,
+      "a": [
+        "UpsertSignatureImageFileRequest"
+      ],
+      "name": "Legacy.Maliev.EmployeeService.Tests.Metadata.EmployeeMetadataOpenApiTests.ActualDocument_KeepsNamedRequestSchemaAndNativeRequiredNullability(schemaName: \"UpsertSignatureImageFileRequest\")"
+    }
+  ],
+  "groups": {
+    "publicReader": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118
+    ],
+    "candidate": [
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149,
+      150,
+      151,
+      152,
+      153,
+      154,
+      155,
+      156,
+      157,
+      158,
+      159,
+      160,
+      161,
+      162,
+      163,
+      164,
+      165,
+      166,
+      167,
+      168,
+      169,
+      170,
+      171,
+      172,
+      173,
+      174,
+      175,
+      176,
+      177,
+      178,
+      179,
+      180,
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+      194,
+      195,
+      196,
+      197,
+      198,
+      199,
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214,
+      215,
+      216,
+      217,
+      218,
+      219,
+      220,
+      221,
+      222,
+      223,
+      224,
+      225,
+      226,
+      227,
+      228,
+      229,
+      230,
+      231,
+      232,
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242,
+      243,
+      244,
+      245,
+      246,
+      247,
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256,
+      257,
+      258,
+      259,
+      260,
+      261,
+      262,
+      263,
+      264,
+      265,
+      266,
+      267,
+      268,
+      269,
+      270,
+      271,
+      272,
+      273,
+      274,
+      275,
+      276,
+      277,
+      278,
+      279,
+      280,
+      281,
+      282,
+      283,
+      284,
+      285,
+      286,
+      287,
+      288,
+      289,
+      290,
+      291,
+      292,
+      293,
+      294,
+      295,
+      296,
+      297,
+      298,
+      299,
+      300,
+      301,
+      302,
+      303,
+      304,
+      305,
+      306,
+      307,
+      308,
+      309,
+      310,
+      311,
+      312,
+      313,
+      314,
+      315,
+      316,
+      317,
+      318,
+      319,
+      320,
+      321,
+      322,
+      323,
+      324,
+      325,
+      326,
+      327,
+      328,
+      329,
+      330,
+      331,
+      332,
+      333,
+      334,
+      335,
+      336,
+      337,
+      338,
+      339,
+      340,
+      341,
+      342,
+      343,
+      344,
+      345,
+      346,
+      347,
+      348,
+      349,
+      350,
+      351,
+      352,
+      353,
+      354,
+      355,
+      356,
+      357,
+      358,
+      359,
+      360,
+      361,
+      362,
+      363,
+      364,
+      365,
+      366,
+      367,
+      368,
+      369,
+      370,
+      371,
+      372,
+      373,
+      374,
+      375,
+      376,
+      377,
+      378,
+      379,
+      380,
+      381,
+      382,
+      383,
+      384,
+      385,
+      386,
+      387,
+      388,
+      389,
+      390,
+      391,
+      392,
+      393,
+      394,
+      395,
+      396,
+      397,
+      398,
+      399,
+      400,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409,
+      410,
+      411,
+      412,
+      413,
+      414,
+      415,
+      416,
+      417,
+      418,
+      419,
+      420,
+      421,
+      422,
+      423,
+      424,
+      425,
+      426,
+      427,
+      428,
+      429,
+      430,
+      431,
+      432,
+      433,
+      434,
+      435,
+      436,
+      437,
+      438,
+      439,
+      440,
+      441
+    ],
+    "openApi": [
+      440,
+      441
+    ]
+  },
+  "baselineRed": [
+    {
+      "r": 119,
+      "forecast": "Passed"
+    },
+    {
+      "r": 120,
+      "forecast": "Failed"
+    },
+    {
+      "r": 121,
+      "forecast": "Passed"
+    },
+    {
+      "r": 122,
+      "forecast": "Passed"
+    },
+    {
+      "r": 123,
+      "forecast": "Failed"
+    },
+    {
+      "r": 124,
+      "forecast": "Passed"
+    },
+    {
+      "r": 125,
+      "forecast": "Passed"
+    },
+    {
+      "r": 126,
+      "forecast": "Passed"
+    },
+    {
+      "r": 127,
+      "forecast": "Passed"
+    },
+    {
+      "r": 128,
+      "forecast": "Passed"
+    },
+    {
+      "r": 129,
+      "forecast": "Passed"
+    },
+    {
+      "r": 130,
+      "forecast": "Passed"
+    },
+    {
+      "r": 131,
+      "forecast": "Passed"
+    },
+    {
+      "r": 132,
+      "forecast": "Failed"
+    },
+    {
+      "r": 133,
+      "forecast": "Failed"
+    },
+    {
+      "r": 134,
+      "forecast": "Failed"
+    },
+    {
+      "r": 135,
+      "forecast": "Failed"
+    },
+    {
+      "r": 136,
+      "forecast": "Failed"
+    },
+    {
+      "r": 137,
+      "forecast": "Failed"
+    },
+    {
+      "r": 138,
+      "forecast": "Failed"
+    },
+    {
+      "r": 139,
+      "forecast": "Failed"
+    },
+    {
+      "r": 140,
+      "forecast": "Failed"
+    },
+    {
+      "r": 147,
+      "forecast": "Passed"
+    },
+    {
+      "r": 148,
+      "forecast": "Failed"
+    },
+    {
+      "r": 149,
+      "forecast": "Passed"
+    },
+    {
+      "r": 150,
+      "forecast": "Passed"
+    },
+    {
+      "r": 151,
+      "forecast": "Failed"
+    },
+    {
+      "r": 152,
+      "forecast": "Passed"
+    },
+    {
+      "r": 153,
+      "forecast": "Passed"
+    },
+    {
+      "r": 154,
+      "forecast": "Passed"
+    },
+    {
+      "r": 155,
+      "forecast": "Passed"
+    },
+    {
+      "r": 156,
+      "forecast": "Passed"
+    },
+    {
+      "r": 157,
+      "forecast": "Passed"
+    },
+    {
+      "r": 158,
+      "forecast": "Passed"
+    },
+    {
+      "r": 159,
+      "forecast": "Passed"
+    },
+    {
+      "r": 160,
+      "forecast": "Failed"
+    },
+    {
+      "r": 161,
+      "forecast": "Failed"
+    },
+    {
+      "r": 162,
+      "forecast": "Failed"
+    },
+    {
+      "r": 163,
+      "forecast": "Failed"
+    },
+    {
+      "r": 164,
+      "forecast": "Failed"
+    },
+    {
+      "r": 165,
+      "forecast": "Failed"
+    },
+    {
+      "r": 166,
+      "forecast": "Failed"
+    },
+    {
+      "r": 167,
+      "forecast": "Failed"
+    },
+    {
+      "r": 168,
+      "forecast": "Failed"
+    },
+    {
+      "r": 175,
+      "forecast": "Passed"
+    },
+    {
+      "r": 176,
+      "forecast": "Failed"
+    },
+    {
+      "r": 177,
+      "forecast": "Passed"
+    },
+    {
+      "r": 178,
+      "forecast": "Passed"
+    },
+    {
+      "r": 179,
+      "forecast": "Failed"
+    },
+    {
+      "r": 180,
+      "forecast": "Passed"
+    },
+    {
+      "r": 181,
+      "forecast": "Passed"
+    },
+    {
+      "r": 182,
+      "forecast": "Passed"
+    },
+    {
+      "r": 183,
+      "forecast": "Passed"
+    },
+    {
+      "r": 184,
+      "forecast": "Passed"
+    },
+    {
+      "r": 185,
+      "forecast": "Passed"
+    },
+    {
+      "r": 186,
+      "forecast": "Passed"
+    },
+    {
+      "r": 187,
+      "forecast": "Passed"
+    },
+    {
+      "r": 188,
+      "forecast": "Failed"
+    },
+    {
+      "r": 189,
+      "forecast": "Failed"
+    },
+    {
+      "r": 190,
+      "forecast": "Failed"
+    },
+    {
+      "r": 191,
+      "forecast": "Failed"
+    },
+    {
+      "r": 192,
+      "forecast": "Failed"
+    },
+    {
+      "r": 193,
+      "forecast": "Failed"
+    },
+    {
+      "r": 194,
+      "forecast": "Failed"
+    },
+    {
+      "r": 195,
+      "forecast": "Failed"
+    },
+    {
+      "r": 196,
+      "forecast": "Failed"
+    },
+    {
+      "r": 203,
+      "forecast": "Passed"
+    },
+    {
+      "r": 204,
+      "forecast": "Failed"
+    },
+    {
+      "r": 205,
+      "forecast": "Passed"
+    },
+    {
+      "r": 206,
+      "forecast": "Passed"
+    },
+    {
+      "r": 207,
+      "forecast": "Failed"
+    },
+    {
+      "r": 208,
+      "forecast": "Passed"
+    },
+    {
+      "r": 209,
+      "forecast": "Passed"
+    },
+    {
+      "r": 210,
+      "forecast": "Passed"
+    },
+    {
+      "r": 211,
+      "forecast": "Passed"
+    },
+    {
+      "r": 212,
+      "forecast": "Passed"
+    },
+    {
+      "r": 213,
+      "forecast": "Passed"
+    },
+    {
+      "r": 214,
+      "forecast": "Passed"
+    },
+    {
+      "r": 215,
+      "forecast": "Passed"
+    },
+    {
+      "r": 216,
+      "forecast": "Failed"
+    },
+    {
+      "r": 217,
+      "forecast": "Failed"
+    },
+    {
+      "r": 218,
+      "forecast": "Failed"
+    },
+    {
+      "r": 219,
+      "forecast": "Failed"
+    },
+    {
+      "r": 220,
+      "forecast": "Failed"
+    },
+    {
+      "r": 221,
+      "forecast": "Failed"
+    },
+    {
+      "r": 222,
+      "forecast": "Failed"
+    },
+    {
+      "r": 223,
+      "forecast": "Failed"
+    },
+    {
+      "r": 224,
+      "forecast": "Failed"
+    },
+    {
+      "r": 231,
+      "forecast": "Passed"
+    },
+    {
+      "r": 232,
+      "forecast": "Failed"
+    },
+    {
+      "r": 233,
+      "forecast": "Passed"
+    },
+    {
+      "r": 234,
+      "forecast": "Passed"
+    },
+    {
+      "r": 235,
+      "forecast": "Failed"
+    },
+    {
+      "r": 236,
+      "forecast": "Passed"
+    },
+    {
+      "r": 237,
+      "forecast": "Passed"
+    },
+    {
+      "r": 238,
+      "forecast": "Passed"
+    },
+    {
+      "r": 239,
+      "forecast": "Passed"
+    },
+    {
+      "r": 240,
+      "forecast": "Passed"
+    },
+    {
+      "r": 241,
+      "forecast": "Passed"
+    },
+    {
+      "r": 242,
+      "forecast": "Passed"
+    },
+    {
+      "r": 243,
+      "forecast": "Passed"
+    },
+    {
+      "r": 244,
+      "forecast": "Failed"
+    },
+    {
+      "r": 245,
+      "forecast": "Failed"
+    },
+    {
+      "r": 246,
+      "forecast": "Failed"
+    },
+    {
+      "r": 247,
+      "forecast": "Failed"
+    },
+    {
+      "r": 248,
+      "forecast": "Failed"
+    },
+    {
+      "r": 249,
+      "forecast": "Failed"
+    },
+    {
+      "r": 250,
+      "forecast": "Failed"
+    },
+    {
+      "r": 251,
+      "forecast": "Failed"
+    },
+    {
+      "r": 252,
+      "forecast": "Failed"
+    },
+    {
+      "r": 259,
+      "forecast": "Passed"
+    },
+    {
+      "r": 260,
+      "forecast": "Failed"
+    },
+    {
+      "r": 261,
+      "forecast": "Passed"
+    },
+    {
+      "r": 262,
+      "forecast": "Passed"
+    },
+    {
+      "r": 263,
+      "forecast": "Failed"
+    },
+    {
+      "r": 264,
+      "forecast": "Passed"
+    },
+    {
+      "r": 265,
+      "forecast": "Passed"
+    },
+    {
+      "r": 266,
+      "forecast": "Passed"
+    },
+    {
+      "r": 267,
+      "forecast": "Passed"
+    },
+    {
+      "r": 268,
+      "forecast": "Passed"
+    },
+    {
+      "r": 269,
+      "forecast": "Passed"
+    },
+    {
+      "r": 270,
+      "forecast": "Passed"
+    },
+    {
+      "r": 271,
+      "forecast": "Passed"
+    },
+    {
+      "r": 272,
+      "forecast": "Failed"
+    },
+    {
+      "r": 273,
+      "forecast": "Failed"
+    },
+    {
+      "r": 274,
+      "forecast": "Failed"
+    },
+    {
+      "r": 275,
+      "forecast": "Failed"
+    },
+    {
+      "r": 276,
+      "forecast": "Failed"
+    },
+    {
+      "r": 277,
+      "forecast": "Failed"
+    },
+    {
+      "r": 278,
+      "forecast": "Failed"
+    },
+    {
+      "r": 279,
+      "forecast": "Failed"
+    },
+    {
+      "r": 280,
+      "forecast": "Failed"
+    },
+    {
+      "r": 287,
+      "forecast": "Passed"
+    },
+    {
+      "r": 288,
+      "forecast": "Failed"
+    },
+    {
+      "r": 289,
+      "forecast": "Passed"
+    },
+    {
+      "r": 290,
+      "forecast": "Passed"
+    },
+    {
+      "r": 291,
+      "forecast": "Failed"
+    },
+    {
+      "r": 292,
+      "forecast": "Passed"
+    },
+    {
+      "r": 293,
+      "forecast": "Passed"
+    },
+    {
+      "r": 294,
+      "forecast": "Passed"
+    },
+    {
+      "r": 295,
+      "forecast": "Passed"
+    },
+    {
+      "r": 296,
+      "forecast": "Passed"
+    },
+    {
+      "r": 297,
+      "forecast": "Passed"
+    },
+    {
+      "r": 298,
+      "forecast": "Passed"
+    },
+    {
+      "r": 299,
+      "forecast": "Passed"
+    },
+    {
+      "r": 300,
+      "forecast": "Failed"
+    },
+    {
+      "r": 301,
+      "forecast": "Failed"
+    },
+    {
+      "r": 302,
+      "forecast": "Failed"
+    },
+    {
+      "r": 303,
+      "forecast": "Failed"
+    },
+    {
+      "r": 304,
+      "forecast": "Failed"
+    },
+    {
+      "r": 305,
+      "forecast": "Failed"
+    },
+    {
+      "r": 306,
+      "forecast": "Failed"
+    },
+    {
+      "r": 307,
+      "forecast": "Failed"
+    },
+    {
+      "r": 308,
+      "forecast": "Failed"
+    },
+    {
+      "r": 315,
+      "forecast": "Passed"
+    },
+    {
+      "r": 316,
+      "forecast": "Failed"
+    },
+    {
+      "r": 317,
+      "forecast": "Passed"
+    },
+    {
+      "r": 318,
+      "forecast": "Passed"
+    },
+    {
+      "r": 319,
+      "forecast": "Failed"
+    },
+    {
+      "r": 320,
+      "forecast": "Passed"
+    },
+    {
+      "r": 321,
+      "forecast": "Passed"
+    },
+    {
+      "r": 322,
+      "forecast": "Passed"
+    },
+    {
+      "r": 323,
+      "forecast": "Passed"
+    },
+    {
+      "r": 324,
+      "forecast": "Passed"
+    },
+    {
+      "r": 325,
+      "forecast": "Passed"
+    },
+    {
+      "r": 326,
+      "forecast": "Passed"
+    },
+    {
+      "r": 327,
+      "forecast": "Passed"
+    },
+    {
+      "r": 328,
+      "forecast": "Failed"
+    },
+    {
+      "r": 329,
+      "forecast": "Failed"
+    },
+    {
+      "r": 330,
+      "forecast": "Failed"
+    },
+    {
+      "r": 331,
+      "forecast": "Failed"
+    },
+    {
+      "r": 332,
+      "forecast": "Failed"
+    },
+    {
+      "r": 333,
+      "forecast": "Failed"
+    },
+    {
+      "r": 334,
+      "forecast": "Failed"
+    },
+    {
+      "r": 335,
+      "forecast": "Failed"
+    },
+    {
+      "r": 336,
+      "forecast": "Failed"
+    }
+  ],
+  "required": "Join every expected display name to TRX definition+execution+result; unique IDs, no skips/missing/extra. Forecast must be qualified against actual xUnit discovery, not relabeled as measured.",
+  "nativeRuntime": "NOT RUN"
+}

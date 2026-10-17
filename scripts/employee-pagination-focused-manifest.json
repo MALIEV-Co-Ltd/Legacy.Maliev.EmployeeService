@@ -129,7 +129,7 @@
       "testId": "885b2b08-28e5-b1b1-4f48-5d6e37cc6e99"
     },
     {
-      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.TextSearch_PreservesEnglishThaiAndSignificantPadding(search: \"\u0e27\u0e34\u0e28\u0e27\", id: 2)",
+      "name": "Legacy.Maliev.EmployeeService.Tests.EmployeeDirectoryParityHttpTests.TextSearch_PreservesEnglishThaiAndSignificantPadding(search: \"วิศว\", id: 2)",
       "testId": "46eea657-6ab5-aa21-7eff-2eba2929514c"
     },
     {
@@ -329,8 +329,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 2680,
-      "sha256": "1f0adadfb52dcc0155c1ed566ceeb0ba9172cccaa6bbc558f7ce4d4b52323237"
+      "bytes": 2846,
+      "sha256": "fda322d1af830331d9d8cc8c8fe0bda3adfddac5081789e0b474004a38d73abf"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
@@ -574,8 +574,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
-      "bytes": 1613,
-      "sha256": "843efa58a1f622058dece181439012803459dba1b1aca5083fa3d0e3f9164a3e"
+      "bytes": 1701,
+      "sha256": "86e20c56b715f3e20dc408e60d548d88a28d2c488fc430fcaf84fec60f14a22d"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/PublishWorkflowPermissionContractTests.cs",
@@ -644,5 +644,76 @@
     "dependencyPinsSha256": "9a0e1d76f98ceb7d96a11468c1e5fb8678f009a7339846d69ca730f911414c3d",
     "preservedBaselineBehaviorHead": "c7cf8172b83591499070588654d570a9d700723d",
     "preservedOrdinaryFullRun": 38108335884
+  },
+  "metadata77Successor": {
+    "predecessorGitBlob": "1655c3b51639157030a00e5be909cc752826fc67",
+    "sourceOnly": true,
+    "featureTree": "67a1a410df7c26a5955aa2766910e8212faeb535",
+    "featureManifest": "2000ed97d0f4b228a359e54fda50d4de8117a4c8",
+    "changedPins": [
+      "Legacy.Maliev.EmployeeService.Api/Program.cs",
+      "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj"
+    ],
+    "preserves": "selected49/dependencyPins/bindingRevision/historical witnesses/admission implementation"
+  },
+  "employee78Correction": {
+    "baseHead": "978d9eeca603d8535a52ca2cb9939bd3f0107d89",
+    "predecessorManifestBlob": "4cb60290c3bd9e1377f6f41cba513b98ebf4de19",
+    "scope": "temporary safe gitleaks provenance diagnostic, existing scan unchanged; remove after classification",
+    "changedPin": {
+      "preimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 2174,
+        "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
+      },
+      "postimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 3508,
+        "sha256": "564297fece8ef1bdde64b867e10f8bf21fc8a32c88b1ee43fbd8e502b922a2a4"
+      }
+    },
+    "selected49Unchanged": true,
+    "dependencyPinsUnchanged": true
+  },
+  "employee78PrivacyCorrection": {
+    "predecessorTree": "44ec6bd3acd94ed10d3b235c497e98bee5ced650",
+    "workflowPreimage": "93e3140747a77f15f2a471948799a01840261a78",
+    "scope": "capture both scanner streams in private bounded files; sanitized parser only; same scanner/rules/history/status",
+    "original49AndDependenciesUnchanged": true
+  },
+  "employee78ProvenanceSuccessor": {
+    "predecessorHead": "37e38792542b67dbbf5da10473ed80d8de25d95f",
+    "scope": "typed exact Git identity +explicit local restore properties; temporary duplicate diagnostic removed",
+    "workflowPin": {
+      "preimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 3508,
+        "sha256": "564297fece8ef1bdde64b867e10f8bf21fc8a32c88b1ee43fbd8e502b922a2a4"
+      },
+      "postimage": {
+        "path": ".github/workflows/_build-and-test.yml",
+        "bytes": 2174,
+        "sha256": "ad9b7fc1aecc2c846e24351802db996b475671950b1ad185360ac8d6450dc4df"
+      }
+    },
+    "originalScannerAndWorkflowRestored": true,
+    "selected49AndDependenciesUnchanged": true
+  },
+  "employee78FactoryBindingCorrection": {
+    "baseHead": "29427e685eba8d06afee4df3be27648f2c845c55",
+    "changedPin": {
+      "preimage": {
+        "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+        "bytes": 2784,
+        "sha256": "659cd00cb03822e6b5f34eb68e4d249f4dafccefa0a6525e1bf2e1ebf5d247ee"
+      },
+      "postimage": {
+        "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
+        "bytes": 2846,
+        "sha256": "fda322d1af830331d9d8cc8c8fe0bda3adfddac5081789e0b474004a38d73abf"
+      }
+    },
+    "scope": "bind reviewed callback registration relocation only; selected49/dependencyPins/guard/historical witnesses unchanged",
+    "runtime": "NOT RUN"
   }
 }
