@@ -286,15 +286,16 @@ def prepare_baseline(value):
     destination = baseline_path(value)
     proof_source()
     plan = manifest()
-    # git archive produces canonical Git bytes, unlike the forced-CRLF checkout.
-    shared.source_inventory(destination, plan["baseline"], (), ())
+    # git archive applies .gitattributes, including the two sealed CRLF contracts.
     custody = shared.object_json(shared.bounded_read(shared.CUSTODY))
+    checkout = shared.checkout_contracts(custody)
+    shared.source_inventory(destination, plan["baseline"], (), checkout)
     candidate = {row["path"]: row for row in custody["candidate"]}
     for name in plan["baselineOverlay"]:
         target = shared.relative_file(destination, name)
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(shared.bounded_read(shared.relative_file(ROOT, name)))
-    shared.source_inventory(destination, baseline_rows(plan, candidate), (), ())
+    shared.source_inventory(destination, baseline_rows(plan, candidate), (), checkout)
     need(not (destination / "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeAddressInputJsonOptions.cs").exists(),
          "New production validator absent from baseline")
     return {"phase": "tests-only-current-native-baseline", "sourcePaths": len(plan["baseline"]) + 4,
@@ -313,7 +314,7 @@ def final_source(value):
     exclusions = (".git", ".dependencies", ".metadata-baseline", "runner-metadata", own) + outputs
     shared.source_inventory(ROOT, custody["candidate"], exclusions, shared.checkout_contracts(custody))
     candidate = {row["path"]: row for row in custody["candidate"]}
-    shared.source_inventory(destination, baseline_rows(plan, candidate), outputs, ())
+    shared.source_inventory(destination, baseline_rows(plan, candidate), outputs, shared.checkout_contracts(custody))
     return {"phase": "final-source", "candidateSuccessorSha256": before["candidateSuccessorSha256"],
             "baselineHead": BASE_HEAD, "baselineProductionUnchanged": True, "overlayPaths": 4, **GRANTS}
 
@@ -354,6 +355,10 @@ def main():
 if __name__ == "__main__":
     try:
         main()
+    except shared.SourceRefusal as error:
+        print(json.dumps({"addressInputProof": "refused", "category": error.category,
+                          "path": error.path, **GRANTS}), file=sys.stderr)
+        sys.exit(2)
     except (ValueError, OSError, UnicodeError, ET.ParseError, KeyError, TypeError, IndexError):
         print(json.dumps({"addressInputProof": "refused", **GRANTS}), file=sys.stderr)
         sys.exit(2)

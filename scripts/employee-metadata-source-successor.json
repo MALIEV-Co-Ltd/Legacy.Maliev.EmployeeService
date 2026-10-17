@@ -1438,8 +1438,8 @@
     },
     {
       "path": "docs/employee-address-input-proof.md",
-      "bytes": 5154,
-      "blob": "05414e705f14937b62bc788b93fe5175b31de273"
+      "bytes": 5236,
+      "blob": "44dec997f6dd7b724026c932e32374820db916ef"
     },
     {
       "path": "docs/employee-administrative-email-literal-source-20261011.md",
@@ -1638,8 +1638,8 @@
     },
     {
       "path": "scripts/test_employee_address_input_proof.py",
-      "bytes": 8969,
-      "blob": "76bab5e6a9c31a07cb5736fc79124b5a943ab9e8"
+      "bytes": 10206,
+      "blob": "b9f6e8369c65e93f18a6940bd2881970002aa43a"
     },
     {
       "path": "scripts/test_employee_authority.py",
@@ -1718,8 +1718,8 @@
     },
     {
       "path": "scripts/verify_employee_address_input_proof.py",
-      "bytes": 21772,
-      "blob": "e42339e0e6a6179af1fba3cee6243800feee5c50"
+      "bytes": 22091,
+      "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",

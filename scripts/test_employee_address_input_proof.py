@@ -136,5 +136,29 @@ class TrxControls(unittest.TestCase):
     def test_malformed_guid_refused(self):
         self.refuse(lambda root: root.find("t:Results/t:UnitTestResult", proof.NS).set("testId", "not-guid"))
 
+class ArchiveRepresentationControls(unittest.TestCase):
+    def pins(self):
+        plan = proof.manifest()
+        rows = {row["path"]: row for row in plan["baseline"]}
+        for pin in shared.CHECKOUT_REPRESENTATIONS:
+            yield rows[pin["path"]], shared.bounded_read(proof.ROOT / pin["path"])
+
+    def test_archive_crlf_contracts_bind_exact_git_sources(self):
+        for row, raw in self.pins():
+            canonical = shared.canonical_source_bytes(row, raw, shared.CHECKOUT_REPRESENTATIONS)
+            self.assertEqual(len(canonical), row["bytes"])
+            self.assertEqual(shared.git_blob(canonical), row["blob"])
+            self.assertNotEqual(raw, canonical)
+
+    def test_archive_canonical_lf_is_not_an_accepted_crlf_representation(self):
+        for row, raw in self.pins():
+            with self.assertRaises(shared.SourceRefusal):
+                shared.canonical_source_bytes(row, raw.replace(b"\r\n", b"\n"), shared.CHECKOUT_REPRESENTATIONS)
+
+    def test_archive_modified_crlf_source_is_refused(self):
+        for row, raw in self.pins():
+            with self.assertRaises(shared.SourceRefusal):
+                shared.canonical_source_bytes(row, raw + b"# changed\r\n", shared.CHECKOUT_REPRESENTATIONS)
+
 if __name__ == "__main__":
     unittest.main()
