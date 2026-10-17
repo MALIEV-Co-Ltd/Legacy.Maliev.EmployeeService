@@ -164,18 +164,28 @@ public sealed class EmployeeMetadataBindingHttpTests(EmployeeRouteAcceptanceFixt
         await db.SaveChangesAsync();
         var first = new Employee
         {
-            FirstName = "Synthetic", LastName = "First", Email = "first@example.invalid", HomeAddressId = address.Id,
+            FirstName = "Synthetic",
+            LastName = "First",
+            Email = "first@example.invalid",
+            HomeAddressId = address.Id,
         };
         var second = new Employee
         {
-            FirstName = "Synthetic", LastName = "Second", Email = "second@example.invalid", HomeAddressId = address.Id,
+            FirstName = "Synthetic",
+            LastName = "Second",
+            Email = "second@example.invalid",
+            HomeAddressId = address.Id,
         };
         db.Employees.AddRange(first, second);
         await db.SaveChangesAsync();
         var created = new DateTime(2020, 1, 1);
         var signature = new SignatureImageFile
         {
-            EmployeeId = first.Id, Bucket = "seed", ObjectName = "seed.png", CreatedDate = created, ModifiedDate = created,
+            EmployeeId = first.Id,
+            Bucket = "seed",
+            ObjectName = "seed.png",
+            CreatedDate = created,
+            ModifiedDate = created,
         };
         db.SignatureImageFiles.Add(signature);
         await db.SaveChangesAsync();

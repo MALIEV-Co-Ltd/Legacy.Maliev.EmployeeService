@@ -1443,8 +1443,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataBindingHttpTests.cs",
-      "bytes": 14244,
-      "blob": "2eac3adb9d72f9608e2afaf80fcf762159bc4bba"
+      "bytes": 14364,
+      "blob": "73a509318b9e86eab9c6e9162afbdf8adfd5f1dc"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Metadata/EmployeeMetadataOpenApiTests.cs",
@@ -1816,5 +1816,13 @@
     "observed": "83controlsPASS; focusedguard staleProgramcodePin refusal; ordinary0W1E xUnit2031; runtime/native/schema NOT RUN",
     "scope": "Assert.Single predicate overload same predicate; exactProgrambytesSHA256 active49pin; all corresponding source tuples",
     "runtime": "NOT RUN"
+  },
+  "httpWhitespaceSuccessor": {
+    "baseHead": "5673a4f357b2908e6bc41a6c1fc8a1c5791d3e44",
+    "baseTree": "ebf06b4df16af124bca717609130df122828df43",
+    "officialOrdinaryJob": 117294513352,
+    "observed": "Release0W0E/full885P0F0S PASS; format10WHITESPACE in3 object initializers lines167/171/178; later gates skipped",
+    "scope": "replace exactly10 comma-following spaces with newline+12spaces in3 object initializers; semantics/token stream unchanged; refresh only corresponding source tuple",
+    "runtime": "NOT RUN; all fresh exact-head gates required"
   }
 }
