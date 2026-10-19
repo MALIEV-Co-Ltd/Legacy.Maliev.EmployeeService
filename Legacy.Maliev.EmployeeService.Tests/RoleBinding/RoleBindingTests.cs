@@ -272,8 +272,8 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         {
             // Table names are the fixed synthetic fixture roster, never request input.
             var sql = "SELECT jsonb_build_object('row', to_jsonb(t), 'xmin', t.xmin::text)::text AS \"Value\" FROM \"" + table + "\" t";
-            if (table == "Role") sql += " WHERE t.\"Id\" <> " + excludedRole.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            sql += " ORDER BY t.\"Id\"";
+            if (table == "Role") sql += " WHERE t.\"ID\" <> " + excludedRole.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            sql += " ORDER BY t.\"ID\"";
             rows[table] = await db.Database.SqlQueryRaw<string>(sql).ToArrayAsync(token);
         }
         return JsonSerializer.Serialize(rows);
