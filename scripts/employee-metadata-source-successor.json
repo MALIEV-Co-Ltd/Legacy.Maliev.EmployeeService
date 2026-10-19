@@ -988,8 +988,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 3457,
-      "blob": "45497f603cc3c1b398a2a6b3f33c4499e14865f5"
+      "bytes": 3619,
+      "blob": "7f2f7635f1aef51b50dbe039657455603c3287cc"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
@@ -1825,6 +1825,21 @@
       "path": "tooling/Test-EmployeeScaffoldContract.ps1",
       "bytes": 10503,
       "blob": "4084d5406237df28bb094ccf6bba129fbdad7b2e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/RoleBinding/RoleBindingCases.cs",
+      "bytes": 3763,
+      "blob": "104d9756418e987e4cc832ef2d0464cfff581f18"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Tests/RoleBinding/RoleBindingTests.cs",
+      "bytes": 15785,
+      "blob": "1c33cc28d674822f32a65b11dd60739624c35d89"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeRoleJsonOptions.cs",
+      "bytes": 3219,
+      "blob": "caf526e007d2bc96b4f5bbb374574ca9b9ba1b91"
     }
   ],
   "baselineTestOverlay": [
