@@ -25,6 +25,7 @@ static async Task RunHostAsync(string[] startupArgs)
     var builder = WebApplication.CreateBuilder(startupArgs);
 
     builder.AddServiceDefaults();
+    builder.AddPrivateRequestObservation("employee");
     builder.Logging.AddEmployeePrivateDiagnostics();
     builder.AddDefaultApiVersioning();
     builder.AddPostgresDbContext<EmployeeDbContext>(connectionName: "EmployeeDbContext");

@@ -988,8 +988,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 3403,
-      "blob": "10912353de3e66a43669278190757f372d4504f9"
+      "bytes": 3457,
+      "blob": "45497f603cc3c1b398a2a6b3f33c4499e14865f5"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Properties/launchSettings.json",
@@ -1624,7 +1624,7 @@
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
       "bytes": 34975,
-      "blob": "dc9b6b1234aa7af532c81c82ab8a4de31409ee85"
+      "blob": "50e7d21d897a78dd538240b353e11bac7c7fc5bc"
     },
     {
       "path": "scripts/employee-signature-input-proof.json",
