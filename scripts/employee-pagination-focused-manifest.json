@@ -304,8 +304,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Controllers/SignaturesController.cs",
-      "bytes": 3141,
-      "sha256": "39a91a2d55c7d8aacf93810432e3c6849d506e535129bbbf85a92143a219739b"
+      "bytes": 3131,
+      "sha256": "837df34df11fafd06468df62f7a262bed8aad223ac716cbd9d2c36989aa0af5f"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Documentation/EmployeeOpenApi.cs",
@@ -544,8 +544,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureBucketLiteralHttpTests.cs",
-      "bytes": 9573,
-      "sha256": "ec7eaeac5919f99a41a3872e48e893defe86b0b56c16221a78a3b1a9fee7ec19"
+      "bytes": 16127,
+      "sha256": "2292aac7633a1bcb34a15ba8eb58d37b36bf1b2310b0e5b00ea232664b472c56"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSignatureDeletionTruthHttpTests.cs",
