@@ -103,7 +103,8 @@ public sealed class EmployeeOriginalBodyBoundaryTests(EmployeeRouteAcceptanceFix
         Assert.Equal(before, samples.Select(value => JsonSerializer.Serialize(value, value.GetType(), json)).ToArray());
         Assert.Equal("123", JsonSerializer.Deserialize<UpsertAddressRequest>("{\"Building\":123}", json)!.Building);
         Assert.Equal("true", JsonSerializer.Deserialize<UpsertSignatureImageFileRequest>("{\"Bucket\":true}", json)!.Bucket);
-        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpsertRoleRequest>("{\"Name\":123}", json));
+        Assert.Equal("123", JsonSerializer.Deserialize<UpsertRoleRequest>("{\"Name\":123}", json)!.Name);
+        Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpsertRoleRequest>("{\"Name\":123}", minimal));
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpdateEmployeeSelfProfileRequest>("{\"FirstName\":123}", json));
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<EmployeeHomeAddressEditRequest>("{\"Building\":123}", json));
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<EmployeeResponse>("{\"FirstName\":123}", json));
