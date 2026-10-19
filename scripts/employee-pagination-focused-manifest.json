@@ -329,8 +329,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Program.cs",
-      "bytes": 3403,
-      "sha256": "bd2e8586b975fd803fc73a2306ec0b4e3b6bb88e80e44245b8e84f7fe583d9d6"
+      "bytes": 3457,
+      "sha256": "1ffe30159700476b8790234b33ac7684aa6ac0c5864658560646d15c3c1f8f34"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Legacy.Maliev.EmployeeService.Application.csproj",
@@ -494,8 +494,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProductionPipelineHttpTests.cs",
-      "bytes": 5718,
-      "sha256": "bc85f232b712d8787e364d685850fb2be54f1570ac91567b0fcbbad447ea1667"
+      "bytes": 23693,
+      "sha256": "dc1246ed7e9e23c554b04b8073633f3e73b6626ba9380979a6e92f7248fd8e04"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeProfileDeletionIsolationHttpTests.cs",
