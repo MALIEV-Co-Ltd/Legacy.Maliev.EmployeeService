@@ -8,16 +8,16 @@ public static class RoleBindingCases
         ["replace", "null_after", "null_before", "empty_after", "repeat_null", "all_null",
          "omitted", "padded", "integer", "decimal", "true", "false"];
 
-    public static IEnumerable<object[]> Valid => Fields.SelectMany(field =>
-        ValidIds.Select(id => new object[] { field, id }));
+    public static IEnumerable<object[]> Valid => Fields.SelectMany(member =>
+        ValidIds.Select(id => new object[] { member, id }));
 
-    public static IEnumerable<object[]> Malformed => Fields.SelectMany(field =>
+    public static IEnumerable<object[]> Malformed => Fields.SelectMany(member =>
         new[] { "object", "array" }.SelectMany(token =>
-            new[] { "only", "before", "after" }.Select(position => new object[] { field, token, position })));
+            new[] { "only", "before", "after" }.Select(position => new object[] { member, token, position })));
 
-    public static IEnumerable<object[]> HttpValid => Fields.SelectMany(field =>
+    public static IEnumerable<object[]> HttpValid => Fields.SelectMany(member =>
         new[] { "null_after", "true" }.SelectMany(id =>
-            new[] { false, true }.Select(update => new object[] { field, id, update })));
+            new[] { false, true }.Select(update => new object[] { member, id, update })));
 
     public static IEnumerable<object[]> HttpRejected => new[] { false, true }.SelectMany(update =>
         new[] { "null", "{\"Name\":{},\"Name\":\"last\"}", "{\"Description\":[],\"Description\":\"last\"}" }
