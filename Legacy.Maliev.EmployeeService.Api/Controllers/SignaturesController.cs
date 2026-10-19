@@ -43,7 +43,7 @@ public sealed class SignaturesController(IEmployeeService service) : ControllerB
     [RequirePermission(EmployeePermissions.SignaturesWrite, ResourcePathTemplate = "/employees/{employeeId}/signature")]
     public async Task<ActionResult> UpdateSignatureImageFileAsync(int employeeId, UpsertSignatureImageFileRequest item, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(item.Bucket) || string.IsNullOrWhiteSpace(item.ObjectName)) return BadRequest();
+        if (string.IsNullOrEmpty(item.Bucket) || string.IsNullOrEmpty(item.ObjectName)) return BadRequest();
         return await service.UpdateSignatureAsync(employeeId, item, cancellationToken) ? NoContent() : NotFound();
     }
 }
