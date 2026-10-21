@@ -194,7 +194,7 @@ def prepare_baseline(destination):
     """Copy only five authored test files and test-only package project."""
     destination = Path(destination).resolve()
     need(destination == ROOT / ".metadata-baseline", "Exact disposable baseline path required")
-    verify_source(baseline=destination)
+    verify_source(root=ROOT, baseline=destination)
     manifest = object_json(bounded_read(CUSTODY))
     original = {row["path"]: row for row in manifest["baseline"]}
     candidate = {row["path"]: row for row in manifest["candidate"]}

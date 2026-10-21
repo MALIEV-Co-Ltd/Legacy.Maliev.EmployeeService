@@ -1823,8 +1823,8 @@
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 28021,
-      "blob": "ed13a2e9b13f37d4570c6cefa3318cd152196cdc"
+      "bytes": 28032,
+      "blob": "1a664ffa546585f3b71ae77cb55ea17e50f2ac3c"
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
@@ -4322,5 +4322,25 @@
       }
     ],
     "preserves": "Baseline161 source bindings and all6 overlay paths/5 current authored C# test overlays remain unchanged; exact historical reviewed test project retains Newtonsoft.Json13.0.3. Candidate project, positive7XML-output cases,49selected identities,442metadata rows,plans/sourcepolicy/nativegrants/thresholds remain unchanged. No warning suppression or generic normalization."
+  },
+  "employee90FixtureRootBindingCorrection": {
+    "predecessorManifestGitBlob": "99fd384e8c6efc402eccfa7a598e153cba8a5354",
+    "baseHead": "79a8392d4a9de87acf00e56c7ba3392c4aae1e57",
+    "cause": "verify_source(root=ROOT) captures the import-time root; the temporary fixture patches ROOT/CUSTODY but prepare_baseline previously omitted the root argument. The actual strict inventory therefore read repository bytes against the temporary candidate manifest.",
+    "change": "Pass root=ROOT explicitly from prepare_baseline to the existing verify_source function. No guard, source binding, normalization, native grant or test assertion is bypassed.",
+    "verifier": {
+      "preimage": {
+        "path": "scripts/verify_employee_metadata_proof.py",
+        "bytes": 28021,
+        "blob": "ed13a2e9b13f37d4570c6cefa3318cd152196cdc"
+      },
+      "postimage": {
+        "path": "scripts/verify_employee_metadata_proof.py",
+        "bytes": 28032,
+        "blob": "1a664ffa546585f3b71ae77cb55ea17e50f2ac3c"
+      }
+    },
+    "regression": "Existing test_prepare_restores_exact_pre_xml_project_without_disabling_candidate_documentation reaches actual prepare_baseline, verify_source and source_inventory under patched fixture ROOT/CUSTODY; all existing86 Python test declarations and assertions remain unchanged. Execution NOT RUN in this source-only lane.",
+    "preserves": "All baseline161 bindings, all6 overlay paths/5 C# bytes, exact1701B historical project including Newtonsoft13, candidate1765B positive XML and7compiled-output cases, selected49/metadata442, dependency/sourcepolicy/grants/thresholds, workflows and all prior witnesses unchanged."
   }
 }
