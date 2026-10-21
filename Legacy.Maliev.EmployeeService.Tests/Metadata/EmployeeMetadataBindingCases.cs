@@ -9,8 +9,8 @@ public static class EmployeeMetadataBindingCases
 {
     /// <summary>Lists the six consumed address text properties exercised by metadata binding cases.</summary>
     public static readonly string[] AddressFields =
-    /// <summary>Lists the Bucket and ObjectName signature text properties exercised by metadata binding cases.</summary>
         ["Building", "AddressLine1", "AddressLine2", "City", "State", "PostalCode"];
+    /// <summary>Lists the Bucket and ObjectName signature text properties exercised by metadata binding cases.</summary>
     public static readonly string[] SignatureFields = ["Bucket", "ObjectName"];
     /// <summary>Maps scalar case identifiers to raw JSON tokens and independently expected nullable text projections.</summary>
     public static readonly IReadOnlyDictionary<string, (string Token, string? Expected)> Tokens =

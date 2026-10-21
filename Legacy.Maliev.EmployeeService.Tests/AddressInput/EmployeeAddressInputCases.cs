@@ -106,8 +106,8 @@ public static class EmployeeAddressInputCases
     };
     /// <summary>Lists address identity and audit fields whose input values are validated without gaining write authority.</summary>
     public static readonly string[] Fields =
-    /// <summary>Lists repeated-property sequences used to test replacement, ignored nulls, case variants, and malformed occurrences.</summary>
         ["Id", "CreatedDate", "ModifiedDate"];
+    /// <summary>Lists repeated-property sequences used to test replacement, ignored nulls, case variants, and malformed occurrences.</summary>
     public static readonly string[] Orders =
         ["replace", "null_after", "null_before", "repeat_null", "empty_after", "all_null",
             "invalid_before_valid", "valid_before_invalid", "bad_then_null", "mixed_replace", "mixed_bad_before_valid"];
