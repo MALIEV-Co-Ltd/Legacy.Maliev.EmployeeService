@@ -9,10 +9,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks literal administrative email storage, capacity failures, authorization, conditional versions, and cache preservation.</summary>
+/// <param name="fixture">The shared route fixture providing PostgreSQL, Redis, signed HTTP clients, and controlled IAM transport for administrative persistence assertions.</param>
 [Collection("Employee administrative persistence")]
 public sealed class EmployeeAdministrativeEmailLiteralHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that email padding survives employee creation or update while unrelated graph rows and caches remain intact.</summary>
+    /// <param name="update">Whether to update employee 17 with PUT instead of creating an employee with POST.</param>
+    /// <param name="email">The literal padded email address expected unchanged in persistence and HTTP readback.</param>
+    /// <returns>A task that completes after asserting literal email storage, response casing, timestamp behavior, and scoped cache and graph changes.</returns>
     [Theory]
     [InlineData(false, "  synthetic@example.invalid  ")]
     [InlineData(true, "  synthetic@example.invalid  ")]
@@ -79,6 +85,9 @@ public sealed class EmployeeAdministrativeEmailLiteralHttpTests(EmployeeRouteAcc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that a conditional email update preserves literal text and returns a version usable by a subsequent update.</summary>
+    /// <param name="email">The literal padded email address sent with the current employee precondition.</param>
+    /// <returns>A task that completes after asserting the stored email, renewed reusable ETag, and targeted cache eviction.</returns>
     [Theory]
     [InlineData("  synthetic@example.invalid  ")]
     [InlineData("\tsynthetic@example.invalid\t")]
@@ -111,16 +120,26 @@ public sealed class EmployeeAdministrativeEmailLiteralHttpTests(EmployeeRouteAcc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that padded email text of length 256 persists and length 257 fails without graph or cache changes.</summary>
+    /// <param name="update">Whether to exercise ordinary employee update instead of employee creation.</param>
+    /// <returns>A task that completes after asserting accepted capacity and sanitized oversized-write rollback with retained caches.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
     public async Task AdministrativeEmail_Padded256PersistsAnd257RollsBackWithoutCacheEviction(bool update) =>
         await AssertPaddedCapacityAsync(update, false);
 
+    /// <summary>Checks that an oversized conditional email write preserves the previously stored value, reusable version, and caches.</summary>
+    /// <returns>A task that completes after asserting the 257-character refusal, sanitized response, unchanged graph, and retained valid ETag.</returns>
     [Fact]
     public async Task ConditionalAdministrativeEmail_Padded257RollsBackAndRetainsReusableVersion() =>
         await AssertPaddedCapacityAsync(true, true);
 
+    /// <summary>Checks that unauthorized email creates and updates leave all rows and primed caches unchanged.</summary>
+    /// <param name="update">Whether to exercise the employee update endpoint instead of creation.</param>
+    /// <param name="authority">The authentication scenario selecting an anonymous actor or an actor without the required permission.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response for the selected actor.</param>
+    /// <returns>A task that completes after asserting the refusal status and unchanged graph and cache bytes.</returns>
     [Theory]
     [InlineData(false, "anonymous", HttpStatusCode.Unauthorized)]
     [InlineData(true, "anonymous", HttpStatusCode.Unauthorized)]
@@ -143,6 +162,8 @@ public sealed class EmployeeAdministrativeEmailLiteralHttpTests(EmployeeRouteAcc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that an email update using a stale version cannot alter the accepted literal email or graph caches.</summary>
+    /// <returns>A task that completes after asserting precondition failure, retained graph and cache bytes, and the current accepted ETag.</returns>
     [Fact]
     public async Task ConditionalAdministrativeEmail_StaleVersionLeavesLiteralRowAndGraphCachesUntouched()
     {

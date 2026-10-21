@@ -8,10 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks literal administrative names, Unicode and length boundaries, conditional versions, and authority refusals.</summary>
+/// <param name="fixture">The shared route fixture providing PostgreSQL, Redis, signed HTTP clients, and controlled IAM transport for administrative persistence assertions.</param>
 [Collection("Employee administrative profile")]
 public sealed class EmployeeAdministrativeLiteralNameHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks literal name persistence and rejection boundaries across ordinary and conditional administrative writes.</summary>
+    /// <param name="route">The write path selector: create for POST, update for ordinary PUT, or versioned for PUT with an employee ETag.</param>
+    /// <returns>A task that completes after asserting name values or refusal, Unicode capacity behavior, graph and cache isolation, and conditional version behavior.</returns>
     [Theory]
     [InlineData("create")]
     [InlineData("update")]
@@ -132,6 +137,10 @@ public sealed class EmployeeAdministrativeLiteralNameHttpTests(EmployeeRouteAcce
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that literal names do not bypass authentication or permission requirements on any administrative write path.</summary>
+    /// <param name="authority">The anonymous, invalid-signature, expired-token, or missing-permission actor scenario.</param>
+    /// <param name="status">The expected unauthorized or forbidden response for that actor.</param>
+    /// <returns>A task that completes after asserting each write refusal and unchanged graph and cache bytes.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("wrong-signature", HttpStatusCode.Unauthorized)]

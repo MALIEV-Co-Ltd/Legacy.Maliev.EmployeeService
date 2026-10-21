@@ -7,9 +7,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Verifies exhausted directory offsets without integer wrapping or mutation of the seeded employee graph.</summary>
+/// <param name="fixture">The directory parity fixture providing the application factory and seeded PostgreSQL directory data.</param>
 public sealed class EmployeeDirectoryOffsetHttpTests(EmployeeDirectoryParityFixture fixture)
     : IClassFixture<EmployeeDirectoryParityFixture>
 {
+    /// <summary>Checks that exhausted and overflow-sized directory offsets return 404 without wrapping or changing stored data.</summary>
+    /// <param name="index">The one-based page index, including values whose multiplication would overflow a 32-bit offset.</param>
+    /// <param name="size">The requested page size used with the index to exercise exhausted and overflow-sized offsets.</param>
+    /// <returns>A task that completes after verifying that exhausted and overflow-sized directory offsets return 404 without wrapping or changing stored data.</returns>
     [Theory]
     [InlineData(1073741825, 4)]
     [InlineData(536870913, 8)]

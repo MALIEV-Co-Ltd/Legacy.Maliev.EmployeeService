@@ -22,15 +22,21 @@ using Moq;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes production pipeline tests that inspect host-owned diagnostics and shared employee state.</summary>
 [CollectionDefinition("Employee production pipeline", DisableParallelization = true)]
 public sealed class EmployeeProductionPipelineHttpTestsCollection;
 
+/// <summary>Verifies production CORS, health responses, private diagnostics, and ordinary failure handling through HTTP.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee production pipeline")]
 public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
     private const string AllowedOrigin = "https://example.test";
 
+    /// <summary>Checks production preflight responses before mutation authorization and exposes CORS headers only for configured origins.</summary>
+    /// <param name="allowed">Whether the request Origin matches the configured allowed origin rather than a blocked external origin.</param>
+    /// <returns>A task that completes after verifying production preflight responses before mutation authorization and exposes CORS headers only for configured origins.</returns>
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
@@ -63,6 +69,8 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
         }
     }
 
+    /// <summary>Checks that anonymous mutation returns 401 with configured-origin CORS headers for browser error handling.</summary>
+    /// <returns>A task that completes after verifying that anonymous mutation returns 401 with configured-origin CORS headers for browser error handling.</returns>
     [Fact]
     public async Task ProductionAnonymousMutation_ReturnsUnauthorizedWithConfiguredOriginForBrowserErrorHandling()
     {
@@ -81,6 +89,9 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
         Assert.Equal("true", Assert.Single(response.Headers.GetValues("Access-Control-Allow-Credentials")));
     }
 
+    /// <summary>Checks anonymous health responses and omission of private readiness detail fields.</summary>
+    /// <param name="probe">The liveness or readiness health endpoint under /employee.</param>
+    /// <returns>A task that completes after verifying anonymous health responses and omission of private readiness detail fields.</returns>
     [Theory]
     [InlineData("liveness")]
     [InlineData("readiness")]
@@ -114,6 +125,9 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
     private const string ObservationCategory = "Maliev.Aspire.ServiceDefaults.Diagnostics.PrivateRequestObservation";
     private const string FrameworkCategory = "Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware";
 
+    /// <summary>Checks quiet uncached health identity that stays stable per host and differs between independent hosts.</summary>
+    /// <param name="probe">The liveness or readiness endpoint used to compare repeated and cross-host health identifiers.</param>
+    /// <returns>A task that completes after verifying quiet uncached health identity that stays stable per host and differs between independent hosts.</returns>
     [Theory]
     [InlineData("liveness")]
     [InlineData("readiness")]
@@ -147,6 +161,11 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
         Assert.False(independentLogs.Overflowed);
     }
 
+    /// <summary>Checks that non-GET and unregistered health-shaped routes expose no diagnostic identity markers.</summary>
+    /// <param name="method">The HTTP verb sent to the registered or health-shaped test route.</param>
+    /// <param name="path">The route used to test non-GET or unregistered health matching.</param>
+    /// <param name="status">The expected numeric HTTP status, including 200, 404, or 405, for the selected route and verb.</param>
+    /// <returns>A task that completes after verifying that non-GET and unregistered health-shaped routes expose no diagnostic identity markers.</returns>
     [Theory]
     [InlineData("POST", "/employee/liveness", 405)]
     [InlineData("POST", "/employee/readiness", 200)]
@@ -170,6 +189,12 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
         Assert.False(logs.Overflowed);
     }
 
+    /// <summary>Checks that diagnostic denial exposes no markers and leaves the host budget available for an admitted probe.</summary>
+    /// <param name="peer">The direct remote IP address, or null, supplied to the diagnostic request.</param>
+    /// <param name="method">The GET or rejected POST verb used for diagnostic admission.</param>
+    /// <param name="nonceKind">The nonce representation: valid compact GUID, invalid text, dashed GUID, or multiple header values.</param>
+    /// <param name="spoofLoopback">Whether to supply forwarded loopback headers while the direct peer remains nonloopback or absent.</param>
+    /// <returns>A task that completes after verifying that diagnostic denial exposes no markers and leaves the host budget available for an admitted probe.</returns>
     [Theory]
     [InlineData("203.0.113.9", "GET", "valid", true)]
     [InlineData(null, "GET", "valid", true)]
@@ -210,6 +235,8 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
         Assert.False(logs.Overflowed);
     }
 
+    /// <summary>Checks compact nonce canonicalization and reopening of the host diagnostic budget at exactly one minute.</summary>
+    /// <returns>A task that completes after verifying compact nonce canonicalization and reopening of the host diagnostic budget at exactly one minute.</returns>
     [Fact]
     public async Task ProductionDiagnostic_CanonicalizesNonceAndReopensOnlyAtTheExactMinute()
     {
@@ -241,6 +268,8 @@ public sealed class EmployeeProductionPipelineHttpTests(EmployeeRouteAcceptanceF
         Assert.False(logs.Overflowed);
     }
 
+    /// <summary>Checks a private ordinary 500 response and one incident without diagnostic-probe headers.</summary>
+    /// <returns>A task that completes after verifying a private ordinary 500 response and one incident without diagnostic-probe headers.</returns>
     [Fact]
     public async Task ProductionOrdinaryThrownFailure_PreservesPrivateJsonAndSingleIncidentWithoutProbeHeaders()
     {

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Options;
 namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 
 // Compiles on baseline: production converter types are not referenced by these tests.
+/// <summary>Checks current MVC metadata binding against public typed readers and retained native request behavior.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -15,6 +17,9 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
     private JsonSerializerOptions Options => fixture.Factory.Services
         .GetRequiredService<IOptions<Microsoft.AspNetCore.Mvc.JsonOptions>>().Value.JsonSerializerOptions;
 
+    /// <summary>Checks consumed metadata strings against the public Newtonsoft.Json 13 typed-string reader.</summary>
+    /// <param name="field">The consumed address or signature string field receiving the scalar token.</param>
+    /// <param name="tokenId">The scalar corpus identifier selecting the raw token compared with ReadAsString.</param>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.FieldTokenCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public void ConsumedField_MatchesPublicTypedReader(string field, string tokenId)
@@ -26,6 +31,9 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         Assert.Equal(reader.ReadAsString(), EmployeeMetadataBindingCases.Field(actual, field));
     }
 
+    /// <summary>Checks that consumed metadata strings follow null-ignoring occurrence order in the source-shaped comparator.</summary>
+    /// <param name="field">The consumed metadata string member repeated in the payload.</param>
+    /// <param name="orderId">The repeated-property scenario controlling replacement, null, or empty-string assignment.</param>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.FieldOrderCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public void OccurrenceOrder_MatchesNullIgnoringProjection(string field, string orderId)
@@ -37,6 +45,10 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         Assert.Equal(EmployeeMetadataBindingCases.Field(expected, field), EmployeeMetadataBindingCases.Field(actual, field));
     }
 
+    /// <summary>Checks that unsupported metadata occurrences keep the native JSON failure path.</summary>
+    /// <param name="field">The consumed metadata string field containing an unsupported occurrence.</param>
+    /// <param name="token">The unsupported raw JSON token placed among repeated occurrences.</param>
+    /// <param name="position">The occurrence-position selector used to construct the malformed member sequence.</param>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.MalformedCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public void UnsupportedOccurrence_KeepsNativeFailurePath(string field, string token, string position)
@@ -48,11 +60,16 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         Assert.Equal(baseline.Path, actual.Path);
     }
 
+    /// <summary>Checks that non-string relationship identifiers retain the existing MVC reader behavior.</summary>
+    /// <param name="kind">The request selector: address for CountryId or signature for EmployeeId.</param>
+    /// <param name="idCase">The case identifier selecting the relationship identifier token fragment.</param>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.NativeIdCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public void NonStringIdPolicy_DelegatesToExistingMvcReader(string kind, string idCase)
         => AssertNativeEquivalent(kind, EmployeeMetadataBindingCases.WithId(kind, EmployeeMetadataBindingCases.IdFragments[idCase]));
 
+    /// <summary>Checks that repeated numeric relationship members cannot acquire string null-ignoring behavior.</summary>
+    /// <param name="caseId">The address or signature sequence choosing an invalid-then-valid identifier or a valid identifier followed by null.</param>
     [Theory]
     [InlineData("address_bad_then_valid")]
     [InlineData("address_valid_then_null")]
@@ -70,10 +87,15 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         AssertNativeEquivalent(kind, json);
     }
 
+    /// <summary>Checks that root values and malformed JSON preserve the native binding outcome.</summary>
+    /// <param name="kind">The request selector: address or signature.</param>
+    /// <param name="json">The raw root or malformed JSON input compared with native MVC deserialization.</param>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.RootCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public void RootAndMalformedJson_KeepNativeOutcome(string kind, string json) => AssertNativeEquivalent(kind, json);
 
+    /// <summary>Checks that malformed syntax reproduces the native failing member path.</summary>
+    /// <param name="caseId">The malformed address identifier, signature identifier, unknown nested member, or unfinished string case.</param>
     [Theory]
     [InlineData("address_id")]
     [InlineData("signature_id")]
@@ -91,6 +113,7 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         AssertNativeEquivalent(kind, json, expectedPath);
     }
 
+    /// <summary>Checks that consumed-string conversion is limited to MVC request properties and leaves other types and writers unchanged.</summary>
     [Fact]
     public void Registration_IsMvcRequestSpecificAndWriterUnchanged()
     {
@@ -138,6 +161,8 @@ public sealed class EmployeeMetadataRequestBindingTests(EmployeeRouteAcceptanceF
         Assert.Equal(JsonSerializer.Serialize(signature, NativeOptions()), JsonSerializer.Serialize(signature, Options));
     }
 
+    /// <summary>Checks that ignored members keep the current DTO policy while identity and audit inputs still receive validation.</summary>
+    /// <param name="kind">The request shape tested for ignored members: address or signature.</param>
     [Theory]
     [InlineData("address")]
     [InlineData("signature")]

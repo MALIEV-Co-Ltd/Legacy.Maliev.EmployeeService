@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 
 namespace Legacy.Maliev.EmployeeService.Tests.OriginalInput;
 
+/// <summary>Compares public source-shaped formatter outcomes with fresh native and candidate MVC readers for grammar, scalars, metadata, depth, and charset handling.</summary>
+/// <param name="fixture">The shared route fixture supplying candidate MVC services and configuration for native-reader reconstruction.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -26,6 +28,8 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         _ => """["B","O",7]"""
     };
 
+    /// <summary>Provides source-shaped, native, and candidate body-reader expectations for scalar, graph, grammar, metadata, and Unicode cases.</summary>
+    /// <returns>Theory rows containing request family, case label, JSON body, source and native outcome labels, and expected consumed projections.</returns>
     public static IEnumerable<object[]> Cases()
     {
         foreach (var kind in new[] { "employee", "address", "signature" })
@@ -179,6 +183,15 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         string projection, string? nativeProjection = null) =>
         [kind, label, json, source, native, projection, nativeProjection!];
 
+    /// <summary>Checks public source-shaped and candidate consumed projections alongside the independently reconstructed native MVC reader outcome.</summary>
+    /// <param name="kind">The employee, address, or signature request family selecting the source shape and candidate DTO.</param>
+    /// <param name="label">The descriptive theory-case label retained for test-case identification.</param>
+    /// <param name="json">The exact request JSON bytes encoded as UTF-8 for all compared readers.</param>
+    /// <param name="sourceKind">The expected public source-shaped reader outcome: success, failure, no-value, or a named thrown exception.</param>
+    /// <param name="nativeKind">The expected fresh native MVC reader outcome for the same body.</param>
+    /// <param name="projection">The expected serialized array of consumed field values when the source-shaped or candidate read succeeds.</param>
+    /// <param name="nativeProjection">The expected native consumed projection when specified; null skips native value comparison.</param>
+    /// <returns>A task that completes after asserting each reader outcome, applicable consumed projections, and sanitized candidate failure messages.</returns>
     [Theory]
     [MemberData(nameof(Cases))]
     public async Task SourceNativeAndCandidate_PinActualFrontdoorOutcomes(string kind, string label, string json,
@@ -205,6 +218,11 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         _ = label;
     }
 
+    /// <summary>Checks that the public source-shaped, fresh native, and candidate readers accept nesting through depth 32 and reject depth 33.</summary>
+    /// <param name="kind">The employee, address, or signature request family used to select the readers.</param>
+    /// <param name="depth">The requested nesting depth of the synthetic unknown JSON member.</param>
+    /// <param name="expected">The expected success or failure outcome for that nesting depth.</param>
+    /// <returns>A task that completes after asserting the expected depth outcome across all three reader paths.</returns>
     [Theory]
     [InlineData("employee", 31, "success")]
     [InlineData("employee", 32, "success")]
@@ -229,6 +247,8 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         Assert.Equal(expected, candidate.Kind);
     }
 
+    /// <summary>Provides request-family, media-type, and byte-encoding cases including unsupported media and charsets.</summary>
+    /// <returns>Theory rows containing request family, content type, UTF-16 encoding choice, and expected reader outcome.</returns>
     public static IEnumerable<object[]> Encodings()
     {
         foreach (var kind in new[] { "employee", "address", "signature" })
@@ -243,6 +263,12 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         }
     }
 
+    /// <summary>Checks retained JSON media support, UTF-16 decoding, and sanitized unsupported media or charset outcomes.</summary>
+    /// <param name="kind">The employee, address, or signature request family used for the body read.</param>
+    /// <param name="contentType">The complete request Content-Type value, including any charset to exercise.</param>
+    /// <param name="unicode">Whether to encode the valid body as little-endian UTF-16 instead of UTF-8.</param>
+    /// <param name="expected">The expected success, failure, or unsupported outcome for the selected media and encoding.</param>
+    /// <returns>A task that completes after asserting source-shaped and candidate outcomes, successful projections, and sanitized unsupported-charset errors.</returns>
     [Theory]
     [MemberData(nameof(Encodings))]
     public async Task StockMediaCharsetsAndSafe415_AreRetained(string kind, string contentType, bool unicode, string expected)
@@ -263,6 +289,8 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         }
     }
 
+    /// <summary>Checks per-read reference isolation, recognized nested error paths, sanitized unknown paths, and bounded model-state errors.</summary>
+    /// <returns>A task that completes after asserting reference scope, source-shaped error-key parity, private-marker exclusion, and the configured error-count bound.</returns>
     [Fact]
     public async Task ReferencesArePerRead_AndOnlyRecognizedGraphKeysCanEscape()
     {
@@ -293,6 +321,7 @@ public sealed class EmployeeOriginalBodyReaderTests(EmployeeRouteAcceptanceFixtu
         Assert.InRange(bounded.ErrorCount, 1, 2);
     }
 
+    /// <summary>Checks the explicit source-shaped MVC formatter settings for depth, additional content, type handling, nulls, culture, and buffering.</summary>
     [Fact]
     public void OriginalMvcSettings_AreNotJsonConvertConvenienceDefaults()
     {

@@ -2,8 +2,12 @@ using System.Globalization;
 
 namespace Legacy.Maliev.EmployeeService.Tests.AddressInput;
 
+/// <summary>Characterizes public Newtonsoft scalar and mutable address projections using the source-shaped comparison helpers.</summary>
 public sealed class EmployeeAddressInputOracleTests
 {
+    /// <summary>Checks scalar acceptance, integer coercion, and parsed date kinds against the planned public-reader cases.</summary>
+    /// <param name="kind">The scalar family selector: id for nullable Int32 parsing or date for nullable DateTime parsing.</param>
+    /// <param name="caseId">The scalar case key selecting JSON input and its expected acceptance, integer value, or date kind.</param>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.ReaderCases), MemberType = typeof(EmployeeAddressInputCases))]
     public void PublicScalar_CharacterizesCoercionAndKind(string kind, string caseId)
@@ -23,6 +27,9 @@ public sealed class EmployeeAddressInputOracleTests
         else Assert.Null(value);
     }
 
+    /// <summary>Checks that a mutable source-shaped address projects the selected scalar consistently with the public typed reader.</summary>
+    /// <param name="propertyName">The address identifier or timestamp property receiving the scalar JSON token.</param>
+    /// <param name="caseId">The scalar case key selecting the token and expected acceptance for that property.</param>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.FieldCases), MemberType = typeof(EmployeeAddressInputCases))]
     public void MutableSource_UsesPublicTypedReader(string propertyName, string caseId)
@@ -47,6 +54,9 @@ public sealed class EmployeeAddressInputOracleTests
         Assert.Equal(764, source.CountryId);
     }
 
+    /// <summary>Checks ordered duplicate assignments for retained nonnull values, replacement values, and invalid occurrences.</summary>
+    /// <param name="propertyName">The address identifier or timestamp property repeated in the constructed JSON body.</param>
+    /// <param name="orderId">The duplicate-assignment scenario selecting null ordering, replacement, mixed casing, or an invalid occurrence.</param>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.OrderCases), MemberType = typeof(EmployeeAddressInputCases))]
     public void MutableSource_PreservesOrderedNullAndErrors(string propertyName, string orderId)
@@ -66,6 +76,8 @@ public sealed class EmployeeAddressInputOracleTests
             EmployeeAddressInputCases.SourceValue(source, propertyName));
     }
 
+    /// <summary>Checks that configured invariant scalar parsing remains independent of the thread culture.</summary>
+    /// <param name="culture">The culture name temporarily assigned to the current thread while parsing signed integer text and a month-first date.</param>
     [Theory]
     [InlineData("fr-FR")]
     [InlineData("th-TH")]

@@ -2,8 +2,10 @@ using System.Text.RegularExpressions;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks publication workflow permission placement without running image publication.</summary>
 public sealed class PublishWorkflowPermissionContractTests
 {
+    /// <summary>Checks that OIDC write permission is limited to publish jobs and absent from the workflow header and deployment gate.</summary>
     [Fact]
     public void PublishWorkflow_ScopesOidcToPublishJobs()
     {

@@ -11,8 +11,11 @@ using Xunit.Sdk;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Verifies controlled IAM transport evidence independently of permission-client exception handling.</summary>
 public sealed class EmployeeIamTransportEvidenceTests
 {
+    /// <summary>Checks that a transport assertion swallowed by the real IAM client still fails external fixture evidence.</summary>
+    /// <returns>A task that completes after verifying that a transport assertion swallowed by the real IAM client still fails external fixture evidence.</returns>
     [Fact]
     public async Task RealIamClient_CatchesTransportAssertion_ButExternalEvidenceStillFails()
     {
@@ -33,6 +36,10 @@ public sealed class EmployeeIamTransportEvidenceTests
         Assert.ThrowsAny<XunitException>(() => evidence.AssertHealthy());
     }
 
+    /// <summary>Checks real IAM request shape and intentional remote outcomes without classifying controlled responses as fixture faults.</summary>
+    /// <param name="outcome">The controlled standard-deny, live-allow, live-unavailable, or live-malformed IAM response scenario.</param>
+    /// <param name="expected">The permission decision expected after the real client processes the controlled response.</param>
+    /// <returns>A task that completes after verifying real IAM request shape and intentional remote outcomes without classifying controlled responses as fixture faults.</returns>
     [Theory]
     [InlineData("standard-deny", false)]
     [InlineData("live-allow", true)]

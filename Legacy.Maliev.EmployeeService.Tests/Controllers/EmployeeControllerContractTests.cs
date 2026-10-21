@@ -12,9 +12,13 @@ using Moq;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Controllers;
 
+/// <summary>Checks controller routes, self-profile ownership, and permission metadata without invoking external identity operations.</summary>
 public sealed class EmployeeControllerContractTests
 {
     private static readonly Type[] ControllerTypes = [typeof(EmployeesController), typeof(AddressesController), typeof(RolesController), typeof(SignaturesController)];
+    /// <summary>Checks that each controller retains its original base route and requires authentication.</summary>
+    /// <param name="controller">The employee, address, role, or signature controller type inspected by reflection.</param>
+    /// <param name="route">The original route template expected on the selected controller.</param>
     [Theory]
     [InlineData(typeof(EmployeesController), "[controller]")]
     [InlineData(typeof(AddressesController), "employees/[controller]")]
@@ -26,6 +30,7 @@ public sealed class EmployeeControllerContractTests
         Assert.NotNull(controller.GetCustomAttribute<AuthorizeAttribute>());
     }
 
+    /// <summary>Checks the original employee action templates and HTTP verbs, including the narrow self-profile route.</summary>
     [Fact]
     public void EmployeeActions_PreserveAllLegacyTemplates()
     {
@@ -37,6 +42,7 @@ public sealed class EmployeeControllerContractTests
         AssertAction<EmployeesController>(nameof(EmployeesController.UpdateSelfProfileAsync), "{employeeId:int}/profile", typeof(HttpPutAttribute));
     }
 
+    /// <summary>Checks that self-profile requests expose only four employee-owned fields and reject administrative members.</summary>
     [Fact]
     public void SelfProfileRequest_ExposesOnlyEmployeeOwnedFieldsAndRejectsUnknownMembers()
     {
@@ -49,6 +55,7 @@ public sealed class EmployeeControllerContractTests
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpdateEmployeeSelfProfileRequest>(json));
     }
 
+    /// <summary>Checks that self-profile updates require the scoped self-update permission without a live IAM check.</summary>
     [Fact]
     public void SelfProfileAction_UsesProfilePermissionAndEmployeeScopedResourcePath()
     {
@@ -61,6 +68,8 @@ public sealed class EmployeeControllerContractTests
         Assert.False(permission.RequireLiveCheck);
     }
 
+    /// <summary>Checks that a successful narrow profile service update produces a no-content controller response.</summary>
+    /// <returns>A task that completes after verifying that a successful narrow profile service update produces a no-content controller response.</returns>
     [Fact]
     public async Task UpdateSelfProfileAsync_AuthorizedBffService_UpdatesOnlyNarrowProfile()
     {
@@ -75,6 +84,7 @@ public sealed class EmployeeControllerContractTests
         service.VerifyAll();
     }
 
+    /// <summary>Checks related controller action counts and the original signature create and read templates.</summary>
     [Fact]
     public void RelatedControllers_PreserveFourteenLegacyActions()
     {
@@ -85,6 +95,7 @@ public sealed class EmployeeControllerContractTests
         AssertAction<SignaturesController>(nameof(SignaturesController.GetSignatureImageFileAsync), "{employeeId:int}", typeof(HttpGetAttribute));
     }
 
+    /// <summary>Checks that employee actions expose no identity, credential, password, or validation operations.</summary>
     [Fact]
     public void EmployeeApi_DoesNotExposeIdentityOrCredentialOperations()
     {
@@ -99,6 +110,7 @@ public sealed class EmployeeControllerContractTests
                 || attribute.Template?.Contains("validate", StringComparison.OrdinalIgnoreCase) == true));
     }
 
+    /// <summary>Checks that all destructive actions require critical live authorization while other actions use signed permissions.</summary>
     [Fact]
     public void SignedPermissionClaims_AreAuthoritativeExceptForCriticalDestructiveActions()
     {

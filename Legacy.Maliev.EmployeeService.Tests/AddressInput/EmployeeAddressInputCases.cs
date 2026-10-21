@@ -11,9 +11,16 @@ using StjSerializer = System.Text.Json.JsonSerializer;
 namespace Legacy.Maliev.EmployeeService.Tests.AddressInput;
 
 // Public 13.0.3/source-shaped projection only; not the historical resolved MVC8 binary.
+/// <summary>Defines address scalar cases and public Newtonsoft.Json 13 source-shaped comparators for request-binding tests.</summary>
 public static class EmployeeAddressInputCases
 {
+    /// <summary>Describes a JSON scalar and its expected acceptance and converted value in the public source-shaped comparator.</summary>
+    /// <param name="Json">The raw JSON scalar token submitted to the typed reader.</param>
+    /// <param name="Accepted">Whether the public typed reader is expected to accept the token.</param>
+    /// <param name="Integer">The expected nullable Int32 result for an integer case; null represents an empty or null value.</param>
+    /// <param name="Kind">The expected DateTimeKind for an accepted date value; null represents no date value.</param>
     public sealed record ScalarCase(string Json, bool Accepted, int? Integer = null, DateTimeKind? Kind = null);
+    /// <summary>Contains integer-token cases covering bounds, quoted numbers, nulls, and unsupported token shapes.</summary>
     public static readonly IReadOnlyDictionary<string, ScalarCase> Integers = new Dictionary<string, ScalarCase>(StringComparer.Ordinal)
     {
         ["null"] = new("null", true, null),
@@ -51,6 +58,7 @@ public static class EmployeeAddressInputCases
         ["object"] = new("{}", false, null),
         ["array"] = new("[]", false, null),
     };
+    /// <summary>Contains date-token cases covering ISO and Microsoft formats, offsets, calendar bounds, and unsupported shapes.</summary>
     public static readonly IReadOnlyDictionary<string, ScalarCase> Dates = new Dictionary<string, ScalarCase>(StringComparer.Ordinal)
     {
         ["null"] = new("null", true, Kind: null),
@@ -96,32 +104,56 @@ public static class EmployeeAddressInputCases
         ["object"] = new("{}", false, Kind: null),
         ["array"] = new("[]", false, Kind: null),
     };
+    /// <summary>Lists address identity and audit fields whose input values are validated without gaining write authority.</summary>
     public static readonly string[] Fields =
+    /// <summary>Lists repeated-property sequences used to test replacement, ignored nulls, case variants, and malformed occurrences.</summary>
         ["Id", "CreatedDate", "ModifiedDate"];
     public static readonly string[] Orders =
         ["replace", "null_after", "null_before", "repeat_null", "empty_after", "all_null",
             "invalid_before_valid", "valid_before_invalid", "bad_then_null", "mixed_replace", "mixed_bad_before_valid"];
+    /// <summary>Enumerates integer and date case identifiers for direct public typed-reader comparisons.</summary>
     public static IEnumerable<object[]> ReaderCases => new[] { "id", "date" }.SelectMany(kind =>
         (kind == "id" ? Integers : Dates).Keys.Select(caseId => new object[] { kind, caseId }));
+    /// <summary>Enumerates each identity or audit field paired with its applicable scalar cases.</summary>
     public static IEnumerable<object[]> FieldCases => Fields.SelectMany(propertyName =>
         Cases(propertyName).Keys.Select(caseId => new object[] { propertyName, caseId }));
+    /// <summary>Enumerates each identity or audit field paired with repeated-property order scenarios.</summary>
     public static IEnumerable<object[]> OrderCases => Fields.SelectMany(propertyName =>
         Orders.Select(orderId => new object[] { propertyName, orderId }));
+    /// <summary>Enumerates POST and PUT address requests with selected identity and audit scalar cases.</summary>
     public static IEnumerable<object[]> HttpCases => new[] { "post", "put" }.SelectMany(verb =>
         new[] { "Id", "CreatedDate", "ModifiedDate" }.SelectMany(propertyName =>
             HttpTokens(propertyName).Select(caseId => new object[] { verb, propertyName, caseId })));
+    /// <summary>Enumerates POST and PUT address requests with selected repeated-property order scenarios.</summary>
     public static IEnumerable<object[]> HttpOrders => new[] { "post", "put" }.SelectMany(verb =>
         new[] { "Id", "CreatedDate", "ModifiedDate" }.SelectMany(propertyName =>
             new[] { "null_after", "invalid_before_valid", "valid_before_invalid", "mixed_replace" }
                 .Select(orderId => new object[] { verb, propertyName, orderId })));
+    /// <summary>Selects representative scalar cases for HTTP testing of an address identity or audit field.</summary>
+    /// <param name="propertyName">The identity or audit property selecting integer cases for Id and date cases otherwise.</param>
+    /// <returns>The case identifiers selected for HTTP coverage of the requested field.</returns>
     public static string[] HttpTokens(string propertyName) => IsId(propertyName)
         ? ["null", "quoted_padded", "int_min", "int_max", "empty_text", "blank_text", "fraction", "exponent", "overflow", "object"]
         : ["null", "empty_text", "blank_text", "iso_utc", "offset_plus", "hour24", "microsoft_epoch",
             "microsoft_offset", "invalid_leap", "integer", "true", "object"];
+    /// <summary>Determines whether a property name denotes the address identity field without regard to casing.</summary>
+    /// <param name="propertyName">The JSON property name compared with Id using ordinal case-insensitive matching.</param>
+    /// <returns>True when the property name denotes Id; otherwise, false.</returns>
     public static bool IsId(string propertyName) => propertyName.Equals("Id", StringComparison.OrdinalIgnoreCase);
+    /// <summary>Selects the integer or date scalar corpus for an address identity or audit property.</summary>
+    /// <param name="propertyName">The property selecting integer cases for Id and date cases for audit timestamps.</param>
+    /// <returns>The integer corpus for Id or the date corpus for an audit field.</returns>
     public static IReadOnlyDictionary<string, ScalarCase> Cases(string propertyName) => IsId(propertyName) ? Integers : Dates;
+    /// <summary>Builds an address request with fixed writable fields and one supplied identity or audit token.</summary>
+    /// <param name="propertyName">The identity or audit JSON member to append to the address payload.</param>
+    /// <param name="token">The raw JSON token inserted as the selected member value.</param>
+    /// <returns>An address JSON object containing literal Thai building text, country 764, and the supplied member.</returns>
     public static string Payload(string propertyName, string token)
         => "{\"Building\":\"literal ไทย\",\"CountryId\":764,\"" + propertyName + "\":" + token + "}";
+    /// <summary>Builds repeated identity or audit members in the requested occurrence order and casing pattern.</summary>
+    /// <param name="propertyName">The identity or audit member repeated in the generated address object.</param>
+    /// <param name="orderId">The case identifier controlling valid replacements, ignored nulls, empty text, errors, or mixed casing.</param>
+    /// <returns>The JSON address object with ordered occurrences for the selected property.</returns>
     public static string Ordered(string propertyName, string orderId)
     {
         var valid = IsId(propertyName) ? "42" : "\"2020-01-02T03:04:05Z\"";
@@ -143,8 +175,13 @@ public static class EmployeeAddressInputCases
                 ? propertyName.ToUpperInvariant() : propertyName) + "\":" + value);
         return "{\"Building\":\"literal ไทย\",\"CountryId\":764," + string.Join(",", members) + "}";
     }
+    /// <summary>Identifies repeated-property cases that contain no unsupported scalar occurrence.</summary>
+    /// <param name="orderId">The repeated-property scenario identifier checked for malformed occurrences.</param>
+    /// <returns>False for sequences containing an invalid occurrence; true for the accepted sequences.</returns>
     public static bool OrderAccepted(string orderId) => orderId is not
         ("invalid_before_valid" or "mixed_bad_before_valid" or "valid_before_invalid" or "bad_then_null");
+    /// <summary>Creates the invariant public Newtonsoft.Json 13 settings used by the source-shaped address comparator.</summary>
+    /// <returns>New serializer settings that ignore null assignments and reference loops and preserve round-trip date kinds.</returns>
     public static JsonSerializerSettings SourceSettings() => new()
     {
         NullValueHandling = NullValueHandling.Ignore,
@@ -153,8 +190,15 @@ public static class EmployeeAddressInputCases
         DateParseHandling = DateParseHandling.DateTime,
         DateTimeZoneHandling = DateTimeZoneHandling.RoundtripKind,
     };
+    /// <summary>Deserializes an address into the mutable source-shaped comparator using public Newtonsoft.Json 13.</summary>
+    /// <param name="json">The JSON address payload passed to the public source-shaped deserializer.</param>
+    /// <returns>The deserialized mutable address projection used for comparison.</returns>
     public static SourceAddress Source(string json)
         => JsonConvert.DeserializeObject<SourceAddress>(json, SourceSettings())!;
+    /// <summary>Reads an integer or date scalar through the public Newtonsoft.Json typed reader.</summary>
+    /// <param name="kind">The reader selector: id invokes ReadAsInt32; other cases invoke ReadAsDateTime.</param>
+    /// <param name="token">The raw JSON scalar token consumed by the selected typed reader.</param>
+    /// <returns>The converted nullable integer or date value; null for a null or accepted empty token.</returns>
     public static object? ReadScalar(string kind, string token)
     {
         using var input = new StringReader(token);
@@ -167,25 +211,44 @@ public static class EmployeeAddressInputCases
         if (kind == "id") return reader.ReadAsInt32();
         return reader.ReadAsDateTime();
     }
+    /// <summary>Extracts identity or audit values from a deserialized source-shaped address.</summary>
+    /// <param name="value">The mutable address projection produced by the public comparator.</param>
+    /// <param name="propertyName">The member selecting Id, CreatedDate, or ModifiedDate with case-insensitive matching.</param>
+    /// <returns>The selected identifier or nullable audit timestamp.</returns>
     public static object? SourceValue(SourceAddress value, string propertyName)
     {
         if (IsId(propertyName)) return value.Id;
         return propertyName.Equals("CreatedDate", StringComparison.OrdinalIgnoreCase) ? value.CreatedDate : value.ModifiedDate;
     }
+    /// <summary>Binds an address payload with the supplied current System.Text.Json request options.</summary>
+    /// <param name="json">The complete JSON address request to bind.</param>
+    /// <param name="options">The current or native MVC serializer settings selected by the test.</param>
+    /// <returns>The bound address request, or null when the JSON root is null.</returns>
     public static UpsertAddressRequest? Bind(string json, JsonSerializerOptions options)
         => StjSerializer.Deserialize<UpsertAddressRequest>(json, options);
 
+    /// <summary>Represents the mutable address shape consumed by the public Newtonsoft.Json 13 comparator.</summary>
     public sealed class SourceAddress
     {
+        /// <summary>Stores the comparator address identifier whose scalar conversion is checked independently of write authority.</summary>
         public int Id { get; set; }
+        /// <summary>Stores the building text retained by the source-shaped address projection.</summary>
         public string? Building { get; set; }
+        /// <summary>Stores the first address line consumed by the source-shaped projection.</summary>
         public string? AddressLine1 { get; set; }
+        /// <summary>Stores the optional second address line consumed by the source-shaped projection.</summary>
         public string? AddressLine2 { get; set; }
+        /// <summary>Stores the locality text consumed by the source-shaped address projection.</summary>
         public string? City { get; set; }
+        /// <summary>Stores the state or province text consumed by the source-shaped address projection.</summary>
         public string? State { get; set; }
+        /// <summary>Stores the postal text consumed by the source-shaped address projection.</summary>
         public string? PostalCode { get; set; }
+        /// <summary>Stores the numeric country reference retained alongside tested identity and audit inputs.</summary>
         public int CountryId { get; set; }
+        /// <summary>Stores the nullable creation timestamp and date kind read by the public comparator.</summary>
         public DateTime? CreatedDate { get; set; }
+        /// <summary>Stores the nullable modification timestamp and date kind read by the public comparator.</summary>
         public DateTime? ModifiedDate { get; set; }
     }
 }

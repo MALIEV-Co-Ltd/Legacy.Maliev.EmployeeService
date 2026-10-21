@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes tests that run the admitted scaffold tooling and original-body reader fixture lane.</summary>
 [CollectionDefinition("Employee scaffold runtime", DisableParallelization = true)]
 public sealed class EmployeeScaffoldRuntimeCollection;
 

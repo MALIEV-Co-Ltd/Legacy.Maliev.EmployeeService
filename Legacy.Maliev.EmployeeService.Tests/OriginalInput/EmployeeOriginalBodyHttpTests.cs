@@ -9,9 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests.OriginalInput;
 
+/// <summary>Serializes original-body HTTP scenarios sharing employee, address, signature, and cache state.</summary>
 [CollectionDefinition("Employee original body HTTP", DisableParallelization = true)]
 public sealed class EmployeeOriginalBodyHttpCollection;
 
+/// <summary>Checks original-style body grammar through employee, address, and signature HTTP consumers while preserving ignored graph fields and preconditions.</summary>
+/// <param name="fixture">The shared route fixture providing the candidate MVC host, PostgreSQL, Redis, signed resource-scoped clients, and controlled IAM transport.</param>
 [Collection("Employee original body HTTP")]
 public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture fixture) : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
@@ -29,6 +32,8 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         "address-versioned"
     ];
 
+    /// <summary>Provides write-route and grammar combinations for original-style JSON bodies.</summary>
+    /// <returns>Theory rows pairing employee, address, or signature write lanes with supported grammar and UTF-16 variants.</returns>
     public static IEnumerable<object[]> GrammarCases()
     {
         foreach (var lane in Lanes)
@@ -40,6 +45,10 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         }
     }
 
+    /// <summary>Checks that original-style grammar persists only consumed scalar projections and leaves ignored graph rows unchanged.</summary>
+    /// <param name="lane">The employee-create, employee-update, address-create, address-update, signature-update, employee-versioned, or address-versioned HTTP write lane.</param>
+    /// <param name="grammar">The single-quote, unquoted-name, comment, trailing-comma, extra-document, trailing-text, or UTF-16 body variant.</param>
+    /// <returns>A task that completes after asserting consumed persistence, readback, timestamps, cache effects, and preservation of ignored graph rows and identifiers.</returns>
     [Theory]
     [MemberData(nameof(GrammarCases))]
     public async Task OriginalGrammar_ProjectsOnlyExistingScalarsAndPreservesIgnoredGraph(string lane, string grammar)
@@ -197,6 +206,8 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         Assert.False(await db.SignatureImageFiles.AnyAsync(item => item.Id == ForgedId));
     }
 
+    /// <summary>Provides invalid nested graph members across employee and address creation, updates, missing rows, and versioned writes.</summary>
+    /// <returns>Theory rows identifying the request family, consumer mode, and invalid nested JSON member to prepend.</returns>
     public static IEnumerable<object[]> InvalidGraphs()
     {
         foreach (var mode in new[] { "create", "update", "missing", "versioned", "versioned-missing" })
@@ -208,6 +219,11 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         }
     }
 
+    /// <summary>Checks that an invalid earlier graph occurrence is rejected before resource lookup, version preconditions, or persistence.</summary>
+    /// <param name="kind">The employee or address request family containing the invalid graph member.</param>
+    /// <param name="mode">The create, update, missing-resource, versioned, or versioned-missing consumer scenario.</param>
+    /// <param name="invalidMember">The nested JSON member containing an invalid source-shaped scalar that must reject the body before any write.</param>
+    /// <returns>A task that completes after asserting sanitized bad-request output and unchanged graph and cache bytes.</returns>
     [Theory]
     [MemberData(nameof(InvalidGraphs))]
     public async Task InvalidEarlierGraph_RejectsBeforeLookupPreconditionOrWrite(string kind, string mode, string invalidMember)
@@ -227,6 +243,10 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         await AssertCacheBytes(caches);
     }
 
+    /// <summary>Checks that omitted, null, empty, and repeated signature owner scalars move route-17 metadata using the source integer default and null-ignore projection.</summary>
+    /// <param name="fields">The additional EmployeeId JSON occurrences appended to the signature body, or empty text to omit the owner field.</param>
+    /// <param name="owner">The expected projected owner identifier, including zero for an omitted or null-only scalar.</param>
+    /// <returns>A task that completes after asserting metadata reassignment, old-route absence, new-route readback, and unchanged employee, address, and role rows.</returns>
     [Theory]
     [InlineData("", 0)]
     [InlineData(",\"EmployeeId\":null", 0)]
@@ -271,6 +291,9 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         Assert.Equal(rolesBefore, await Table("Role"));
     }
 
+    /// <summary>Checks that original-style versioned bodies retain missing-precondition, successful-save, and stale-version outcomes.</summary>
+    /// <param name="kind">The employee or address request family used to select its versioned write route and current ETag.</param>
+    /// <returns>A task that completes after asserting 428, 204, then 412 responses and preservation of graph and cache state on refused requests.</returns>
     [Theory]
     [InlineData("employee")]
     [InlineData("address")]
@@ -317,6 +340,9 @@ public sealed class EmployeeOriginalBodyHttpTests(EmployeeRouteAcceptanceFixture
         await AssertCacheBytes(afterCache);
     }
 
+    /// <summary>Checks that a successfully bound empty object reaches the existing explicit consumer guard without an implicit MVC error dictionary.</summary>
+    /// <param name="lane">The employee-create, employee-update, or signature-update consumer receiving an empty JSON object.</param>
+    /// <returns>A task that completes after asserting the existing bad-request guard response and unchanged graph and caches.</returns>
     [Theory]
     [InlineData("employee-create")]
     [InlineData("employee-update")]

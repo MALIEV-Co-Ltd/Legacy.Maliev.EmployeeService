@@ -3,9 +3,14 @@ using System.Text.Json;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks employee directory search, paging, wire projection, authorization, and cancellation against stored synthetic rows.</summary>
+/// <param name="fixture">The directory fixture that seeds employees, owns the HTTP host, and controls cancellation at the actual query.</param>
 public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixture fixture)
     : IClassFixture<EmployeeDirectoryParityFixture>
 {
+    /// <summary>Checks literal special characters, Thai text, and padding in each remaining searchable stored text field.</summary>
+    /// <param name="field">The stored directory field seeded for literal matching: LastName, Email, or PhoneNumber.</param>
+    /// <returns>A task that completes after verifying literal special characters, Thai text, and padding in each remaining searchable stored text field.</returns>
     [Theory]
     [InlineData("LastName")]
     [InlineData("Email")]
@@ -29,6 +34,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         }
     }
 
+    /// <summary>Checks that a text query can match the computed full name across the given-name and family-name boundary.</summary>
+    /// <returns>A task that completes after verifying that a text query can match the computed full name across the given-name and family-name boundary.</returns>
     [Fact]
     public async Task SourceSearch_ComputedFullNameMatchesAcrossNameBoundary()
     {
@@ -46,6 +53,9 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         _ => throw new ArgumentOutOfRangeException(nameof(field)),
     };
 
+    /// <summary>Checks that numeric search selects only the exact employee identifier, including a zero-padded query.</summary>
+    /// <param name="search">The numeric identifier query, either 7 or 007, expected to select employee 7.</param>
+    /// <returns>A task that completes after verifying that numeric search selects only the exact employee identifier, including a zero-padded query.</returns>
     [Theory]
     [InlineData("7")]
     [InlineData("007")]
@@ -58,6 +68,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync($"search={search}", [7], 1, 1, 1);
     }
 
+    /// <summary>Checks that an absent numeric employee identifier does not match phone or email text.</summary>
+    /// <returns>A task that completes after verifying that an absent numeric employee identifier does not match phone or email text.</returns>
     [Fact]
     public async Task AbsentNumericId_DoesNotMatchPhoneOrEmail()
     {
@@ -65,6 +77,10 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertNotFoundAsync("search=7000");
     }
 
+    /// <summary>Checks that percent, underscore, and backslash remain literal directory-search substrings.</summary>
+    /// <param name="literal">The exact first-name text searched for, containing literal wildcard or escape characters.</param>
+    /// <param name="distractor">The nearby first-name text that must not match through wildcard expansion.</param>
+    /// <returns>A task that completes after verifying that percent, underscore, and backslash remain literal directory-search substrings.</returns>
     [Theory]
     [InlineData("Sales%Lead", "SalesXLead")]
     [InlineData("Code_1", "CodeA1")]
@@ -77,6 +93,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync($"search={Uri.EscapeDataString(literal)}", [1], 1, 1, 1);
     }
 
+    /// <summary>Checks that selecting a page beyond the filtered directory returns source-shaped not found.</summary>
+    /// <returns>A task that completes after verifying that selecting a page beyond the filtered directory returns source-shaped not found.</returns>
     [Fact]
     public async Task EmptySelectedPage_ReturnsSourceNotFound()
     {
@@ -85,6 +103,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertNotFoundAsync("search=Engineer&index=3&size=1");
     }
 
+    /// <summary>Checks that filtered paging counts only literal percent matches and returns the correct second row.</summary>
+    /// <returns>A task that completes after verifying that filtered paging counts only literal percent matches and returns the correct second row.</returns>
     [Fact]
     public async Task LiteralFilteredPaging_CountsOnlyLiteralMatches()
     {
@@ -94,6 +114,10 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync("search=%25&index=2&size=1", [2], 2, 2, 2);
     }
 
+    /// <summary>Checks case-insensitive English, Thai, and significant padded text queries.</summary>
+    /// <param name="search">The English, Thai, or padded literal query sent to the directory.</param>
+    /// <param name="id">The employee identifier expected as the sole search result.</param>
+    /// <returns>A task that completes after verifying case-insensitive English, Thai, and significant padded text queries.</returns>
     [Theory]
     [InlineData("ENg", 1)]
     [InlineData("วิศว", 2)]
@@ -106,6 +130,12 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync($"search={Uri.EscapeDataString(search)}", [id], 1, 1, 1);
     }
 
+    /// <summary>Checks all four original identifier and email sort modes against exact wire ordering.</summary>
+    /// <param name="sort">The original EmployeeId or EmployeeEmail ascending or descending sort enum name.</param>
+    /// <param name="first">The expected employee identifier in the first result position.</param>
+    /// <param name="second">The expected employee identifier in the second result position.</param>
+    /// <param name="third">The expected employee identifier in the third result position.</param>
+    /// <returns>A task that completes after verifying all four original identifier and email sort modes against exact wire ordering.</returns>
     [Theory]
     [InlineData("EmployeeId_Ascending", 1, 2, 3)]
     [InlineData("EmployeeId_Descending", 3, 2, 1)]
@@ -118,6 +148,11 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync($"sort={sort}", [first, second, third], 1, 1, 3);
     }
 
+    /// <summary>Checks retained historical paging inputs against the corrected source outcomes for full cohorts and zero-size pages.</summary>
+    /// <param name="query">The retained paging input: omitted parameters, size=10000, or index=0 with size=0.</param>
+    /// <param name="count">The retained historical theory count checked only as an input identity, not used as the source response oracle.</param>
+    /// <param name="pages">The retained historical theory page count checked only as an input identity, not used as the source response oracle.</param>
+    /// <returns>A task that completes after verifying retained historical paging inputs against the corrected source outcomes for full cohorts and zero-size pages.</returns>
     [Theory]
     [InlineData("", 50, 6)]
     [InlineData("size=10000", 250, 2)]
@@ -151,6 +186,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync(query, Enumerable.Range(1, sourceCount).ToArray(), 1, sourcePages, 260);
     }
 
+    /// <summary>Checks PascalCase directory JSON, nested home-address values, null omission, and unchanged storage.</summary>
+    /// <returns>A task that completes after verifying PascalCase directory JSON, nested home-address values, null omission, and unchanged storage.</returns>
     [Fact]
     public async Task Projection_PreservesPascalCaseNestedAddressAndNullOmission()
     {
@@ -171,6 +208,10 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         Assert.Equal(snapshot, await fixture.SnapshotAsync());
     }
 
+    /// <summary>Checks that rejected signed callers cannot read private directory data or mutate the database.</summary>
+    /// <param name="authority">The invalid caller scenario: anonymous, missing-permission, wrong-signature, or expired.</param>
+    /// <param name="expected">The expected unauthorized or forbidden HTTP response.</param>
+    /// <returns>A task that completes after verifying that rejected signed callers cannot read private directory data or mutate the database.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("missing-permission", HttpStatusCode.Forbidden)]
@@ -187,6 +228,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         Assert.Equal(snapshot, await fixture.SnapshotAsync());
     }
 
+    /// <summary>Checks that caller cancellation reaches the real directory query without changing stored rows.</summary>
+    /// <returns>A task that completes after verifying that caller cancellation reaches the real directory query without changing stored rows.</returns>
     [Fact]
     public async Task CallerCancellation_ReachesActualDirectoryQueryAndLeavesDatabaseUnchanged()
     {
@@ -204,6 +247,8 @@ public sealed class EmployeeDirectoryParityHttpTests(EmployeeDirectoryParityFixt
         await AssertPageAsync("", [1], 1, 1, 1);
     }
 
+    /// <summary>Checks that an unmatched text query returns not found without database changes.</summary>
+    /// <returns>A task that completes after verifying that an unmatched text query returns not found without database changes.</returns>
     [Fact]
     public async Task MissingText_ReturnsNotFoundWithoutMutation()
     {
