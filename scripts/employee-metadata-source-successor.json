@@ -1778,8 +1778,8 @@
     },
     {
       "path": "scripts/test_employee_metadata_proof.py",
-      "bytes": 34093,
-      "blob": "4e8eaa3ed9e061fad54320248df353711bf2b93d"
+      "bytes": 37512,
+      "blob": "9adc7255e54c511bbc37c03038b158d53e20a9e6"
     },
     {
       "path": "scripts/test_employee_no_sdk_controller.py",
@@ -1823,8 +1823,8 @@
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 26508,
-      "blob": "fa2cd242481ac0a24528d0696393cbf8b1f85e57"
+      "bytes": 28021,
+      "blob": "ed13a2e9b13f37d4570c6cefa3318cd152196cdc"
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
@@ -4270,5 +4270,57 @@
       }
     ],
     "preserves": "Original baseline161, all source-policy bytes/capsules, baseline overlays, dependency pins, proof plans/rosters, admission thresholds/process census, grants=false and all historical outcome classifications unchanged. No native execution or acceptance granted."
+  },
+  "baselineTestProject": {
+    "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+    "bytes": 1701,
+    "blob": "b39f14f5c601928a5b93ee68a5b432968697b7c1"
+  },
+  "employee90HistoricalBaselineProjectCorrection": {
+    "predecessorManifestGitBlob": "9291900c1456e6f654ce1241aedddcf167cc7c1e",
+    "baseHead": "808722b199a5a0c24782c0f2919835d88c606270",
+    "scope": "Only metadata historical test-project overlay preparation/final verification; candidate compiler XML documentation remains enabled.",
+    "candidateProject": {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+      "bytes": 1765,
+      "blob": "2b5fa9c4152e6ff5a6579e846790b0073883af38"
+    },
+    "historicalOverlayProject": {
+      "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+      "bytes": 1701,
+      "blob": "b39f14f5c601928a5b93ee68a5b432968697b7c1"
+    },
+    "derivation": {
+      "removeExactlyOnce": "    <GenerateDocumentationFile>true</GenerateDocumentationFile>\n",
+      "historicalSha256": "86e20c56b715f3e20dc408e60d548d88a28d2c488fc430fcaf84fec60f14a22d",
+      "otherDifferencesRefused": true
+    },
+    "changedControls": [
+      {
+        "preimage": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 34093,
+          "blob": "4e8eaa3ed9e061fad54320248df353711bf2b93d"
+        },
+        "postimage": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 37512,
+          "blob": "9adc7255e54c511bbc37c03038b158d53e20a9e6"
+        }
+      },
+      {
+        "preimage": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 26508,
+          "blob": "fa2cd242481ac0a24528d0696393cbf8b1f85e57"
+        },
+        "postimage": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28021,
+          "blob": "ed13a2e9b13f37d4570c6cefa3318cd152196cdc"
+        }
+      }
+    ],
+    "preserves": "Baseline161 source bindings and all6 overlay paths/5 current authored C# test overlays remain unchanged; exact historical reviewed test project retains Newtonsoft.Json13.0.3. Candidate project, positive7XML-output cases,49selected identities,442metadata rows,plans/sourcepolicy/nativegrants/thresholds remain unchanged. No warning suppression or generic normalization."
   }
 }

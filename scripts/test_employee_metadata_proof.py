@@ -438,7 +438,9 @@ class FinalSourceControls(unittest.TestCase):
             checkout_files[pin["path"]] = raw
         candidate_files = dict(base_files)
         candidate_files[program] = b"candidate-program"
-        candidate_files[test_project] = b"test-only-package"
+        candidate_files[test_project] = (HERE.parent / test_project).read_bytes()
+        historical_test_project = candidate_files[test_project].replace(
+            b"    <GenerateDocumentationFile>true</GenerateDocumentationFile>\n", b"", 1)
         overlay = sorted([test_project] + [test_root + "/Metadata/Test" + str(index) + ".cs" for index in range(5)])
         for name in overlay:
             candidate_files.setdefault(name, b"authored-test")
@@ -451,6 +453,8 @@ class FinalSourceControls(unittest.TestCase):
                          "candidate": bindings(candidate_files), "baselineTestOverlay": overlay,
                          "productionHelper": helper,
                          "generatedOutputDirectories": sorted(project + "/" + leaf for project in projects for leaf in ("bin", "obj"))}
+        self.manifest["baselineTestProject"] = {
+            "path": test_project, "bytes": 1701, "blob": "b39f14f5c601928a5b93ee68a5b432968697b7c1"}
         self.manifest["checkoutRepresentations"] = copy.deepcopy(v.CHECKOUT_REPRESENTATIONS)
         for name, data in candidate_files.items():
             data = checkout_files.get(name, data)
@@ -459,6 +463,7 @@ class FinalSourceControls(unittest.TestCase):
             path.write_bytes(data)
         baseline_files = dict(base_files)
         baseline_files.update({name: candidate_files[name] for name in overlay})
+        baseline_files[test_project] = historical_test_project
         for name, data in baseline_files.items():
             data = checkout_files.get(name, data)
             path = self.root / ".metadata-baseline" / name
@@ -476,6 +481,9 @@ class FinalSourceControls(unittest.TestCase):
             "kind": "tests-only-baseline", "baseCommit": "base", "overlayPaths": overlay,
             "sourcePaths": len(baseline_files), **v.GRANTS}), encoding="utf-8")
         self.program = program
+        self.test_project = test_project
+        self.historical_test_project = historical_test_project
+        self.candidate_test_project = candidate_files[test_project]
         self.custody = custody
         self.addCleanup(mock.patch.stopall)
         mock.patch.object(v, "ROOT", self.root).start()
@@ -485,6 +493,50 @@ class FinalSourceControls(unittest.TestCase):
         self.assertEqual(result["baselineProgram"], "exact original binding")
         self.assertEqual(result["baselineHelper"], "absent")
         self.assertEqual(result["baselineOverlayPaths"], 6)
+    def test_prepare_restores_exact_pre_xml_project_without_disabling_candidate_documentation(self):
+        baseline = self.root / ".metadata-baseline"
+        for name in self.manifest["baselineTestOverlay"]:
+            if name == self.test_project:
+                (baseline / name).write_bytes(b"project")
+            else:
+                (baseline / name).unlink()
+        result = v.prepare_baseline(baseline)
+        restored = (baseline / self.test_project).read_bytes()
+        self.assertEqual(1701, len(restored))
+        self.assertEqual("b39f14f5c601928a5b93ee68a5b432968697b7c1", v.git_blob(restored))
+        self.assertIn(b'Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="all"', restored)
+        self.assertEqual(self.candidate_test_project, (self.root / self.test_project).read_bytes())
+        self.assertIn(b"<GenerateDocumentationFile>true</GenerateDocumentationFile>", (self.root / self.test_project).read_bytes())
+        self.assertEqual(6, len(result["overlayPaths"]))
+        for name in self.manifest["baselineTestOverlay"]:
+            if name != self.test_project:
+                self.assertEqual((self.root / name).read_bytes(), (baseline / name).read_bytes())
+        self.assertEqual("absent", v.verify_final_source()["baselineHelper"])
+
+    def test_baseline_xml_candidate_project_cannot_replace_historical_overlay(self):
+        (self.root / ".metadata-baseline" / self.test_project).write_bytes(self.candidate_test_project)
+        with self.assertRaises(ValueError):
+            v.verify_final_source()
+
+    def test_pre_xml_derivation_rejects_stale_altered_duplicate_and_undeclared_project_bytes(self):
+        original = self.candidate_test_project
+        line = b"    <GenerateDocumentationFile>true</GenerateDocumentationFile>\n"
+        for data in (self.historical_test_project, original + b" drift", original.replace(line, line + line),
+                     original.replace(b'Version="13.0.3"', b'Version="13.0.4"')):
+            with self.subTest(bytes=len(data)):
+                with self.assertRaises(ValueError):
+                    v.baseline_overlay_bytes(self.manifest, self.test_project, data)
+                altered = copy.deepcopy(self.manifest)
+                row = next(row for row in altered["candidate"] if row["path"] == self.test_project)
+                row.update(bytes=len(data), blob=v.git_blob(data))
+                with self.assertRaises(ValueError):
+                    v.baseline_overlay_bytes(altered, self.test_project, data)
+        for field, value in (("path", "Other/Other.csproj"), ("bytes", 1702), ("blob", "0" * 40)):
+            altered = copy.deepcopy(self.manifest)
+            altered["baselineTestProject"][field] = value
+            with self.assertRaises(ValueError):
+                v.baseline_overlay_bytes(altered, self.test_project, original)
+
     def test_final_candidate_source_mutation_refused(self):
         (self.root / self.program).write_bytes(b"changed")
         with self.assertRaises(ValueError):

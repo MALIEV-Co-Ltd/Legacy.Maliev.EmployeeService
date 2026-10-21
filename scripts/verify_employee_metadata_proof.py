@@ -161,6 +161,35 @@ def verify_source(root=ROOT, baseline=None):
             "baseCommit": manifest["baseCommit"], "featureTree": manifest["featureTree"],
             "successorSha256": hashlib.sha256(manifest_data).hexdigest(), **GRANTS}
 
+BASELINE_TEST_PROJECT = {
+    "path": "Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj",
+    "bytes": 1701,
+    "blob": "b39f14f5c601928a5b93ee68a5b432968697b7c1"
+}
+
+def baseline_overlay_binding(manifest, name):
+    candidate = {row["path"]: row for row in manifest["candidate"]}
+    if name != BASELINE_TEST_PROJECT["path"]:
+        return candidate[name]
+    need(manifest["baselineTestProject"] == BASELINE_TEST_PROJECT,
+         "Exact pre-XML reviewed test-package project required")
+    return BASELINE_TEST_PROJECT
+
+def baseline_overlay_bytes(manifest, name, data):
+    """Restore only the exact historical test project's pre-XML build semantics."""
+    if name != BASELINE_TEST_PROJECT["path"]:
+        return data
+    expected = baseline_overlay_binding(manifest, name)
+    candidate = next(row for row in manifest["candidate"] if row["path"] == name)
+    need(len(data) == candidate["bytes"] and git_blob(data) == candidate["blob"],
+         "Candidate test-project binding drift")
+    line = b"    <GenerateDocumentationFile>true</GenerateDocumentationFile>\n"
+    need(data.count(line) == 1, "Exact candidate-only XML-output addition required")
+    historical = data.replace(line, b"", 1)
+    need(len(historical) == expected["bytes"] and git_blob(historical) == expected["blob"],
+         "Pre-XML reviewed test-package project drift")
+    return historical
+
 def prepare_baseline(destination):
     """Copy only five authored test files and test-only package project."""
     destination = Path(destination).resolve()
@@ -175,10 +204,11 @@ def prepare_baseline(destination):
         need(name.startswith("Legacy.Maliev.EmployeeService.Tests/"), "Production overlay refused")
         target = relative_file(destination, name)
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(bounded_read(relative_file(ROOT, name)))
+        data = bounded_read(relative_file(ROOT, name))
+        target.write_bytes(baseline_overlay_bytes(manifest, name, data))
     expected = dict(original)
     for name in copy_paths:
-        expected[name] = candidate[name]
+        expected[name] = baseline_overlay_binding(manifest, name)
     source_inventory(destination, list(expected.values()), (".git",), checkout_contracts(manifest))
     need(not (destination / manifest["productionHelper"]).exists(), "Baseline converter must be absent")
     return {"kind": "tests-only-baseline", "sourcePaths": len(expected), "overlayPaths": copy_paths,
@@ -219,7 +249,7 @@ def verify_final_source():
     candidate = {row["path"]: row for row in manifest["candidate"]}
     baseline_rows = {row["path"]: row for row in manifest["baseline"]}
     for name in copy_paths:
-        baseline_rows[name] = candidate[name]
+        baseline_rows[name] = baseline_overlay_binding(manifest, name)
     need(baseline_before["sourcePaths"] == len(baseline_rows), "Baseline source cardinality changed")
     baseline_root = relative_file(ROOT, ".metadata-baseline")
     need(baseline_root.is_dir(), "Baseline directory missing")
