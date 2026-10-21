@@ -6,6 +6,7 @@ using YamlDotNet.RepresentationModel;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Workflows;
 
+/// <summary>Verifies immutable build dependencies, scaffold boundaries, least-privilege validation, and evidence workflow structure.</summary>
 public sealed class WorkflowContractTests
 {
     private static readonly string Workflow = File.ReadAllText(FindRepositoryFile(".github", "workflows", "_build-and-test.yml"));
@@ -16,12 +17,16 @@ public sealed class WorkflowContractTests
     private static readonly string DataProject = File.ReadAllText(
         FindRepositoryFile("Legacy.Maliev.EmployeeService.Data", "Legacy.Maliev.EmployeeService.Data.csproj"));
 
+    /// <summary>Checks that the maintained build-and-test workflow satisfies its structural contract.</summary>
     [Fact]
     public void BuildAndTest_SatisfiesStructuralContract()
     {
         WorkflowContractValidator.Validate(Workflow);
     }
 
+    /// <summary>Checks rejection of changes to the scaffold guard shell, script path, or evidence destination.</summary>
+    /// <param name="original">The reviewed scaffold guard shell, script path, or evidence-output path located in the workflow.</param>
+    /// <param name="replacement">The altered shell, script path, or evidence destination that must fail structural validation.</param>
     [Theory]
     [InlineData("shell: pwsh", "shell: bash")]
     [InlineData("./tooling/Test-EmployeeScaffoldContract.ps1", "./tooling/UnreviewedScaffold.ps1")]
@@ -31,6 +36,7 @@ public sealed class WorkflowContractTests
         AssertMutationRejected(original, replacement);
     }
 
+    /// <summary>Checks that a commented hash cannot authorize a shared action referenced by its main branch.</summary>
     [Fact]
     public void BuildAndTest_RejectsSharedActionMainWithPinnedShaComment()
     {
@@ -39,6 +45,7 @@ public sealed class WorkflowContractTests
             "MALIEV-Co-Ltd/Legacy.Maliev.Workflows/actions/dotnet-validate@main # e3a6093324a24968876782153286f52db8b29fd8");
     }
 
+    /// <summary>Checks that a commented dependency hash cannot satisfy immutable checkout pinning.</summary>
     [Fact]
     public void BuildAndTest_RejectsCommentedDependencySha()
     {
@@ -47,6 +54,7 @@ public sealed class WorkflowContractTests
             "ref: main # c40a7f82cea347b949444dcd7fb730f2b8dc3c0e");
     }
 
+    /// <summary>Checks that the API references legacy ServiceDefaults without the retired Aspire project dependency.</summary>
     [Fact]
     public void ApiProject_UsesOnlyLegacyServiceDefaults()
     {
@@ -55,6 +63,7 @@ public sealed class WorkflowContractTests
         Assert.DoesNotContain("Include=\"Maliev.Aspire.ServiceDefaults\"", ApiProject, StringComparison.Ordinal);
     }
 
+    /// <summary>Checks shared failure middleware registration without retired exception handlers or logging service dependencies.</summary>
     [Fact]
     public void Api_UsesSharedFailureTracingWithoutRetiredExceptionHandler()
     {
@@ -65,6 +74,7 @@ public sealed class WorkflowContractTests
         Assert.DoesNotContain("Maliev.LoggerService", ApiProgram, StringComparison.Ordinal);
     }
 
+    /// <summary>Checks EF design-time dependency ownership and explicit opt-in isolation from normal API builds.</summary>
     [Fact]
     public void EfDesignDependency_IsOwnedByDataProjectOnly()
     {
@@ -80,6 +90,7 @@ public sealed class WorkflowContractTests
         Assert.Contains("Microsoft.EntityFrameworkCore.Design", DataProject, StringComparison.Ordinal);
     }
 
+    /// <summary>Checks rejection of job-level permissions that escalate beyond read-only validation.</summary>
     [Fact]
     public void BuildAndTest_RejectsJobPermissionEscalation()
     {
@@ -88,6 +99,7 @@ public sealed class WorkflowContractTests
             "  validate:\n    permissions:\n      contents: write\n    name: validate");
     }
 
+    /// <summary>Checks rejection of secret references anywhere in the workflow, including comments.</summary>
     [Fact]
     public void BuildAndTest_RejectsSecretReferenceAnywhere()
     {
@@ -96,6 +108,8 @@ public sealed class WorkflowContractTests
         Assert.Throws<InvalidOperationException>(() => WorkflowContractValidator.Validate(mutated));
     }
 
+    /// <summary>Checks rejection of secret expressions injected into validation job environment values.</summary>
+    /// <param name="expression">The dotted or bracketed GitHub secrets expression inserted into a job environment value.</param>
     [Theory]
     [InlineData("${{secrets.X}}")]
     [InlineData("${{ secrets['X'] }}")]
@@ -106,6 +120,7 @@ public sealed class WorkflowContractTests
             $"    env:\n      MalievWorkspaceRoot: ${{{{ github.workspace }}}}/.dependencies\n      REVIEW_TOKEN: {expression}");
     }
 
+    /// <summary>Checks rejection of duplicated restore commands even when additional whitespace obscures the tokens.</summary>
     [Fact]
     public void BuildAndTest_RejectsWhitespaceObfuscatedRestoreCommand()
     {
@@ -114,6 +129,7 @@ public sealed class WorkflowContractTests
             "          solution: Legacy.Maliev.EmployeeService.slnx\n      - run: dotnet  restore Legacy.Maliev.EmployeeService.slnx");
     }
 
+    /// <summary>Checks rejection when shared validation omits its explicit local-dependency opt-in.</summary>
     [Fact]
     public void BuildAndTest_RejectsMissingLocalDependencyOptIn()
     {
@@ -122,6 +138,7 @@ public sealed class WorkflowContractTests
             string.Empty);
     }
 
+    /// <summary>Checks rejection of reserved GitHub Actions environment overrides on validation steps.</summary>
     [Fact]
     public void BuildAndTest_RejectsReservedGitHubActionsOverride()
     {
@@ -130,6 +147,8 @@ public sealed class WorkflowContractTests
             "          use-local-maliev-dependencies: 'true'\n        env:\n          GITHUB_ACTIONS: 'false'\n");
     }
 
+    /// <summary>Checks rejection of Go toolchain selection that differs from the reviewed pinned version.</summary>
+    /// <param name="replacement">The auto or alternate explicit Go toolchain selection substituted for the approved go1.26.8 value.</param>
     [Theory]
     [InlineData("auto")]
     [InlineData("go1.26.9")]

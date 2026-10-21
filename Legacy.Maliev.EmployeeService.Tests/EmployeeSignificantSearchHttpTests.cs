@@ -3,9 +3,14 @@ using System.Text.Json;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks significant directory search text, numeric identifier interpretation, and null or whitespace query binding.</summary>
+/// <param name="fixture">The directory parity fixture providing seeded employee rows, signed clients, and mutation snapshots.</param>
 public sealed class EmployeeSignificantSearchHttpTests(EmployeeDirectoryParityFixture fixture)
     : IClassFixture<EmployeeDirectoryParityFixture>
 {
+    /// <summary>Checks that significant padded text and wildcard-like characters match the original literal rather than a trimmed distractor.</summary>
+    /// <param name="search">The literal padded or wildcard-like search text stored on the target employee and sent in the query.</param>
+    /// <returns>A task that completes after asserting only the literal target is returned and storage remains unchanged.</returns>
     [Theory]
     [InlineData("  Engineer  ")]
     [InlineData("\tEngineer\t")]
@@ -21,6 +26,9 @@ public sealed class EmployeeSignificantSearchHttpTests(EmployeeDirectoryParityFi
         await AssertResultAsync(search, [1]);
     }
 
+    /// <summary>Checks that signed or padded integer search text retains exact employee identifier matching.</summary>
+    /// <param name="search">The signed or whitespace-padded integer text expected to resolve to employee identifier 7.</param>
+    /// <returns>A task that completes after asserting the exact identifier result and unchanged storage.</returns>
     [Theory]
     [InlineData(" 007 ")]
     [InlineData("+7")]
@@ -32,6 +40,9 @@ public sealed class EmployeeSignificantSearchHttpTests(EmployeeDirectoryParityFi
         await AssertResultAsync(search, [7]);
     }
 
+    /// <summary>Checks that absent significant padded text returns not found instead of exposing an unfiltered directory.</summary>
+    /// <param name="search">The nonblank padded search text absent from the seeded employee values.</param>
+    /// <returns>A task that completes after asserting not found and unchanged directory storage.</returns>
     [Theory]
     [InlineData(" Engineer ")]
     [InlineData("\tEngineer\t")]
@@ -42,6 +53,9 @@ public sealed class EmployeeSignificantSearchHttpTests(EmployeeDirectoryParityFi
         await AssertResultAsync(search, []);
     }
 
+    /// <summary>Checks that MVC binding of null, empty, or whitespace-only search values retains the unfiltered directory.</summary>
+    /// <param name="search">The omitted, empty, or whitespace-only query value expected to bind as an unfiltered search.</param>
+    /// <returns>A task that completes after asserting all seeded employees and unchanged storage.</returns>
     [Theory]
     [InlineData(null)]
     [InlineData("")]

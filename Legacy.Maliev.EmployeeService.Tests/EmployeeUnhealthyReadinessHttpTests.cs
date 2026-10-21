@@ -9,13 +9,19 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes tests that inject production readiness dependency failures.</summary>
 [CollectionDefinition("Employee unhealthy readiness", DisableParallelization = true)]
 public sealed class EmployeeUnhealthyReadinessHttpTestsCollection;
 
+/// <summary>Checks anonymous production readiness sanitization and healthy liveness after a controlled dependency fails.</summary>
+/// <param name="fixture">The shared route fixture used to create production hosts with a controlled failing readiness check.</param>
 [Collection("Employee unhealthy readiness")]
 public sealed class EmployeeUnhealthyReadinessHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that returned unhealthy results and thrown health-check failures produce sanitized anonymous 503 readiness while liveness stays healthy.</summary>
+    /// <param name="throwFailure">Whether the controlled health check throws instead of returning an unhealthy result containing private diagnostics.</param>
+    /// <returns>A task that completes after asserting readiness status and sanitized fields, nonnegative timings, and continued healthy liveness.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

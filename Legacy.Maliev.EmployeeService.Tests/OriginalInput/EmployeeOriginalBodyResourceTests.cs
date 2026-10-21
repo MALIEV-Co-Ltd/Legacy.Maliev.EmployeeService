@@ -11,9 +11,15 @@ using Microsoft.Extensions.Options;
 
 namespace Legacy.Maliev.EmployeeService.Tests.OriginalInput;
 
+/// <summary>Verifies original-body formatter drain behavior and ownership of spilled buffers and caller streams.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee original body HTTP")]
 public sealed class EmployeeOriginalBodyResourceTests(EmployeeRouteAcceptanceFixture fixture) : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks stock drain, canceled-token handling, and response-owned spill cleanup on success or I/O failure.</summary>
+    /// <param name="candidate">Whether to exercise the registered candidate formatter instead of the source-shaped original formatter.</param>
+    /// <param name="fault">Whether the fragmented input throws after 40,000 bytes instead of draining successfully.</param>
+    /// <returns>A task that completes after verifying stock drain, canceled-token handling, and response-owned spill cleanup on success or I/O failure.</returns>
     [Theory]
     [InlineData(false, false)]
     [InlineData(false, true)]
@@ -79,6 +85,8 @@ public sealed class EmployeeOriginalBodyResourceTests(EmployeeRouteAcceptanceFix
         }
     }
 
+    /// <summary>Checks that invalid UTF-8 retains an unexpected decoder fault rather than becoming a malformed-input response.</summary>
+    /// <returns>A task that completes after verifying that invalid UTF-8 retains an unexpected decoder fault rather than becoming a malformed-input response.</returns>
     [Fact]
     public async Task InvalidUtf8_RetainsExactUnexpectedDecoderFaultInsteadOfMalformed400()
     {

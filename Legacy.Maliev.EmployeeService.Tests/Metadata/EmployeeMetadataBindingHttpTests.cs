@@ -9,15 +9,25 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 
 // Existing disposable normal Production/JWT/PG18/Redis fixture; never cloud storage or Role writes.
+/// <summary>Verifies consumed address and signature text binding through authenticated HTTP without changing unrelated persisted state.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeMetadataBindingHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that later duplicate nulls retain consumed metadata text and leave unrelated state unchanged.</summary>
+    /// <param name="field">The consumed Building, AddressLine1, AddressLine2, City, State, PostalCode, Bucket, or ObjectName property to exercise.</param>
+    /// <param name="verb">The post address-create or put metadata-update operation selected by the case.</param>
+    /// <returns>A task that completes after verifying that later duplicate nulls retain consumed metadata text and leave unrelated state unchanged.</returns>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.HttpFieldCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public async Task HttpOrderedNull_KeepsConsumedTextAndUnrelatedState(string field, string verb)
         => await AssertRoundTripAsync(field, verb, ["\"first\"", "null"]);
 
+    /// <summary>Checks preservation of the public-reader decimal lexeme through metadata HTTP writes.</summary>
+    /// <param name="field">The consumed Building, AddressLine1, AddressLine2, City, State, PostalCode, Bucket, or ObjectName property to exercise.</param>
+    /// <param name="verb">The post address-create or put metadata-update operation selected by the case.</param>
+    /// <returns>A task that completes after verifying preservation of the public-reader decimal lexeme through metadata HTTP writes.</returns>
     [Theory]
     [InlineData("Building", "post")]
     [InlineData("AddressLine1", "put")]
@@ -30,6 +40,10 @@ public sealed class EmployeeMetadataBindingHttpTests(EmployeeRouteAcceptanceFixt
     public async Task HttpPrimitive_KeepsPublicReaderLexeme(string field, string verb)
         => await AssertRoundTripAsync(field, verb, ["12.50"]);
 
+    /// <summary>Checks that earlier malformed metadata text returns 400 despite later valid text without changing data or caches.</summary>
+    /// <param name="field">The consumed Building, AddressLine1, AddressLine2, City, State, PostalCode, Bucket, or ObjectName property to exercise.</param>
+    /// <param name="token">The raw object or array JSON token inserted before a valid duplicate text value.</param>
+    /// <returns>A task that completes after verifying that earlier malformed metadata text returns 400 despite later valid text without changing data or caches.</returns>
     [Theory]
     [MemberData(nameof(EmployeeMetadataBindingCases.HttpMalformedCases), MemberType = typeof(EmployeeMetadataBindingCases))]
     public async Task HttpMalformedOccurrenceBeforeValid_Is400WithoutMutation(string field, string token)
@@ -44,6 +58,11 @@ public sealed class EmployeeMetadataBindingHttpTests(EmployeeRouteAcceptanceFixt
         await AssertSeedCacheAsync(seed);
     }
 
+    /// <summary>Checks that denied metadata actors cannot mutate address or signature data or evict caches.</summary>
+    /// <param name="field">The Building or Bucket property selecting the address or signature metadata route.</param>
+    /// <param name="authority">The anonymous or missing-permission authority scenario used to verify rejection before mutation.</param>
+    /// <param name="expected">The expected Unauthorized or Forbidden status for the selected authority.</param>
+    /// <returns>A task that completes after verifying that denied metadata actors cannot mutate address or signature data or evict caches.</returns>
     [Theory]
     [InlineData("Building", "anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("Building", "missing-permission", HttpStatusCode.Forbidden)]
@@ -61,6 +80,10 @@ public sealed class EmployeeMetadataBindingHttpTests(EmployeeRouteAcceptanceFixt
         await AssertSeedCacheAsync(seed);
     }
 
+    /// <summary>Checks conditional address statuses, duplicate-null text retention, and cache effects.</summary>
+    /// <param name="condition">The If-Match scenario: missing, malformed, stale, or current.</param>
+    /// <param name="expected">The expected 428, 400, 412, or 204 status for the selected If-Match scenario.</param>
+    /// <returns>A task that completes after verifying conditional address statuses, duplicate-null text retention, and cache effects.</returns>
     [Theory]
     [InlineData("missing", HttpStatusCode.PreconditionRequired)]
     [InlineData("malformed", HttpStatusCode.BadRequest)]

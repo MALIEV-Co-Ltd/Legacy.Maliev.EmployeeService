@@ -18,9 +18,13 @@ using Moq;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Startup;
 
+/// <summary>Verifies safe private console diagnostics directly and through the configured Employee production host.</summary>
 [Collection(nameof(EmployeeConsoleCaptureCollection))]
 public sealed class EmployeeDiagnosticConsoleFormatterTests
 {
+    /// <summary>Checks severity filtering and fixed safe messages without evaluating arbitrary message formatters.</summary>
+    /// <param name="level">The log level supplied to the formatter, including suppressed levels and Warning, Error, or Critical.</param>
+    /// <param name="severity">The expected uppercase severity for an emitted event, or null when the selected level must emit nothing.</param>
     [Theory]
     [InlineData(LogLevel.Trace, null)]
     [InlineData(LogLevel.Debug, null)]
@@ -44,6 +48,7 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         Assert.Equal(TimeSpan.Zero, DateTimeOffset.Parse(document.RootElement.GetProperty("occurredAtUtc").GetString()!, CultureInfo.InvariantCulture).Offset);
     }
 
+    /// <summary>Checks runtime exception, activity, source-location, and deployment provenance against forged diagnostic state.</summary>
     [Fact]
     public void PrivateFormatter_PreservesRuntimeExceptionActivityAndDeploymentProvenance()
     {
@@ -67,6 +72,8 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         Assert.DoesNotContain("private@example.invalid", line);
     }
 
+    /// <summary>Checks asynchronous and generic runtime source locations without leaking private exception text.</summary>
+    /// <returns>A task that completes after verifying asynchronous and generic runtime source locations without leaking private exception text.</returns>
     [Fact]
     public async Task PrivateFormatter_PreservesAsyncAndGenericReflectionSourceLocations()
     {
@@ -87,6 +94,7 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         Assert.DoesNotContain("private@example.invalid", genericDocument.RootElement.GetRawText());
     }
 
+    /// <summary>Checks accepted diagnostic scalars and canonical identifiers while retaining safe incident metadata.</summary>
     [Fact]
     public void PrivateFormatter_PreservesOriginalSafeFieldsAndModernTypeIncidentAdaptation()
     {
@@ -119,6 +127,8 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
             Assert.Equal(JsonSerializer.Serialize(field.Value), root.GetProperty(field.Key).GetRawText());
     }
 
+    /// <summary>Checks omission of unknown keys and invalid scalar representations from diagnostic output.</summary>
+    /// <param name="key">The unknown or restricted state key supplied with an email-shaped value that must be excluded.</param>
     [Theory]
     [InlineData("EventName")]
     [InlineData("Path")]
@@ -137,6 +147,7 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         Assert.DoesNotContain("private@example.invalid", line);
     }
 
+    /// <summary>Checks state precedence over scopes, unique emitted keys, and bounded scope processing.</summary>
     [Fact]
     public void PrivateFormatter_StateWinsWithoutDuplicateKeysAndScopeProcessingIsBounded()
     {
@@ -161,6 +172,7 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         finally { foreach (var handle in handles.AsEnumerable().Reverse()) handle.Dispose(); }
     }
 
+    /// <summary>Checks bounded state enumeration and safe logger fallback for untrusted or missing categories.</summary>
     [Fact]
     public void PrivateFormatter_StateEnumerationAndUntrustedCategoryFailClosed()
     {
@@ -173,6 +185,7 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         Assert.Equal("ConfiguredLogger", missingCategory.RootElement.GetProperty("logger").GetString());
     }
 
+    /// <summary>Checks that the private formatter rejects a null output writer.</summary>
     [Fact]
     public void PrivateFormatter_NullWriterIsRejected()
     {
@@ -180,6 +193,7 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
         Assert.Throws<ArgumentNullException>(() => new EmployeeDiagnosticConsoleFormatter().Write(entry, null, null!));
     }
 
+    /// <summary>Checks owned warning-level console formatter registration while retaining other logging providers.</summary>
     [Fact]
     public void PrivateRegistration_SelectsOwnedWarningFormatterAndPreservesOtherProviders()
     {
@@ -199,6 +213,8 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
             && rule.CategoryName is null && rule.LogLevel == LogLevel.Warning);
     }
 
+    /// <summary>Checks real console-queue filtering, redaction, and correlated HTTP failure output while other providers retain events.</summary>
+    /// <returns>A task that completes after verifying real console-queue filtering, redaction, and correlated HTTP failure output while other providers retain events.</returns>
     [Fact]
     public async Task ConfiguredEmployeeHost_ConsoleQueueFiltersInformationAndRedactsWarningAndHttpFailure()
     {
@@ -425,5 +441,6 @@ public sealed class EmployeeDiagnosticConsoleFormatterTests
     }
 }
 
+/// <summary>Serializes tests that replace process-wide console writers while capturing the real logging queue.</summary>
 [CollectionDefinition(nameof(EmployeeConsoleCaptureCollection), DisableParallelization = true)]
 public sealed class EmployeeConsoleCaptureCollection { }

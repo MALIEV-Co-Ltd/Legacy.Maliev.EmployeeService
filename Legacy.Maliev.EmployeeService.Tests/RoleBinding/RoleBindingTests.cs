@@ -18,6 +18,8 @@ namespace Legacy.Maliev.EmployeeService.Tests.RoleBinding;
 
 // Reuses the incumbent serialized real PG18/Redis + Production JWT/IAM transport fixture.
 // No production registration, source model, global reader or historical case is changed.
+/// <summary>Checks literal role-body projection against a public source-shaped reader and through candidate MVC and HTTP persistence boundaries.</summary>
+/// <param name="fixture">The shared route fixture providing candidate MVC services, PostgreSQL, Redis, signed clients, and controlled IAM transport.</param>
 [Collection("Employee shared role")]
 public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -27,6 +29,10 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
     private static readonly byte[] CacheSentinel = Encoding.UTF8.GetBytes("role-binding-synthetic-cache");
     private IServiceProvider Services => fixture.Factory.Services;
 
+    /// <summary>Checks that the public source-shaped formatter retains the expected literal role text and ignores later null assignments.</summary>
+    /// <param name="field">The consumed role text property, Name or Description, selected for the input case.</param>
+    /// <param name="caseId">The valid scalar or ordered duplicate case selecting input JSON and expected literal role text.</param>
+    /// <returns>A task that completes after asserting successful public-reader projection and zero model-state errors.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.Valid), MemberType = typeof(RoleBindingCases))]
     public async Task PublicMvcBaseline_UsesLiteralNullIgnoringStringProjection(string field, string caseId)
@@ -38,6 +44,10 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         AssertFields(field, RoleBindingCases.Expected(caseId), role.Name, role.Description);
     }
 
+    /// <summary>Checks that the candidate MVC reader retains source-compatible nonnull role text across ordered occurrences.</summary>
+    /// <param name="field">The consumed role text property, Name or Description, selected for the input case.</param>
+    /// <param name="caseId">The valid scalar or ordered duplicate case selecting input JSON and expected literal role text.</param>
+    /// <returns>A task that completes after asserting successful candidate role projection and zero model-state errors.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.Valid), MemberType = typeof(RoleBindingCases))]
     public async Task ActualMvcReader_RetainsOrderedNonNullConsumedRoleText(string field, string caseId)
@@ -49,6 +59,11 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         AssertFields(field, RoleBindingCases.Expected(caseId), role.Name, role.Description);
     }
 
+    /// <summary>Checks that an unsupported consumed role occurrence cannot be hidden in the public source-shaped formatter read.</summary>
+    /// <param name="field">The consumed role text property, Name or Description, selected for the input case.</param>
+    /// <param name="token">The unsupported JSON token inserted into the consumed text field.</param>
+    /// <param name="position">The occurrence-order scenario placing the unsupported token relative to valid text.</param>
+    /// <returns>A task that completes after asserting a failed public-reader result, no model, and recorded model-state errors.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.Malformed), MemberType = typeof(RoleBindingCases))]
     public async Task PublicMvcBaseline_CannotHideAnUnsupportedOccurrence(string field, string token, string position)
@@ -59,6 +74,11 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         Assert.True(result.ErrorCount > 0);
     }
 
+    /// <summary>Checks that the candidate MVC reader refuses an unsupported role occurrence even beside valid text.</summary>
+    /// <param name="field">The consumed role text property, Name or Description, selected for the input case.</param>
+    /// <param name="token">The unsupported JSON token inserted into the consumed text field.</param>
+    /// <param name="position">The occurrence-order scenario placing the unsupported token relative to valid text.</param>
+    /// <returns>A task that completes after asserting a failed candidate read, no model, and recorded model-state errors.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.Malformed), MemberType = typeof(RoleBindingCases))]
     public async Task ActualMvcReader_RefusesUnsupportedOccurrenceEvenBesideValidText(string field, string token, string position)
@@ -69,6 +89,7 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         Assert.True(result.ErrorCount > 0);
     }
 
+    /// <summary>Checks that the role adapter preserves null-root handling, unrelated string parsing, minimal-API readers, and response serialization.</summary>
     [Fact]
     public void RoleRequestScope_PreservesNullRootGlobalStringsMinimalApiAndWriter()
     {
@@ -86,6 +107,11 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
             JsonSerializer.Serialize(new UpsertRoleRequest(null, "fixed"), options));
     }
 
+    /// <summary>Checks literal role HTTP persistence and readback while preserving unrelated row versions and applying only linked cache eviction.</summary>
+    /// <param name="field">The consumed role text property, Name or Description, selected for the input case.</param>
+    /// <param name="caseId">The valid scalar or ordered duplicate case selecting input JSON and expected literal role text.</param>
+    /// <param name="update">Whether to update the selected existing role with PUT instead of creating a role with POST.</param>
+    /// <returns>A task that completes after asserting role fields, timestamps, created location or empty update response, unchanged unrelated rows, and scoped cache behavior.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.HttpValid), MemberType = typeof(RoleBindingCases))]
     public async Task HttpBinding_PersistsLiteralProjectionAndKeepsUnrelatedRowsAndCache(
@@ -138,6 +164,10 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         }
     }
 
+    /// <summary>Checks that rejected role bodies produce bad requests without changing rows, concurrency versions, or cache bytes.</summary>
+    /// <param name="update">Whether to submit the rejected body through role update instead of creation.</param>
+    /// <param name="json">The exact malformed or otherwise rejected role request body.</param>
+    /// <returns>A task that completes after asserting a bad-request response and unchanged graph and caches.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.HttpRejected), MemberType = typeof(RoleBindingCases))]
     public async Task HttpRejectedBody_Is400WithoutAnyRowVersionOrCacheMutation(bool update, string json)
@@ -154,6 +184,10 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         await AssertCacheUntouched(token);
     }
 
+    /// <summary>Checks that denied role writers cannot persist source-compatible text or invalidate employee caches.</summary>
+    /// <param name="update">Whether to exercise role update instead of creation.</param>
+    /// <param name="authority">The authentication or missing-permission scenario used to construct the denied writer.</param>
+    /// <returns>A task that completes after asserting unauthorized or forbidden status and unchanged graph and caches.</returns>
     [Theory]
     [MemberData(nameof(RoleBindingCases.Denied), MemberType = typeof(RoleBindingCases))]
     public async Task HttpDeniedActor_CannotPersistRoleBindingOrInvalidateCache(bool update, string authority)
@@ -172,6 +206,8 @@ public sealed class RoleBindingTests(EmployeeRouteAcceptanceFixture fixture)
         await AssertCacheUntouched(token);
     }
 
+    /// <summary>Checks that a valid role body targeting a missing role retains not found without row or cache changes.</summary>
+    /// <returns>A task that completes after asserting not found and unchanged graph and cache bytes.</returns>
     [Fact]
     public async Task MissingRole_ValidBodyKeeps404WithoutMutation()
     {

@@ -7,14 +7,19 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Startup;
 
+/// <summary>Serializes tests that intercept startup or modify process-wide console and exit-code state.</summary>
 [CollectionDefinition("Employee startup state", DisableParallelization = true)]
 public sealed class StartupCollection;
 
+/// <summary>Checks real entry-point failure sanitization, successful host interception, and host-abort propagation.</summary>
 [Collection("Employee startup state")]
 public sealed class StartupFailureAcceptanceTests
 {
     private const string Sentinel = "private-startup-test-sentinel";
 
+    /// <summary>Checks that configuration or host-start failure emits a sanitized startup record and exits with code one.</summary>
+    /// <param name="phase">The startup failure selector: malformed settings, missing-root, or host-start.</param>
+    /// <returns>A task that completes after verifying that configuration or host-start failure emits a sanitized startup record and exits with code one.</returns>
     [Theory]
     [InlineData("malformed")]
     [InlineData("missing-root")]
@@ -108,6 +113,8 @@ public sealed class StartupFailureAcceptanceTests
             ["Observability:RuntimeMetricsEnabled"] = "false"
         };
     }
+    /// <summary>Checks that a normal production test host remains interceptable and preserves an existing process exit code.</summary>
+    /// <returns>A task that completes after verifying that a normal production test host remains interceptable and preserves an existing process exit code.</returns>
     [Fact]
     public async Task Normal_production_host_remains_interceptable_and_preserves_exit_code()
     {
@@ -137,6 +144,8 @@ public sealed class StartupFailureAcceptanceTests
         }
         finally { Environment.ExitCode = previous; }
     }
+    /// <summary>Checks that host abort escapes the actual entry point without emitting a startup-failure record or changing the exit code.</summary>
+    /// <returns>A task that completes after verifying that host abort escapes the actual entry point without emitting a startup-failure record or changing the exit code.</returns>
     [Fact]
     public async Task Actual_entrypoint_rethrows_host_abort_without_emitting_private_failure_or_changing_exit_code()
     {

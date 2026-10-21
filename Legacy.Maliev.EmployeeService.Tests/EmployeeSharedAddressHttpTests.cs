@@ -9,12 +9,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes tests that update an address shared by multiple employee projections.</summary>
 [CollectionDefinition("Employee shared address", DisableParallelization = true)]
 public sealed class EmployeeSharedAddressCollection;
 
+/// <summary>Checks shared-address persistence, public projections, and eviction of only linked Redis entries.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee shared address")]
 public sealed class EmployeeSharedAddressHttpTests(EmployeeRouteAcceptanceFixture fixture) : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks literal shared-address replacement refreshes both linked employee reads while preserving unrelated rows and cache.</summary>
+    /// <param name="value">The value assigned to every writable address text field: null, empty, padded, or Thai text.</param>
+    /// <returns>A task that completes after verifying literal shared-address replacement refreshes both linked employee reads while preserving unrelated rows and cache.</returns>
     [Theory]
     [InlineData(null)]
     [InlineData("")]

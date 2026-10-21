@@ -7,14 +7,21 @@ using Testcontainers.PostgreSql;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Data;
 
+/// <summary>Owns disposable PostgreSQL tests for self-profile persistence and server-owned employee fields.</summary>
 public sealed class EmployeeSelfProfilePostgresTests : IAsyncLifetime
 {
     private readonly PostgreSqlContainer postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
 
+    /// <summary>Starts the PostgreSQL container owned by the self-profile test instance.</summary>
+    /// <returns>A task that completes when the owned PostgreSQL container has started.</returns>
     public Task InitializeAsync() => postgres.StartAsync();
 
+    /// <summary>Disposes the PostgreSQL container owned by the self-profile test instance.</summary>
+    /// <returns>A task that completes when the owned PostgreSQL container has been disposed.</returns>
     public Task DisposeAsync() => postgres.DisposeAsync().AsTask();
 
+    /// <summary>Checks allowed self-profile persistence, name trimming, server timestamps, and preservation of administrative employee fields.</summary>
+    /// <returns>A task that completes after verifying allowed self-profile persistence, name trimming, server timestamps, and preservation of administrative employee fields.</returns>
     [Fact]
     public async Task UpdateSelfProfileAsync_PersistsAllowedFieldsAndPreservesServerOwnedFields()
     {
@@ -65,6 +72,8 @@ public sealed class EmployeeSelfProfilePostgresTests : IAsyncLifetime
         Assert.Equal(DateTime.SpecifyKind(modified.UtcDateTime, DateTimeKind.Unspecified), persisted.ModifiedDate.Value);
     }
 
+    /// <summary>Checks that updating a missing self-profile returns false without inserting an employee.</summary>
+    /// <returns>A task that completes after verifying that updating a missing self-profile returns false without inserting an employee.</returns>
     [Fact]
     public async Task UpdateSelfProfileAsync_MissingEmployee_ReturnsFalseWithoutAddingRows()
     {

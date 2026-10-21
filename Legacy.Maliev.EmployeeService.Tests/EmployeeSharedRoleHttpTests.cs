@@ -9,12 +9,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes shared-role persistence tests that use the common employee graph and caches.</summary>
 [CollectionDefinition("Employee shared role", DisableParallelization = true)]
 public sealed class EmployeeSharedRoleCollection;
 
+/// <summary>Checks literal shared-role updates, linked cache eviction, and role text capacity failures.</summary>
+/// <param name="fixture">The shared PostgreSQL and Redis route fixture supplying signed clients and controlled IAM transport.</param>
 [Collection("Employee shared role")]
 public sealed class EmployeeSharedRoleHttpTests(EmployeeRouteAcceptanceFixture fixture) : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that shared-role text remains literal while employee rows stay unchanged and every linked employee cache is invalidated.</summary>
+    /// <param name="value">The null, empty, padded, or Thai text assigned to both role name and description.</param>
+    /// <returns>A task that completes after asserting role persistence and readback, retained employee rows, and eviction of linked caches only.</returns>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -72,6 +78,10 @@ public sealed class EmployeeSharedRoleHttpTests(EmployeeRouteAcceptanceFixture f
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that 50-character role text persists and 51-character text fails privately without graph or cache changes.</summary>
+    /// <param name="field">The role field, Name or Description, enlarged to 51 characters for the refused write.</param>
+    /// <param name="update">Whether to exercise the refused role update instead of role creation.</param>
+    /// <returns>A task that completes after asserting accepted capacity, sanitized oversized-write failure, and retained graph and cache bytes.</returns>
     [Theory]
     [InlineData("Name", false)]
     [InlineData("Name", true)]

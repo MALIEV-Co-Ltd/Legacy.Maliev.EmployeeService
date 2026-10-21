@@ -25,9 +25,14 @@ using Testcontainers.PostgreSql;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks optional self-profile phone updates, narrow field ownership, cache refresh, and authorization rejection.</summary>
+/// <param name="fixture">The fixture owning disposable PostgreSQL, the controlled-clock host, and synthetic signing keys for profile tests.</param>
 public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture fixture)
     : IClassFixture<NullablePhoneFixture>
 {
+    /// <summary>Checks direct profile updates preserve optional phone values while changing only employee-owned fields.</summary>
+    /// <param name="phone">The optional phone value to persist: null, empty text, or a supported phone string.</param>
+    /// <returns>A task that completes after verifying direct profile updates preserve optional phone values while changing only employee-owned fields.</returns>
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -50,6 +55,9 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         AssertManagedFieldsUnchanged(original, persisted);
     }
 
+    /// <summary>Checks that both an omitted phone member and an explicit null clear an existing phone.</summary>
+    /// <param name="omitPhone">Whether to omit PhoneNumber from the payload rather than send it explicitly as null.</param>
+    /// <returns>A task that completes after verifying that both an omitted phone member and an explicit null clear an existing phone.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -68,6 +76,8 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         AssertManagedFieldsUnchanged(original, persisted);
     }
 
+    /// <summary>Checks that an already absent phone does not prevent another owned profile field from changing.</summary>
+    /// <returns>A task that completes after verifying that an already absent phone does not prevent another owned profile field from changing.</returns>
     [Fact]
     public async Task Http_AlreadyAbsentPhone_AllowsAnotherProfileFieldToChange()
     {
@@ -82,6 +92,8 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         AssertManagedFieldsUnchanged(original, persisted);
     }
 
+    /// <summary>Checks that clearing a phone invalidates a previously cached employee read.</summary>
+    /// <returns>A task that completes after verifying that clearing a phone invalidates a previously cached employee read.</returns>
     [Fact]
     public async Task Http_ClearedPhone_InvalidatesPreviouslyCachedEmployeeRead()
     {
@@ -101,6 +113,9 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         Assert.Equal("New", after.RootElement.GetProperty("FirstName").GetString());
     }
 
+    /// <summary>Checks that empty and 256-character phone values are accepted without changing managed fields.</summary>
+    /// <param name="length">The accepted phone-string length, either zero or 256 characters.</param>
+    /// <returns>A task that completes after verifying that empty and 256-character phone values are accepted without changing managed fields.</returns>
     [Theory]
     [InlineData(0)]
     [InlineData(256)]
@@ -118,6 +133,10 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         AssertManagedFieldsUnchanged(original, persisted);
     }
 
+    /// <summary>Checks that blank names and oversized names or phone values return bad request without persistence.</summary>
+    /// <param name="field">The owned field made invalid: FirstName, LastName, or PhoneNumber.</param>
+    /// <param name="length">Zero selects a whitespace-only name; 257 selects an overlong string.</param>
+    /// <returns>A task that completes after verifying that blank names and oversized names or phone values return bad request without persistence.</returns>
     [Theory]
     [InlineData("FirstName", 0)]
     [InlineData("LastName", 0)]
@@ -137,6 +156,9 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         Assert.Equal(original, await fixture.ReadAsync(original.Id));
     }
 
+    /// <summary>Checks that administrative or owner fields outside the narrow profile payload are rejected without changing either employee.</summary>
+    /// <param name="field">The forbidden payload member: RoleId, Email, HomeAddressId, or EmployeeId.</param>
+    /// <returns>A task that completes after verifying that administrative or owner fields outside the narrow profile payload are rejected without changing either employee.</returns>
     [Theory]
     [InlineData("RoleId")]
     [InlineData("Email")]
@@ -157,6 +179,10 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         Assert.Equal(other, await fixture.ReadAsync(other.Id));
     }
 
+    /// <summary>Checks that untrusted, expired, or insufficiently permitted clients cannot persist profile changes.</summary>
+    /// <param name="authority">The rejected caller scenario: anonymous, missing-permission, expired, or wrong-signature.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response for the selected authority.</param>
+    /// <returns>A task that completes after verifying that untrusted, expired, or insufficiently permitted clients cannot persist profile changes.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("missing-permission", HttpStatusCode.Forbidden)]
@@ -174,6 +200,8 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         Assert.Equal(original, await fixture.ReadAsync(original.Id));
     }
 
+    /// <summary>Checks that updating a selected employee leaves another employee unchanged.</summary>
+    /// <returns>A task that completes after verifying that updating a selected employee leaves another employee unchanged.</returns>
     [Fact]
     public async Task Http_SelectedEmployeeUpdate_DoesNotChangeAnotherEmployee()
     {
@@ -189,6 +217,8 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
         AssertManagedFieldsUnchanged(original, await fixture.ReadAsync(original.Id));
     }
 
+    /// <summary>Checks that a valid self-profile update to an absent employee returns not found.</summary>
+    /// <returns>A task that completes after verifying that a valid self-profile update to an absent employee returns not found.</returns>
     [Fact]
     public async Task Http_MissingEmployee_ValidProfileReturnsNotFound()
     {
@@ -224,6 +254,7 @@ public sealed class EmployeeSelfProfileNullablePhoneTests(NullablePhoneFixture f
     }
 }
 
+/// <summary>Owns disposable PostgreSQL, a controlled-clock production host, and signing keys for nullable-phone tests.</summary>
 public sealed class NullablePhoneFixture : IAsyncLifetime
 {
     private const string Issuer = "https://nullable-phone.example.invalid";
@@ -232,9 +263,13 @@ public sealed class NullablePhoneFixture : IAsyncLifetime
         .WithName($"employee-null-phone-{Guid.NewGuid():N}").Build();
     private readonly RSA rsa = RSA.Create(2048);
     private readonly RSA otherRsa = RSA.Create(2048);
+    /// <summary>Defines the controlled server modification timestamp expected after a self-profile update.</summary>
     public static readonly DateTime ModifiedDate = new(2030, 1, 2, 3, 4, 5, DateTimeKind.Unspecified);
+    /// <summary>Gets the production application factory configured with fixture storage and signing trust.</summary>
     public WebApplicationFactory<Program> Factory { get; private set; } = null!;
 
+    /// <summary>Starts disposable PostgreSQL, applies migrations, and creates the nullable-phone production host.</summary>
+    /// <returns>A task that completes after storage migrations and host-factory setup finish.</returns>
     public async Task InitializeAsync()
     {
         await postgres.StartAsync();
@@ -243,6 +278,8 @@ public sealed class NullablePhoneFixture : IAsyncLifetime
         Factory = new NullablePhoneFactory(postgres.GetConnectionString(), rsa);
     }
 
+    /// <summary>Disposes the host, both synthetic signing keys, and the fixture PostgreSQL container.</summary>
+    /// <returns>A task that completes after fixture-owned host, key, and database resources are disposed.</returns>
     public async Task DisposeAsync()
     {
         if (Factory is not null) await Factory.DisposeAsync();
@@ -251,6 +288,9 @@ public sealed class NullablePhoneFixture : IAsyncLifetime
         await postgres.DisposeAsync();
     }
 
+    /// <summary>Creates an anonymous or controlled signed client for self-profile and employee-read requests.</summary>
+    /// <param name="authority">The client scenario: valid, anonymous, expired, wrong-signature, or missing-permission.</param>
+    /// <returns>A caller-owned HTTP client with redirects disabled and the selected synthetic authority.</returns>
     public HttpClient CreateClient(string authority = "valid")
     {
         var client = Factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
@@ -273,6 +313,9 @@ public sealed class NullablePhoneFixture : IAsyncLifetime
         return client;
     }
 
+    /// <summary>Persists a synthetic employee with its own role and address and returns the stored comparison snapshot.</summary>
+    /// <param name="phone">The initial nullable phone value stored on the synthetic employee.</param>
+    /// <returns>A task whose result is the persisted snapshot of the newly seeded employee.</returns>
     public async Task<EmployeeSnapshot> SeedAsync(string? phone = "0404")
     {
         await using var db = CreateDbContext();
@@ -298,6 +341,9 @@ public sealed class NullablePhoneFixture : IAsyncLifetime
         return await ReadAsync(employee.Id);
     }
 
+    /// <summary>Reads the stored fields used to verify narrow profile ownership and managed-field preservation.</summary>
+    /// <param name="id">The identifier of the persisted employee whose snapshot is required.</param>
+    /// <returns>A task whose result is the matching employee snapshot; an absent identifier causes the single-row query to fail.</returns>
     public async Task<EmployeeSnapshot> ReadAsync(int id)
     {
         await using var db = CreateDbContext();
@@ -336,5 +382,16 @@ public sealed class NullablePhoneFixture : IAsyncLifetime
     }
 }
 
+/// <summary>Captures stored employee fields for before-and-after comparisons of profile ownership.</summary>
+/// <param name="Id">The persisted employee identifier.</param>
+/// <param name="FirstName">The stored given name compared after profile updates.</param>
+/// <param name="LastName">The stored family name compared after profile updates.</param>
+/// <param name="PhoneNumber">The nullable stored phone value whose replacement or clearing is under test.</param>
+/// <param name="DateOfBirth">The nullable birth date owned by the self-profile workflow.</param>
+/// <param name="Email">The administratively managed email expected to remain unchanged.</param>
+/// <param name="RoleId">The nullable role reference expected to remain unchanged.</param>
+/// <param name="HomeAddressId">The nullable home-address reference expected to remain unchanged.</param>
+/// <param name="CreatedDate">The original server creation timestamp expected to remain unchanged.</param>
+/// <param name="ModifiedDate">The server modification timestamp compared with the controlled clock.</param>
 public sealed record EmployeeSnapshot(int Id, string FirstName, string LastName, string? PhoneNumber,
     DateTime? DateOfBirth, string Email, int? RoleId, int? HomeAddressId, DateTime? CreatedDate, DateTime? ModifiedDate);

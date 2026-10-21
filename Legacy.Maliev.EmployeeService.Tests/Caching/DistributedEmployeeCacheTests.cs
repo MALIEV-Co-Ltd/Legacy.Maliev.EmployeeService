@@ -6,8 +6,11 @@ using Moq;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Caching;
 
+/// <summary>Checks employee cache serialization, scoped keys, fail-open reads, and cancellation propagation.</summary>
 public sealed class DistributedEmployeeCacheTests
 {
+    /// <summary>Checks that a distributed cache failure is treated as an employee cache miss.</summary>
+    /// <returns>A task that completes after asserting a null cache result when the underlying Redis read throws.</returns>
     [Fact]
     public async Task GetAsync_RedisFailure_FailsOpen()
     {
@@ -20,6 +23,8 @@ public sealed class DistributedEmployeeCacheTests
         Assert.Null(result);
     }
 
+    /// <summary>Checks that an employee response round-trips through serialized cache bytes under its employee-specific key.</summary>
+    /// <returns>A task that completes after asserting equality between the cached and retrieved employee responses.</returns>
     [Fact]
     public async Task SetAndGet_RoundTripsEmployeeWithScopedKey()
     {
@@ -38,6 +43,8 @@ public sealed class DistributedEmployeeCacheTests
         Assert.Equal(employee, result);
     }
 
+    /// <summary>Checks that cancellation from the distributed cache read reaches the employee cache caller.</summary>
+    /// <returns>A task that completes after asserting propagation of OperationCanceledException from the cache read.</returns>
     [Fact]
     public async Task GetAsync_does_not_swallow_cancellation()
     {
@@ -50,6 +57,8 @@ public sealed class DistributedEmployeeCacheTests
         await Assert.ThrowsAsync<OperationCanceledException>(() => cache.GetAsync(42, cancellationToken));
     }
 
+    /// <summary>Checks that cancellation from the distributed cache write reaches the employee cache caller.</summary>
+    /// <returns>A task that completes after asserting propagation of OperationCanceledException from the cache write.</returns>
     [Fact]
     public async Task SetAsync_does_not_swallow_cancellation()
     {
@@ -67,6 +76,8 @@ public sealed class DistributedEmployeeCacheTests
         await Assert.ThrowsAsync<OperationCanceledException>(() => cache.SetAsync(employee, cancellationToken));
     }
 
+    /// <summary>Checks that cancellation from the distributed cache removal reaches the employee cache caller.</summary>
+    /// <returns>A task that completes after asserting propagation of OperationCanceledException from the cache removal.</returns>
     [Fact]
     public async Task RemoveAsync_does_not_swallow_cancellation()
     {

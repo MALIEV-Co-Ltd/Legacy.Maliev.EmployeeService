@@ -4,9 +4,15 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks generated OpenAPI guidance against maintained Employee routes, schemas, and authorization behavior.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that OpenAPI is exposed in development and staging and hidden in production.</summary>
+    /// <param name="environment">The ASP.NET Core environment used for the documentation request.</param>
+    /// <param name="exposed">Whether the OpenAPI endpoint is expected to be available in that environment.</param>
+    /// <returns>A task that completes after verifying that OpenAPI is exposed in development and staging and hidden in production.</returns>
     [Theory]
     [InlineData("Development", true)]
     [InlineData("Staging", true)]
@@ -19,6 +25,8 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         Assert.Equal(exposed ? HttpStatusCode.OK : HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Checks maintained operation summaries and bearer requirements in generated Employee OpenAPI.</summary>
+    /// <returns>A task that completes after verifying maintained operation summaries and bearer requirements in generated Employee OpenAPI.</returns>
     [Fact]
     public async Task Documentation_ConsumesMaintainedSummariesAndAdvertisesExistingBearerRequirement()
     {
@@ -48,6 +56,8 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         Assert.Equal("bearer", bearer.GetProperty("scheme").GetString());
     }
 
+    /// <summary>Checks documented address creation JSON and existing success and not-found mutation responses.</summary>
+    /// <returns>A task that completes after verifying documented address creation JSON and existing success and not-found mutation responses.</returns>
     [Fact]
     public async Task Documentation_DescribesActualAddressCreationAndMutationResults()
     {
@@ -63,6 +73,8 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
                 Assert.False(string.IsNullOrWhiteSpace(paths.GetProperty("/employees/Addresses/{addressId}").GetProperty(method).GetProperty("responses").GetProperty(status).GetProperty("description").GetString()));
     }
 
+    /// <summary>Checks guidance for writable address fields and nullable employee address and role references.</summary>
+    /// <returns>A task that completes after verifying guidance for writable address fields and nullable employee address and role references.</returns>
     [Fact]
     public async Task Documentation_ExplainsProfileReferencesAndAddressPayload()
     {
@@ -88,6 +100,8 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         }
     }
 
+    /// <summary>Checks that address-deletion documentation describes the existing fresh live authorization requirement.</summary>
+    /// <returns>A task that completes after verifying that address-deletion documentation describes the existing fresh live authorization requirement.</returns>
     [Fact]
     public async Task Documentation_ExplainsExistingLiveAuthorizationForCriticalAddressDeletion()
     {
@@ -99,6 +113,8 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         Assert.Equal("Deletion requires a fresh authorization decision for this address; cached permission claims do not authorize this critical operation.", description.GetString());
     }
 
+    /// <summary>Checks directory query names and documentation of complete omitted-size cohorts, zero pages, and negative provider boundaries.</summary>
+    /// <returns>A task that completes after verifying directory query names and documentation of complete omitted-size cohorts, zero pages, and negative provider boundaries.</returns>
     [Fact]
     public async Task Documentation_ExplainsExistingDirectoryDefaultsAndQueryNames()
     {
@@ -126,6 +142,8 @@ public sealed class EmployeeDocumentationAcceptanceTests(EmployeeRouteAcceptance
         Assert.Equal("EmployeeId_Ascending", sort.GetProperty("example").GetString());
     }
 
+    /// <summary>Checks that address request-body documentation describes payload fields rather than cancellation tokens.</summary>
+    /// <returns>A task that completes after verifying that address request-body documentation describes payload fields rather than cancellation tokens.</returns>
     [Fact]
     public async Task Documentation_DescribesAddressPayloadInsteadOfCancellation()
     {

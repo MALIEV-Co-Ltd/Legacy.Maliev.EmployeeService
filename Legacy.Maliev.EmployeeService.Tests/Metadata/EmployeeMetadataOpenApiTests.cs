@@ -12,10 +12,16 @@ using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 
+/// <summary>Compares served address and signature request schemas with native properties, requiredness, and nullability.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
+/// <param name="output">The xUnit output sink recording canonical native and candidate schema comparison evidence.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeMetadataOpenApiTests(EmployeeRouteAcceptanceFixture fixture, ITestOutputHelper output)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that metadata adaptation preserves named request schemas and native property constraints.</summary>
+    /// <param name="schemaName">The UpsertAddressRequest or UpsertSignatureImageFileRequest schema to compare in the actual OpenAPI document.</param>
+    /// <returns>A task that completes after verifying that metadata adaptation preserves named request schemas and native property constraints.</returns>
     [Theory]
     [InlineData("UpsertAddressRequest")]
     [InlineData("UpsertSignatureImageFileRequest")]

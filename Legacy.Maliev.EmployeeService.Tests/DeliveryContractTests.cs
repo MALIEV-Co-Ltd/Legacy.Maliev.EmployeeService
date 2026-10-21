@@ -1,7 +1,9 @@
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks container-build exclusions, delivery manifests, immutable dependencies, and publication guards.</summary>
 public sealed class DeliveryContractTests
 {
+    /// <summary>Checks that Docker context rules exclude repository metadata, build output, test artifacts, and secret files.</summary>
     [Fact]
     public void DockerContext_ExcludesBuildRepositoryAndSecretArtifacts()
     {
@@ -19,6 +21,7 @@ public sealed class DeliveryContractTests
         Assert.Contains(".env", dockerIgnore, StringComparison.Ordinal);
     }
 
+    /// <summary>Checks that delivery manifests remain in the legacy namespace and provision no cluster or database infrastructure.</summary>
     [Fact]
     public void KubernetesResources_AreNamespaceConfinedAndProvisionNoInfrastructure()
     {
@@ -34,6 +37,7 @@ public sealed class DeliveryContractTests
             path => Assert.Contains("namespace: maliev-legacy", File.ReadAllText(path), StringComparison.Ordinal));
     }
 
+    /// <summary>Checks the small non-root deployment, read-only filesystem, runtime secret projection, and health probes.</summary>
     [Fact]
     public void Deployment_IsSmallNonRootAndUsesRuntimeSecretProjection()
     {
@@ -50,6 +54,7 @@ public sealed class DeliveryContractTests
         Assert.DoesNotContain("AuthService__LegacyEmployeeIdentityBaseUrl", deployment, StringComparison.Ordinal);
     }
 
+    /// <summary>Checks the explicit deployment gate, pinned reusable publish workflow, scoped permissions, and absence of manifest application.</summary>
     [Fact]
     public void PublishWorkflow_IsExplicitlyGatedAndNeverAppliesManifests()
     {
@@ -65,6 +70,7 @@ public sealed class DeliveryContractTests
         Assert.DoesNotContain("kubectl apply", workflow, StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>Checks .NET 10 non-root image stages and immutable public dependency pins without copying local dependencies.</summary>
     [Fact]
     public void Dockerfile_IsDotNet10NonRootAndPinsPublicLegacyDependencies()
     {
@@ -82,6 +88,7 @@ public sealed class DeliveryContractTests
         Assert.DoesNotContain("MALIEV-Co-Ltd/Maliev.MessagingContracts", dockerfile, StringComparison.Ordinal);
     }
 
+    /// <summary>Checks documented runtime secret names and immutable-image rollback prerequisites without requiring signing secrets.</summary>
     [Fact]
     public void DeploymentContract_ListsExactRuntimeSecretAndRollbackPrerequisites()
     {

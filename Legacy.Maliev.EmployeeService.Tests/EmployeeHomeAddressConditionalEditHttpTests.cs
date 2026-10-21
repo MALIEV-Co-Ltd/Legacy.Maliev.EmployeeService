@@ -19,12 +19,16 @@ using Npgsql;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks resource-bound home-address edits, dual versions and permissions, concurrent relation changes, and uncertain commits.</summary>
+/// <param name="fixture">The shared route fixture providing PostgreSQL, Redis, signed resource-scoped clients, and controlled IAM transport.</param>
 [Collection("Employee conditional edits")]
 public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcceptanceFixture fixture) : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
     private const string EmployeePermission = "legacy-employee.employees.update";
     private const string AddressPermission = "legacy-employee.addresses.update";
 
+    /// <summary>Checks that a bound address edit retains employee fields and version while advancing the address version and evicting every linked employee cache.</summary>
+    /// <returns>A task that completes after asserting retained employee rows, the changed address, version headers, and linked cache eviction.</returns>
     [Fact]
     public async Task BoundEdit_PreservesEmployeeVersionAndFieldsAndEvictsSharedCaches()
     {
@@ -47,6 +51,9 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(result.Headers.ETag.ToString(), after.Address);
     }
 
+    /// <summary>Checks that an independently changed employee or address version rejects the captured edit without further mutation.</summary>
+    /// <param name="address">Whether to change the address independently instead of changing the employee profile before reusing the captured versions.</param>
+    /// <returns>A task that completes after asserting precondition failure and unchanged rows and caches following the independent change.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -69,6 +76,9 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         await AssertCacheAsync(true);
     }
 
+    /// <summary>Checks that moving or detaching the employee home address invalidates a captured address edit even with a fresh employee version.</summary>
+    /// <param name="movedAddress">The replacement home-address identifier, or null to detach the employee from its previous address.</param>
+    /// <returns>A task that completes after asserting precondition failure and preservation of both addresses.</returns>
     [Theory]
     [InlineData(null)]
     [InlineData(2)]
@@ -88,6 +98,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that a relation move completed before the employee row fence prevents the pending bound address edit.</summary>
+    /// <returns>A task that completes after coordinating the competing writes and asserting precondition failure with no additional address mutation.</returns>
     [Fact]
     public async Task ConcurrentOrdinaryRelationMove_BeforeEmployeeFence_Is412AndMutatesNoAddress()
     {
@@ -113,6 +125,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         finally { gate.Release.TrySetResult(); }
     }
 
+    /// <summary>Checks that two bound address saves using the same captured versions yield exactly one successful write.</summary>
+    /// <returns>A task that completes after asserting one no-content response and one precondition-failed response.</returns>
     [Fact]
     public async Task ConcurrentBoundAddressSaves_ExactlyOneWins()
     {
@@ -129,6 +143,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         finally { foreach (var result in results) result.Dispose(); }
     }
 
+    /// <summary>Checks that the employee row fence remains held through address commit and blocks a concurrent ordinary relation move.</summary>
+    /// <returns>A task that completes after observing database lock contention and asserting the committed address edit followed by the relation move.</returns>
     [Fact]
     public async Task EmployeeFence_HoldsUntilAddressCommitAndBlocksOrdinaryRelationMove()
     {
@@ -170,6 +186,11 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         }
     }
 
+    /// <summary>Checks that both strong version preconditions are required and cannot be swapped between the employee and address.</summary>
+    /// <param name="employee">The employee-precondition scenario: valid, swapped from the address, absent, or a malformed strong-tag value.</param>
+    /// <param name="address">The address-precondition scenario: valid, swapped from the employee, absent, or a malformed strong-tag value.</param>
+    /// <param name="status">The expected HTTP status for the selected missing, malformed, or resource-mismatched preconditions.</param>
+    /// <returns>A task that completes after asserting the precondition refusal status and unchanged graph.</returns>
     [Theory]
     [InlineData(null, "valid", 428)]
     [InlineData("valid", null, 428)]
@@ -194,6 +215,10 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that a bound home-address write requires both employee-update and address-update authority.</summary>
+    /// <param name="authority">The anonymous, employee-only, or address-only permission scenario used for the writer.</param>
+    /// <param name="status">The expected unauthorized or forbidden status for that authority scenario.</param>
+    /// <returns>A task that completes after asserting the authority refusal and unchanged graph.</returns>
     [Theory]
     [InlineData("anonymous", 401)]
     [InlineData("employee-only", 403)]
@@ -209,6 +234,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that broad address permission cannot authorize an address identifier different from the employee binding.</summary>
+    /// <returns>A task that completes after asserting precondition failure and unchanged graph for the wrong captured address.</returns>
     [Fact]
     public async Task WrongCapturedAddressId_Is412EvenWithBroadAddressPermission()
     {
@@ -221,6 +248,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that an absent employee produces not found without changing the address graph.</summary>
+    /// <returns>A task that completes after asserting the not-found response and unchanged graph.</returns>
     [Fact]
     public async Task AbsentEmployee_Is404WithoutAddressMutation()
     {
@@ -233,6 +262,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that profile-only fields in a bound address payload are rejected before mass assignment.</summary>
+    /// <returns>A task that completes after asserting a bad-request response and unchanged graph.</returns>
     [Fact]
     public async Task UnknownProfileFields_Are400WithoutMassAssignment()
     {
@@ -249,6 +280,9 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that nonpositive captured address identifiers are rejected without mutation.</summary>
+    /// <param name="addressId">The zero or negative captured address identifier submitted in the bound edit payload.</param>
+    /// <returns>A task that completes after asserting a bad-request response and unchanged graph.</returns>
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
@@ -263,6 +297,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that a lost commit acknowledgment returns a sanitized uncertain failure after one address commit and linked cache eviction.</summary>
+    /// <returns>A task that completes after asserting one commit, advanced address version, retained employee version, cache eviction, and sanitized failure output.</returns>
     [Fact]
     public async Task LostCommitAcknowledgment_IsUncertain500WithOneCommitAndLinkedCacheEviction()
     {
@@ -283,6 +319,8 @@ public sealed class EmployeeHomeAddressConditionalEditHttpTests(EmployeeRouteAcc
         Assert.DoesNotContain("synthetic-commit-ack", await result.Content.ReadAsStringAsync(), StringComparison.Ordinal);
     }
 
+    /// <summary>Checks that cancellation after address commit preserves the caller token and evicts linked caches without replaying the commit.</summary>
+    /// <returns>A task that completes after asserting the original cancellation token, exactly one committed transaction, advanced address version, and linked cache eviction.</returns>
     [Fact]
     public async Task CommitCancellation_PreservesCallerTokenAndEvictsLinkedCachesWithoutReplay()
     {
