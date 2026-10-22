@@ -62,7 +62,7 @@ internal static class EmployeeScaffoldRuntimeProof
         Directory.CreateDirectory(temporary);
         try
         {
-            await ExecuteAsync("dotnet", ["tool", "install", "dotnet-ef", "--version", "10.0.12", "--tool-path", tools], "exact-tool-install", repository, environment, phases);
+            await ExecuteAsync("dotnet", ["tool", "install", "dotnet-ef", "--version", "10.0.13", "--tool-path", tools], "exact-tool-install", repository, environment, phases);
             environment["PATH"] = tools + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH");
             var apiProject = Path.Combine(repository, "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj");
             var ordinaryPackages = await ExecuteAsync("dotnet", ["msbuild", apiProject, "-getItem:PackageReference", "-p:EnableEmployeeScaffoldDesignTime=false", "-nodeReuse:false"],
@@ -297,7 +297,7 @@ internal static class EmployeeScaffoldRuntimeProof
         if (designTime)
         {
             Assert.Single(designers);
-            Assert.Equal("10.0.12", designers[0].GetProperty("Version").GetString());
+            Assert.Equal("10.0.13", designers[0].GetProperty("Version").GetString());
         }
         else
         {
@@ -326,9 +326,9 @@ internal static class EmployeeScaffoldRuntimeProof
           <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
           <ItemGroup>
             <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
-            <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
-            <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
-            <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.12" />
+            <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+            <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
+            <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="10.0.13" />
           </ItemGroup>
         </Project>
         """;
