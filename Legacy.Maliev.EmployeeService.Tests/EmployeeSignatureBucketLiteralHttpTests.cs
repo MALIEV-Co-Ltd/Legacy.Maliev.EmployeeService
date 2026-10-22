@@ -1,15 +1,24 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Legacy.Maliev.EmployeeService.Domain;
+using Legacy.Maliev.EmployeeService.Tests.OriginalInput;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks literal signature bucket padding, whitespace-only metadata, capacity failures, and authority boundaries.</summary>
+/// <param name="fixture">The shared route fixture supplying PostgreSQL, signed resource-scoped clients, and controlled IAM transport for signature metadata persistence.</param>
 [Collection("Employee signature persistence")]
 public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that significant bucket padding and object-name characters survive signature creation and update without unrelated graph changes.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <param name="bucket">The literal padded bucket name expected unchanged in stored metadata and readback.</param>
+    /// <returns>A task that completes after asserting literal metadata, timestamps, response casing, location behavior, and unrelated graph preservation.</returns>
     [Theory]
     [InlineData(false, "  synthetic-bucket  ")]
     [InlineData(true, "  synthetic-bucket  ")]
@@ -64,6 +73,9 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that all 50 padded bucket characters persist and a 51-character bucket fails without trimming or graph changes.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <returns>A task that completes after asserting accepted bucket capacity, sanitized oversized-write failure, and unchanged graph.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -93,6 +105,11 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that padded signature writes retain authority checks and cannot mutate the graph when denied.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <param name="authority">The authentication or permission scenario used to construct the request client.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response for the selected actor.</param>
+    /// <returns>A task that completes after asserting the authority refusal and unchanged graph including row versions.</returns>
     [Theory]
     [InlineData(false, "anonymous", HttpStatusCode.Unauthorized)]
     [InlineData(true, "anonymous", HttpStatusCode.Unauthorized)]
@@ -111,11 +128,143 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Provides whitespace-only signature metadata cases across JSON grammar, media, and encoding variants.</summary>
+    /// <returns>Theory rows containing the metadata field, exact whitespace value, and wire-format scenario.</returns>
+    public static IEnumerable<object[]> WhitespaceOnlyMetadataCases()
+    {
+        foreach (var field in new[] { "Bucket", "ObjectName" })
+        {
+            foreach (var value in new[] { " ", "\t", "\u00a0", "\u2003" })
+            {
+                foreach (var wire in new[] { "json", "utf16" })
+                    yield return [field, value, wire];
+            }
+            foreach (var wire in new[] { "text-json", "vendor-json", "single-quotes", "unquoted-names", "comments", "trailing-comma", "second-object", "trailing-garbage", "duplicate-null" })
+                yield return [field, " \t\u00a0\u2003", wire];
+        }
+    }
+
+    /// <summary>Checks that whitespace-only PUT metadata matches the public source-shaped reader and remains literal in storage and readback.</summary>
+    /// <param name="field">The signature metadata field, Bucket or ObjectName, receiving whitespace-only text.</param>
+    /// <param name="value">The exact whitespace text expected to remain unchanged after body reading and persistence.</param>
+    /// <param name="wire">The JSON grammar, encoding, or media scenario used to construct the submitted request body.</param>
+    /// <returns>A task that completes after comparing the public reader projection and asserting literal persisted metadata, readback, and unchanged unrelated rows.</returns>
+    [Theory]
+    [MemberData(nameof(WhitespaceOnlyMetadataCases))]
+    public async Task WhitespaceOnlyMetadata_PutMatchesSourceReaderAndPreservesLiteralStorage(
+        string field, string value, string wire)
+    {
+        var bucket = field == "Bucket" ? value : "source-bucket";
+        var objectName = field == "ObjectName" ? value : "source-object.png";
+        var payload = JsonSerializer.Serialize(new { Bucket = bucket, ObjectName = objectName, EmployeeId = 17 });
+        var body = wire switch
+        {
+            "single-quotes" => payload.Replace('"', '\''),
+            "unquoted-names" => System.Text.RegularExpressions.Regex.Replace(payload, "\"([A-Za-z][A-Za-z0-9]*)\":", "$1:"),
+            "comments" => "/* source body */" + payload.Insert(1, "/* source member */"),
+            "trailing-comma" => payload.Insert(payload.Length - 1, ","),
+            "second-object" => payload + "{\"Bucket\":\"ignored-second-document\"}",
+            "trailing-garbage" => payload + " ignored-trailing-input",
+            "duplicate-null" => payload.Insert(payload.Length - 1, ",\"" + field + "\":null"),
+            "json" or "utf16" or "text-json" or "vendor-json" => payload,
+            _ => throw new ArgumentOutOfRangeException(nameof(wire)),
+        };
+        var encoding = wire == "utf16" ? Encoding.Unicode : Encoding.UTF8;
+        var mediaType = wire == "text-json" ? "text/json"
+            : wire == "vendor-json" ? "application/vnd.maliev+json" : "application/json";
+        using var content = new StringContent(body, encoding, mediaType);
+        var source = await EmployeeOriginalInputOracle.ReadBytesAsync(
+            EmployeeOriginalInputOracle.Formatter(), EmployeeOriginalInputOracle.SourceType("signature"),
+            new EmptyModelMetadataProvider(), encoding.GetBytes(body), content.Headers.ContentType!.ToString());
+        Assert.Equal("success", source.Kind);
+        var original = Assert.IsType<SourceSignature>(source.Model);
+        Assert.Equal(bucket, original.Bucket);
+        Assert.Equal(objectName, original.ObjectName);
+        Assert.Equal(17, original.EmployeeId);
+
+        await SeedAsync(true);
+        var unrelated = await SnapshotAsync(101);
+        using var writer = Writer(true);
+        var started = DateTime.UtcNow;
+        using var response = await writer.PutAsync("/employees/signatures/17", content);
+        var finished = DateTime.UtcNow;
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Equal(string.Empty, await response.Content.ReadAsStringAsync());
+        await using (var db = fixture.CreateContext())
+        {
+            var saved = await db.SignatureImageFiles.AsNoTracking().SingleAsync(row => row.Id == 101);
+            Assert.Equal(17, saved.EmployeeId);
+            Assert.Equal(bucket, saved.Bucket);
+            Assert.Equal(objectName, saved.ObjectName);
+            Assert.Equal(new DateTime(2020, 1, 1), saved.CreatedDate);
+            Assert.NotNull(saved.ModifiedDate);
+            Assert.InRange(saved.ModifiedDate.Value, started.AddSeconds(-1), finished.AddSeconds(1));
+        }
+        using var reader = fixture.Client("legacy-employee.signatures.read", "/employees/17/signature");
+        using var read = await reader.GetAsync("/employees/signatures/17/");
+        Assert.Equal(HttpStatusCode.OK, read.StatusCode);
+        using var json = JsonDocument.Parse(await read.Content.ReadAsStringAsync());
+        Assert.Equal(101, json.RootElement.GetProperty("Id").GetInt32());
+        Assert.Equal(17, json.RootElement.GetProperty("EmployeeId").GetInt32());
+        Assert.Equal(bucket, json.RootElement.GetProperty("Bucket").GetString());
+        Assert.Equal(objectName, json.RootElement.GetProperty("ObjectName").GetString());
+        Assert.False(json.RootElement.TryGetProperty("bucket", out _));
+        Assert.False(json.RootElement.TryGetProperty("objectName", out _));
+        Assert.Equal(unrelated, await SnapshotAsync(101));
+        fixture.IamTransportEvidence.AssertHealthy();
+    }
+
+    /// <summary>Checks that whitespace-only signature query parameters retain MVC rejection before a POST can write metadata.</summary>
+    /// <param name="field">The Bucket or ObjectName query parameter assigned whitespace-only text.</param>
+    /// <param name="value">The exact space, tab, nonbreaking space, or em-space value submitted in that query parameter.</param>
+    /// <returns>A task that completes after asserting a bad-request response and unchanged graph.</returns>
+    [Theory]
+    [InlineData("Bucket", " ")]
+    [InlineData("ObjectName", " ")]
+    [InlineData("Bucket", "\t")]
+    [InlineData("ObjectName", "\t")]
+    [InlineData("Bucket", "\u00a0")]
+    [InlineData("ObjectName", "\u00a0")]
+    [InlineData("Bucket", "\u2003")]
+    [InlineData("ObjectName", "\u2003")]
+    public async Task WhitespaceOnlyQuery_PostRetainsMvcRejectionWithoutWrites(string field, string value)
+    {
+        await SeedAsync(false);
+        var before = await SnapshotAsync();
+        using var writer = Writer(false);
+        using var response = await SendAsync(writer, false,
+            field == "Bucket" ? value : "synthetic-bucket",
+            field == "ObjectName" ? value : "synthetic.png");
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(before, await SnapshotAsync());
+        fixture.IamTransportEvidence.AssertHealthy();
+    }
+
+    /// <summary>Checks that whitespace-only signature PUT bodies still require valid authentication and write permission.</summary>
+    /// <param name="authority">The authentication or permission scenario used to construct the request client.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response for the selected actor.</param>
+    /// <returns>A task that completes after asserting authority refusal and unchanged graph.</returns>
+    [Theory]
+    [InlineData("anonymous", HttpStatusCode.Unauthorized)]
+    [InlineData("wrong-signature", HttpStatusCode.Unauthorized)]
+    [InlineData("missing-permission", HttpStatusCode.Forbidden)]
+    public async Task WhitespaceOnlyMetadata_PutRetainsAuthorityBeforeWrites(string authority, HttpStatusCode expected)
+    {
+        await SeedAsync(true);
+        var before = await SnapshotAsync();
+        using var writer = fixture.Client("legacy-employee.signatures.write", "/employees/17/signature", authority: authority);
+        using var response = await writer.PutAsJsonAsync("/employees/signatures/17",
+            new { Bucket = " ", ObjectName = "\t", EmployeeId = 17 });
+        Assert.Equal(expected, response.StatusCode);
+        Assert.Equal(before, await SnapshotAsync());
+        fixture.IamTransportEvidence.AssertHealthy();
+    }
+
     private HttpClient Writer(bool update) => fixture.Client("legacy-employee.signatures.write",
         update ? "/employees/17/signature" : "/employees/17");
 
     private static Task<HttpResponseMessage> SendAsync(HttpClient client, bool update, string bucket, string objectName) => update
-        ? client.PutAsJsonAsync("/employees/signatures/17", new { Bucket = bucket, ObjectName = objectName })
+        ? client.PutAsJsonAsync("/employees/signatures/17", new { Bucket = bucket, ObjectName = objectName, EmployeeId = 17 })
         : client.PostAsync($"/employees/17/signatures?bucket={Uri.EscapeDataString(bucket)}&objectName={Uri.EscapeDataString(objectName)}", null);
 
     private async Task SeedAsync(bool signature)

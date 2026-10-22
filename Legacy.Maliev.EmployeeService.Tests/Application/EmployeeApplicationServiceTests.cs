@@ -5,8 +5,11 @@ using Moq;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Application;
 
+/// <summary>Verifies repository authority and cache cleanup behavior at the Employee application-service boundary.</summary>
 public sealed class EmployeeApplicationServiceTests
 {
+    /// <summary>Checks that employee detail uses the fresh repository result without reading or publishing cached projections.</summary>
+    /// <returns>A task that completes after verifying that employee detail uses the fresh repository result without reading or publishing cached projections.</returns>
     [Fact]
     public async Task GetEmployeeAsync_StaleCacheCannotReplaceAuthoritativePostgreSqlResult()
     {
@@ -27,6 +30,8 @@ public sealed class EmployeeApplicationServiceTests
         repository.VerifyNoOtherCalls();
     }
 
+    /// <summary>Checks that an address update invalidates every employee projection linked to that address.</summary>
+    /// <returns>A task that completes after verifying that an address update invalidates every employee projection linked to that address.</returns>
     [Fact]
     public async Task UpdateAddressAsync_InvalidatesEveryEmployeeUsingAddress()
     {
@@ -43,6 +48,8 @@ public sealed class EmployeeApplicationServiceTests
         cache.Verify(value => value.RemoveAsync(8, It.IsAny<CancellationToken>()), Times.Once);
     }
 
+    /// <summary>Checks that legacy directory sizes pass unchanged to the repository while an omitted page index defaults to one.</summary>
+    /// <returns>A task that completes after verifying that legacy directory sizes pass unchanged to the repository while an omitted page index defaults to one.</returns>
     [Fact]
     public async Task GetEmployeesAsync_ClampsUnboundedLegacyRequest()
     {
@@ -63,6 +70,8 @@ public sealed class EmployeeApplicationServiceTests
         repository.VerifyNoOtherCalls();
     }
 
+    /// <summary>Checks that successful self-profile updates invalidate only the owning employee projection.</summary>
+    /// <returns>A task that completes after verifying that successful self-profile updates invalidate only the owning employee projection.</returns>
     [Fact]
     public async Task UpdateSelfProfileAsync_Success_InvalidatesOnlyOwnedEmployeeCache()
     {
@@ -80,6 +89,9 @@ public sealed class EmployeeApplicationServiceTests
         cache.VerifyAll();
     }
 
+    /// <summary>Checks that caller cancellation after a committed conditional result cannot cancel cache cleanup.</summary>
+    /// <param name="address">Whether to update a shared address and invalidate both linked employees rather than update one employee.</param>
+    /// <returns>A task that completes after verifying that caller cancellation after a committed conditional result cannot cancel cache cleanup.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -112,6 +124,9 @@ public sealed class EmployeeApplicationServiceTests
         cache.VerifyAll();
     }
 
+    /// <summary>Checks that cache-cleanup failures do not replace the original caller-cancellation exception.</summary>
+    /// <param name="address">Whether the canceled conditional operation updates an address rather than an employee.</param>
+    /// <returns>A task that completes after verifying that cache-cleanup failures do not replace the original caller-cancellation exception.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -145,6 +160,8 @@ public sealed class EmployeeApplicationServiceTests
 
     private static EmployeeResponse SampleEmployee() => new(7, 2, "Ada", "Lovelace", "Ada Lovelace", null, "ada@example.com", null, null, null, null, null, null);
 
+    /// <summary>Checks that home-address cache cleanup remains uncancellable after the repository returns a committed result.</summary>
+    /// <returns>A task that completes after verifying that home-address cache cleanup remains uncancellable after the repository returns a committed result.</returns>
     [Fact]
     public async Task HomeAddressConditionalEdit_PostReturnCancellationCannotCancelLinkedCacheCleanup()
     {
@@ -163,6 +180,9 @@ public sealed class EmployeeApplicationServiceTests
         cache.VerifyAll();
     }
 
+    /// <summary>Checks that home-address cancellation survives cache-removal failure and retains linked-employee cleanup.</summary>
+    /// <param name="commitAttempted">Whether cancellation carries the two affected employee identifiers from an attempted commit rather than a plain caller-cancellation exception.</param>
+    /// <returns>A task that completes after verifying that home-address cancellation survives cache-removal failure and retains linked-employee cleanup.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

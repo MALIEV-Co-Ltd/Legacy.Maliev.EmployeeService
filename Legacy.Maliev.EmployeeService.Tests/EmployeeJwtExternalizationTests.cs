@@ -13,12 +13,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks external public-key configuration and production RS256 issuer, audience, and signing-key validation.</summary>
 public sealed class EmployeeJwtExternalizationTests
 {
     private const string Issuer = "https://iam.maliev.com";
     private const string Audience = "maliev-services";
     private const string LegacyTestKey = "test-only-legacy-key-of-at-least-32-bytes"; // gitleaks:allow
 
+    /// <summary>Checks that startup uses external asymmetric authentication and stores no symmetric JWT key in settings.</summary>
     [Fact]
     public void EmployeeApi_UsesExternalPublicKeyWithoutAStoredSymmetricKey()
     {
@@ -36,6 +38,7 @@ public sealed class EmployeeJwtExternalizationTests
         Assert.Equal(Audience, jwt.GetProperty("Audience").GetString());
     }
 
+    /// <summary>Checks production RS256 acceptance and rejection of HMAC, other algorithms, keys, issuers, and audiences.</summary>
     [Fact]
     public void ProductionEmployeeValidator_AcceptsOnlyConfiguredRs256IssuerAndAudience()
     {
@@ -78,6 +81,7 @@ public sealed class EmployeeJwtExternalizationTests
             Token(rsa, SecurityAlgorithms.RsaSha256, audience: "other-services"), parameters, out _));
     }
 
+    /// <summary>Checks that missing external public-key configuration cannot fall back to the legacy symmetric key.</summary>
     [Fact]
     public void ProductionEmployeeValidator_DoesNotFallBackToLegacySymmetricKey()
     {

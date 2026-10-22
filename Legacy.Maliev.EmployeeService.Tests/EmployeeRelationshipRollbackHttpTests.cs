@@ -9,13 +9,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes tests that exercise linked metadata deletion and relationship rollback.</summary>
 [CollectionDefinition("Employee relationship rollback", DisableParallelization = true)]
 public sealed class EmployeeRelationshipRollbackCollection;
 
+/// <summary>Checks atomic relationship failures and live authorization ordering across employee, address, and role boundaries.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee relationship rollback")]
 public sealed class EmployeeRelationshipRollbackHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that live-authorized deletion still respects linked metadata foreign keys without altering rows or cache.</summary>
+    /// <param name="kind">The linked metadata route segment: addresses or roles.</param>
+    /// <param name="permission">The matching address-delete or role-delete permission carried by the signed client.</param>
+    /// <returns>A task that completes after verifying that live-authorized deletion still respects linked metadata foreign keys without altering rows or cache.</returns>
     [Theory]
     [InlineData("addresses", "legacy-employee.addresses.delete")]
     [InlineData("roles", "legacy-employee.roles.delete")]
@@ -35,6 +42,10 @@ public sealed class EmployeeRelationshipRollbackHttpTests(EmployeeRouteAcceptanc
         Assert.Equal(1, authority.LiveCalls);
     }
 
+    /// <summary>Checks that live IAM denial refuses linked metadata deletion before database failure despite signed permission.</summary>
+    /// <param name="kind">The linked metadata route segment: addresses or roles.</param>
+    /// <param name="permission">The matching address-delete or role-delete permission carried by the signed client.</param>
+    /// <returns>A task that completes after verifying that live IAM denial refuses linked metadata deletion before database failure despite signed permission.</returns>
     [Theory]
     [InlineData("addresses", "legacy-employee.addresses.delete")]
     [InlineData("roles", "legacy-employee.roles.delete")]
@@ -55,6 +66,9 @@ public sealed class EmployeeRelationshipRollbackHttpTests(EmployeeRouteAcceptanc
         Assert.Equal(1, authority.LiveCalls);
     }
 
+    /// <summary>Checks that missing address or role references reject employee create and update atomically without cache eviction.</summary>
+    /// <param name="kind">The missing relationship selector: address sets an absent HomeAddressId; role sets an absent RoleId.</param>
+    /// <returns>A task that completes after verifying that missing address or role references reject employee create and update atomically without cache eviction.</returns>
     [Theory]
     [InlineData("address")]
     [InlineData("role")]

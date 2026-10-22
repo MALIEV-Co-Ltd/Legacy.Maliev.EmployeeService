@@ -6,9 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes signature ambiguity tests that share seeded employee metadata.</summary>
 [CollectionDefinition("Employee signature ambiguity", DisableParallelization = true)]
 public sealed class EmployeeSignatureAmbiguityCollection;
 
+/// <summary>Verifies signature read and update responses for zero, one, or multiple employee metadata rows.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee signature ambiguity")]
 public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -18,6 +21,10 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
     private const string Route = "/employees/signatures/17";
     private const string Resource = "/employees/17/signature";
 
+    /// <summary>Checks that ambiguous signature reads and updates retain a private server failure without changing stored metadata.</summary>
+    /// <param name="update">Whether to PUT signature metadata rather than GET the employee signature.</param>
+    /// <param name="matches">The two or three signature metadata rows seeded for the selected employee to create ambiguity.</param>
+    /// <returns>A task that completes after verifying that ambiguous signature reads and updates retain a private server failure without changing stored metadata.</returns>
     [Theory]
     [InlineData(false, 2)]
     [InlineData(false, 3)]
@@ -43,6 +50,9 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
         }
     }
 
+    /// <summary>Checks that signature creation with existing metadata acknowledges exactly the newly persisted row.</summary>
+    /// <param name="existing">The one or two signature metadata rows already stored for the selected employee before creation.</param>
+    /// <returns>A task that completes after verifying that signature creation with existing metadata acknowledges exactly the newly persisted row.</returns>
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -68,6 +78,9 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
         Assert.EndsWith("/employees/signatures/17", response.Headers.Location!.ToString(), StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>Checks the unique signature read or update contract while preserving another employee's metadata.</summary>
+    /// <param name="update">Whether to PUT signature metadata rather than GET the employee signature.</param>
+    /// <returns>A task that completes after verifying the unique signature read or update contract while preserving another employee's metadata.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -104,6 +117,9 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
         }
     }
 
+    /// <summary>Checks that missing employee signature metadata returns 404 without mutation.</summary>
+    /// <param name="update">Whether to PUT signature metadata rather than GET the employee signature.</param>
+    /// <returns>A task that completes after verifying that missing employee signature metadata returns 404 without mutation.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -118,6 +134,11 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
         Assert.Equal(before, await SnapshotAsync());
     }
 
+    /// <summary>Checks that invalid signature request authority is rejected before ambiguous metadata lookup.</summary>
+    /// <param name="update">Whether to PUT signature metadata rather than GET the employee signature.</param>
+    /// <param name="authority">The anonymous, wrong-signature, or missing-permission request scenario.</param>
+    /// <param name="expected">The expected Unauthorized or Forbidden response for the selected authority.</param>
+    /// <returns>A task that completes after verifying that invalid signature request authority is rejected before ambiguous metadata lookup.</returns>
     [Theory]
     [InlineData(false, "anonymous", HttpStatusCode.Unauthorized)]
     [InlineData(false, "wrong-signature", HttpStatusCode.Unauthorized)]
@@ -140,7 +161,7 @@ public sealed class EmployeeSignatureAmbiguityHttpTests(EmployeeRouteAcceptanceF
     private static string Permission(bool update) => update ? "legacy-employee.signatures.write" : "legacy-employee.signatures.read";
 
     private static Task<HttpResponseMessage> SendAsync(HttpClient client, bool update) => update
-        ? client.PutAsJsonAsync(Route, new { Bucket = "replacement-bucket", ObjectName = "replacement.png" })
+        ? client.PutAsJsonAsync(Route, new { Bucket = "replacement-bucket", ObjectName = "replacement.png", EmployeeId = OwnerId })
         : client.GetAsync(Route);
 
     private async Task SeedAsync(int matches)

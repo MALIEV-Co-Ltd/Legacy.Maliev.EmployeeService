@@ -10,10 +10,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Verifies authenticated Employee routes, real persistence and caches, controlled IAM, and served wire contracts.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks scaffold preview generation, compilation, and generated queries against the migrated owned employee graph.</summary>
+    /// <returns>A task that completes after verifying scaffold preview generation, compilation, and generated queries against the migrated owned employee graph.</returns>
     [Fact]
     public async Task Scaffold_ActualEfPreviewBuildAndGeneratedQueriesPreserveMigratedOwnedGraph()
     {
@@ -22,6 +26,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await EmployeeScaffoldRuntimeProof.RunAsync(fixture, employee.Id);
     }
 
+    /// <summary>Checks normal RS256 creation, persisted identities, named Location headers, and literal response property casing.</summary>
+    /// <param name="route">The employees, employees/addresses, or employees/roles creation route.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying normal RS256 creation, persisted identities, named Location headers, and literal response property casing.</returns>
     [Theory]
     [InlineData("employees", "legacy-employee.employees.create")]
     [InlineData("employees/addresses", "legacy-employee.addresses.create")]
@@ -66,6 +74,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         }
     }
 
+    /// <summary>Checks creation with absent optional address or role fields without inventing required input.</summary>
+    /// <param name="route">The employees/addresses or employees/roles creation route.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying creation with absent optional address or role fields without inventing required input.</returns>
     [Theory]
     [InlineData("employees/addresses", "legacy-employee.addresses.create")]
     [InlineData("employees/roles", "legacy-employee.roles.create")]
@@ -79,6 +91,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.False(document.RootElement.TryGetProperty(route.EndsWith("roles", StringComparison.Ordinal) ? "Name" : "AddressLine1", out _));
     }
 
+    /// <summary>Checks that null and malformed create bodies return 400 without persisting employee, address, or role rows.</summary>
+    /// <param name="route">The employees, employees/addresses, or employees/roles creation route.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying that null and malformed create bodies return 400 without persisting employee, address, or role rows.</returns>
     [Theory]
     [InlineData("employees", "legacy-employee.employees.create")]
     [InlineData("employees/addresses", "legacy-employee.addresses.create")]
@@ -95,6 +111,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.False(await db.Employees.AnyAsync()); Assert.False(await db.Addresses.AnyAsync()); Assert.False(await db.Roles.AnyAsync());
     }
 
+    /// <summary>Checks that approved employee name and email validation rejects invalid create bodies before persistence.</summary>
+    /// <param name="body">The JSON create body containing an empty first name, blank last name, or invalid email address.</param>
+    /// <returns>A task that completes after verifying that approved employee name and email validation rejects invalid create bodies before persistence.</returns>
     [Theory]
     [InlineData("{\"FirstName\":\"\",\"LastName\":\"Fixture\",\"Email\":\"x@example.invalid\"}")]
     [InlineData("{\"FirstName\":\"Fixture\",\"LastName\":\" \",\"Email\":\"x@example.invalid\"}")]
@@ -107,6 +126,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await using var db = fixture.CreateContext(); Assert.False(await db.Employees.AnyAsync());
     }
 
+    /// <summary>Checks that a missing literal resource identifier returns 404 without inserting records.</summary>
+    /// <param name="route">The employee, address, role, or signature route segment selecting the resource under test.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying that a missing literal resource identifier returns 404 without inserting records.</returns>
     [Theory]
     [InlineData("employees", "legacy-employee.employees.read")]
     [InlineData("employees/addresses", "legacy-employee.addresses.read")]
@@ -123,6 +146,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await using var db = fixture.CreateContext(); Assert.False(await db.Employees.AnyAsync());
     }
 
+    /// <summary>Checks that empty address and role lists retain the source 404 response.</summary>
+    /// <param name="route">The employees/addresses or employees/roles collection route.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying that empty address and role lists retain the source 404 response.</returns>
     [Theory]
     [InlineData("employees/addresses", "legacy-employee.addresses.list")]
     [InlineData("employees/roles", "legacy-employee.roles.read")]
@@ -133,6 +160,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    /// <summary>Checks nonempty address and role lists for PascalCase properties and omission of null optional values.</summary>
+    /// <param name="route">The employees/addresses or employees/roles collection route.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying nonempty address and role lists for PascalCase properties and omission of null optional values.</returns>
     [Theory]
     [InlineData("employees/addresses", "legacy-employee.addresses.list")]
     [InlineData("employees/roles", "legacy-employee.roles.read")]
@@ -147,6 +178,8 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.False(row.TryGetProperty(route.EndsWith("roles", StringComparison.Ordinal) ? "Description" : "Building", out _));
     }
 
+    /// <summary>Checks exact embedded home-address output without navigation cycles or an invented role projection.</summary>
+    /// <returns>A task that completes after verifying exact embedded home-address output without navigation cycles or an invented role projection.</returns>
     [Fact]
     public async Task Get_EmployeeWithAddress_EmbedsExactHomeAddressWithoutCyclesOrInventedRole()
     {
@@ -165,6 +198,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.False(json.TryGetProperty("Role", out _)); // Source GET includes HomeAddress only.
     }
 
+    /// <summary>Checks that successful updates refresh affected employee projections and preserve creation dates and unrelated identity fields.</summary>
+    /// <param name="kind">The employee, address, role, or profile mutation selecting the route, permission, request, and expected persisted change.</param>
+    /// <returns>A task that completes after verifying that successful updates refresh affected employee projections and preserve creation dates and unrelated identity fields.</returns>
     [Theory]
     [InlineData("employee")]
     [InlineData("address")]
@@ -195,6 +231,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         if (kind == "role") Assert.Equal("Updated role", (await db.Roles.SingleAsync()).Name);
     }
 
+    /// <summary>Checks that updates to missing resources return 404 without inventing related rows.</summary>
+    /// <param name="kind">The employee, address, role, or profile mutation selecting the route, permission, request, and expected persisted change.</param>
+    /// <returns>A task that completes after verifying that updates to missing resources return 404 without inventing related rows.</returns>
     [Theory]
     [InlineData("employee")]
     [InlineData("address")]
@@ -210,6 +249,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.False(await db.Addresses.AnyAsync()); Assert.False(await db.Roles.AnyAsync());
     }
 
+    /// <summary>Checks forced-live-authorized deletion of only the selected resource and a repeated-delete 404.</summary>
+    /// <param name="route">The employee, address, role, or signature route segment selecting the resource under test.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <returns>A task that completes after verifying forced-live-authorized deletion of only the selected resource and a repeated-delete 404.</returns>
     [Theory]
     [InlineData("employees", "legacy-employee.employees.delete")]
     [InlineData("employees/addresses", "legacy-employee.addresses.delete")]
@@ -233,6 +276,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.Equal(2, authority.LiveCalls); // Forced live bypasses actual client's previous positive cache.
     }
 
+    /// <summary>Checks that signed permission cannot authorize deletion after live denial, remote failure, or a missing IAM client.</summary>
+    /// <param name="decision">The forced live IAM outcome: deny, unavailable, malformed, or no-client.</param>
+    /// <returns>A task that completes after verifying that signed permission cannot authorize deletion after live denial, remote failure, or a missing IAM client.</returns>
     [Theory]
     [InlineData("deny")]
     [InlineData("unavailable")]
@@ -249,6 +295,12 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.Equal(1, await db.Addresses.CountAsync()); Assert.Equal(1, await db.Roles.CountAsync()); Assert.Equal(1, await db.SignatureImageFiles.CountAsync());
     }
 
+    /// <summary>Checks normal token and permission failures without persisting create requests.</summary>
+    /// <param name="route">The employees, employees/addresses, or employees/roles creation route.</param>
+    /// <param name="permission">The matching legacy-employee permission supplied to the signed request authority.</param>
+    /// <param name="authority">The anonymous, expired, wrong-signature, wrong-issuer, wrong-audience, or missing-permission authority scenario.</param>
+    /// <param name="status">The expected numeric 401 or 403 response for that authentication or permission failure.</param>
+    /// <returns>A task that completes after verifying normal token and permission failures without persisting create requests.</returns>
     [Theory]
     [InlineData("employees", "legacy-employee.employees.create", "anonymous", 401)]
     [InlineData("employees", "legacy-employee.employees.create", "expired", 401)]
@@ -266,6 +318,8 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await using var db = fixture.CreateContext(); Assert.False(await db.Employees.AnyAsync()); Assert.False(await db.Addresses.AnyAsync()); Assert.False(await db.Roles.AnyAsync());
     }
 
+    /// <summary>Checks signature query creation, named Location, and source-compatible employee reassignment through body update without cloud I/O.</summary>
+    /// <returns>A task that completes after verifying signature query creation, named Location, and source-compatible employee reassignment through body update without cloud I/O.</returns>
     [Fact]
     public async Task Signature_CreateQueryNamedLocationAndBodyUpdate_PreserveSourceEmployeeIdReassignmentWithoutCloudIo()
     {
@@ -296,6 +350,10 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.Equal("signatures/updated.png", document.RootElement.GetProperty("ObjectName").GetString());
     }
 
+    /// <summary>Checks that missing signature storage query values return 400 without inserting metadata.</summary>
+    /// <param name="bucket">The bucket query value, empty when testing missing bucket validation.</param>
+    /// <param name="objectName">The objectName query value, empty when testing missing object-name validation.</param>
+    /// <returns>A task that completes after verifying that missing signature storage query values return 400 without inserting metadata.</returns>
     [Theory]
     [InlineData("", "object")]
     [InlineData("bucket", "")]
@@ -308,6 +366,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await using var db = fixture.CreateContext(); Assert.False(await db.SignatureImageFiles.AnyAsync());
     }
 
+    /// <summary>Checks that signature creation or update for missing targets returns 404 without inventing metadata.</summary>
+    /// <param name="action">The create operation for a missing employee or update operation for missing signature metadata.</param>
+    /// <returns>A task that completes after verifying that signature creation or update for missing targets returns 404 without inventing metadata.</returns>
     [Theory]
     [InlineData("create")]
     [InlineData("update")]
@@ -321,6 +382,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await using var db = fixture.CreateContext(); Assert.False(await db.SignatureImageFiles.AnyAsync());
     }
 
+    /// <summary>Checks that null or invalid signature update bodies return 400 while preserving stored metadata.</summary>
+    /// <param name="body">The null JSON body or signature object containing an empty Bucket or ObjectName value.</param>
+    /// <returns>A task that completes after verifying that null or invalid signature update bodies return 400 while preserving stored metadata.</returns>
     [Theory]
     [InlineData("{\"Bucket\":\"\",\"ObjectName\":\"part.png\"}")]
     [InlineData("{\"Bucket\":\"fixture\",\"ObjectName\":\"\"}")]
@@ -333,6 +397,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         await using var db = fixture.CreateContext(); Assert.Equal("signatures/original.png", (await db.SignatureImageFiles.SingleAsync()).ObjectName);
     }
 
+    /// <summary>Checks rejection of invalid or expanded self-profile bodies without changing administrative fields.</summary>
+    /// <param name="body">The profile JSON containing an empty name or an out-of-scope RoleId or Email property.</param>
+    /// <returns>A task that completes after verifying rejection of invalid or expanded self-profile bodies without changing administrative fields.</returns>
     [Theory]
     [InlineData("{\"FirstName\":\"\",\"LastName\":\"Fixture\"}")]
     [InlineData("{\"FirstName\":\"Fixture\",\"LastName\":\"\"}")]
@@ -347,6 +414,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         Assert.Equal(employee.FirstName, after.FirstName); Assert.Equal(employee.Email, after.Email); Assert.Equal(employee.RoleId, after.RoleId); Assert.Equal(employee.ModifiedDate, after.ModifiedDate);
     }
 
+    /// <summary>Checks that late historical reads and stale Redis fills cannot replace a subsequently committed mutation.</summary>
+    /// <param name="kind">The employee, profile, address, or delete operation raced against a previously started detail read.</param>
+    /// <returns>A task that completes after verifying that late historical reads and stale Redis fills cannot replace a subsequently committed mutation.</returns>
     [Theory]
     [InlineData("employee")]
     [InlineData("profile")]
@@ -415,6 +485,8 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
         }
     }
 
+    /// <summary>Checks nonproduction OpenAPI business routes and schemas while production keeps that document hidden.</summary>
+    /// <returns>A task that completes after verifying nonproduction OpenAPI business routes and schemas while production keeps that document hidden.</returns>
     [Fact]
     public async Task Documentation_ExistingNonProductionHttpContractContainsBusinessRoutesAndProductionDoesNotExposeIt()
     {
@@ -467,6 +539,9 @@ public sealed class EmployeeRouteAcceptanceHttpTests(EmployeeRouteAcceptanceFixt
             page.Value.GetProperty("properties").EnumerateObject().Select(item => item.Name).Order(StringComparer.Ordinal).ToArray());
     }
 
+    /// <summary>Checks that poisoned or unavailable Redis cannot replace committed PostgreSQL employee detail.</summary>
+    /// <param name="denyRemoval">Whether to force cache-removal failure during a successful update before reading the authoritative employee detail.</param>
+    /// <returns>A task that completes after verifying that poisoned or unavailable Redis cannot replace committed PostgreSQL employee detail.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

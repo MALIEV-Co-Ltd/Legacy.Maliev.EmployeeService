@@ -9,10 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks employee deletion isolation, fresh live IAM decisions, and shared graph and Redis preservation.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee shared address")]
 public sealed class EmployeeProfileDeletionIsolationHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks live-allowed or live-denied profile deletion while preserving shared references and surviving employees and caches.</summary>
+    /// <param name="decision">The controlled fresh IAM decision, allow or deny, applied to the selected employee deletion.</param>
+    /// <returns>A task that completes after verifying live-allowed or live-denied profile deletion while preserving shared references and surviving employees and caches.</returns>
     [Theory]
     [InlineData("allow")]
     [InlineData("deny")]

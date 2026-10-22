@@ -9,13 +9,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes administrative profile tests that share employee, address, role, and cache state.</summary>
 [CollectionDefinition("Employee administrative profile", DisableParallelization = true)]
 public sealed class EmployeeAdministrativeProfileCollection;
 
+/// <summary>Checks literal optional administrative profile values and clearing of persisted references.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee administrative profile")]
 public sealed class EmployeeAdministrativeProfileLifecycleHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks administrative creation of optional fields and later clearing without modifying shared address or role rows.</summary>
+    /// <param name="phone">The literal initial phone value, including null, empty text, or surrounding spaces.</param>
+    /// <param name="related">Whether the initial employee receives date-of-birth, role, and home-address references rather than null values.</param>
+    /// <returns>A task that completes after verifying administrative creation of optional fields and later clearing without modifying shared address or role rows.</returns>
     [Theory]
     [InlineData(null, false)]
     [InlineData("", false)]

@@ -1,7 +1,9 @@
 namespace Legacy.Maliev.EmployeeService.Tests.Workflows;
 
+/// <summary>Checks Dependabot NuGet scope and the absence of exclusions that would split the coordinated EF and Npgsql dependency graph.</summary>
 public sealed class DependabotConfigurationContractTests
 {
+    /// <summary>Checks that NuGet updates target exactly the independently resolvable Application, Data, and Domain project directories.</summary>
     [Fact]
     public void NuGetUpdater_ScansOnlyIndependentlyResolvableProjectDirectories()
     {
@@ -21,6 +23,7 @@ public sealed class DependabotConfigurationContractTests
         Assert.Equal(3, source.Split("\n      - /Legacy.Maliev.EmployeeService.", StringSplitOptions.None).Length - 1);
     }
 
+    /// <summary>Checks that EF Core and Npgsql provider packages remain eligible for coordinated dependency updates.</summary>
     [Fact]
     public void NuGetUpdater_AllowsCoordinatedEfAndNpgsqlRuntimeGraph()
     {

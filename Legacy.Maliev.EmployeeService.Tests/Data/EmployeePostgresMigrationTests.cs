@@ -6,14 +6,21 @@ using Testcontainers.PostgreSql;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Data;
 
+/// <summary>Owns disposable PostgreSQL migration tests for employee relations, signature metadata, and computed names.</summary>
 public sealed class EmployeePostgresMigrationTests : IAsyncLifetime
 {
     private readonly PostgreSqlContainer postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
 
+    /// <summary>Starts the PostgreSQL container owned by the migration test instance.</summary>
+    /// <returns>A task that completes when the owned PostgreSQL container has started.</returns>
     public Task InitializeAsync() => postgres.StartAsync();
 
+    /// <summary>Disposes the PostgreSQL container owned by the migration test instance.</summary>
+    /// <returns>A task that completes when the owned PostgreSQL container has been disposed.</returns>
     public Task DisposeAsync() => postgres.DisposeAsync().AsTask();
 
+    /// <summary>Checks migrated tables, computed full names, address and role ownership, and signature metadata through the repository.</summary>
+    /// <returns>A task that completes after verifying migrated tables, computed full names, address and role ownership, and signature metadata through the repository.</returns>
     [Fact]
     public async Task InitialMigration_PreservesEmployeeRelationsSignatureMetadataAndComputedName()
     {

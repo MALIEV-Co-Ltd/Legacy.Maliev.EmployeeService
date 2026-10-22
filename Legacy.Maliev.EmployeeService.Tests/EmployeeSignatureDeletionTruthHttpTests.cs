@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Verifies truthful deletion of all selected-employee signature metadata while preserving other employees.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 public sealed class EmployeeSignatureDeletionTruthHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
@@ -14,6 +16,9 @@ public sealed class EmployeeSignatureDeletionTruthHttpTests(EmployeeRouteAccepta
     private const string Resource = "/employees/17/signature";
     private const string Route = "/employees/signatures/17";
 
+    /// <summary>Checks that deleting one or multiple selected signature rows returns 204 and a repeated delete returns 404.</summary>
+    /// <param name="matches">The one, two, or three signature metadata rows seeded for the selected employee.</param>
+    /// <returns>A task that completes after verifying that deleting one or multiple selected signature rows returns 204 and a repeated delete returns 404.</returns>
     [Theory]
     [InlineData(1)]
     [InlineData(2)]
@@ -45,6 +50,9 @@ public sealed class EmployeeSignatureDeletionTruthHttpTests(EmployeeRouteAccepta
         Assert.Equal(2, fixture.Authorities.Values.Single().LiveCalls);
     }
 
+    /// <summary>Checks that live IAM refusal preserves every duplicate signature row and other-employee metadata.</summary>
+    /// <param name="decision">The forced live IAM outcome: deny, unavailable, malformed, or no-client.</param>
+    /// <returns>A task that completes after verifying that live IAM refusal preserves every duplicate signature row and other-employee metadata.</returns>
     [Theory]
     [InlineData("deny")]
     [InlineData("unavailable")]
@@ -65,6 +73,10 @@ public sealed class EmployeeSignatureDeletionTruthHttpTests(EmployeeRouteAccepta
         Assert.DoesNotContain("synthetic.png", await response.Content.ReadAsStringAsync(), StringComparison.Ordinal);
     }
 
+    /// <summary>Checks that invalid authority cannot delete duplicate signature metadata.</summary>
+    /// <param name="authority">The anonymous, wrong-signature, or missing-permission request scenario.</param>
+    /// <param name="expected">The expected Unauthorized or Forbidden response for that request authority.</param>
+    /// <returns>A task that completes after verifying that invalid authority cannot delete duplicate signature metadata.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("wrong-signature", HttpStatusCode.Unauthorized)]

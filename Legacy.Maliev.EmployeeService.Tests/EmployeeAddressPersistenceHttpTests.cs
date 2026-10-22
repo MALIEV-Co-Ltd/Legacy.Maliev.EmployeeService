@@ -9,13 +9,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes address text-limit tests that share persisted rows and linked Redis entries.</summary>
 [CollectionDefinition("Employee address persistence", DisableParallelization = true)]
 public sealed class EmployeeAddressPersistenceCollection;
 
+/// <summary>Checks address text limits and linked-cache effects against real persistence.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee address persistence")]
 public sealed class EmployeeAddressPersistenceHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that 256-character address text persists and 257 characters fail privately without changing stored graphs or caches.</summary>
+    /// <param name="field">The address text field tested at its storage limit: either address line, building, city, state, or postal code.</param>
+    /// <param name="update">Whether to update the existing linked address rather than create a new unlinked address.</param>
+    /// <returns>A task that completes after verifying that 256-character address text persists and 257 characters fail privately without changing stored graphs or caches.</returns>
     [Theory]
     [InlineData("AddressLine1", false)]
     [InlineData("AddressLine2", false)]

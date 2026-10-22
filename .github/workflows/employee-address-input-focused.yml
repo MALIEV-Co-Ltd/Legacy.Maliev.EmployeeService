@@ -1,0 +1,251 @@
+name: Employee Address input validation proof
+
+on:
+  pull_request:
+    branches: [main, develop, staging]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: employee-address-input-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  address-input-proof:
+    name: address-input-public347-native118-candidate614
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      MalievWorkspaceRoot: ${{ github.workspace }}/.dependencies
+      GITHUB_ACTIONS: 'false'
+      MSBUILDDISABLENODEREUSE: '1'
+      DOTNET_CLI_DO_NOT_USE_MSBUILD_SERVER: '1'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+    steps:
+      - name: Check out exact proposed source and frozen baseline object
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out frozen Defaults
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: MALIEV-Co-Ltd/Legacy.Maliev.ServiceDefaults
+          ref: c40a7f82cea347b949444dcd7fb730f2b8dc3c0e
+          path: .dependencies/Legacy.Maliev.ServiceDefaults
+          persist-credentials: false
+      - name: Check out frozen Contracts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: MALIEV-Co-Ltd/Legacy.Maliev.CompatibilityContracts
+          ref: 78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7
+          path: .dependencies/Legacy.Maliev.CompatibilityContracts
+          persist-credentials: false
+      - name: Check complete candidate source and proof refusal controls
+        run: |
+          mkdir -p runner-metadata/address-input
+          python3 -B scripts/verify_employee_address_input_proof.py source | tee runner-metadata/address-input/source.json
+          python3 -B scripts/test_employee_address_input_proof.py
+      - name: Compose exact current-native baseline outside the checkout
+        run: |
+          baseline="$RUNNER_TEMP/employee-address-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$baseline"
+          test "$(git rev-parse b34700f3d65b5055bc9991a1fd6656b5e3259e87^{tree})" = fcc2fda97b255b09415886b895c70e9faca93417
+          mkdir "$baseline"
+          git archive b34700f3d65b5055bc9991a1fd6656b5e3259e87 | tar -x -C "$baseline"
+          python3 -B scripts/verify_employee_address_input_proof.py prepare-baseline "$baseline" | tee runner-metadata/address-input/baseline-source.json
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: 10.0.x
+      - name: Restore and build untouched current-native baseline Release
+        timeout-minutes: 9
+        run: |
+          export GITHUB_ACTIONS=false
+          baseline="$RUNNER_TEMP/employee-address-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/baseline-restore-admission.json
+          timeout --signal=TERM --kill-after=15s 180s dotnet restore "$baseline/Legacy.Maliev.EmployeeService.slnx" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -nodeReuse:false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/baseline-build-admission.json
+          timeout --signal=TERM --kill-after=15s 300s dotnet build "$baseline/Legacy.Maliev.EmployeeService.slnx" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/address-input/baseline-build.log
+      - name: Characterize actual public readers and fresh current native MVC first
+        timeout-minutes: 6
+        run: |
+          export GITHUB_ACTIONS=false
+          baseline="$RUNNER_TEMP/employee-address-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/characterizer-admission.json
+          timeout --signal=TERM --kill-after=15s 300s dotnet test "$baseline/Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeAddressInputOracleTests|FullyQualifiedName~EmployeeAddressInputBindingTests.CurrentNativeBaseline_IgnoresIgnoredMetadata" --logger "trx;LogFileName=characterizer.trx" --results-directory "$GITHUB_WORKSPACE/runner-metadata/address-input/characterizer"
+          python3 -B scripts/verify_employee_address_input_proof.py verify characterizer runner-metadata/address-input/characterizer 0 | tee runner-metadata/address-input/characterizer-receipt.json
+      - name: Measure exact untouched current-native missing-validation RED
+        timeout-minutes: 6
+        run: |
+          export GITHUB_ACTIONS=false
+          baseline="$RUNNER_TEMP/employee-address-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/baseline-test-admission.json
+          set +e
+          timeout --signal=TERM --kill-after=15s 300s dotnet test "$baseline/Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeAddressInputBindingTests.CandidateMatchesSource" --logger "trx;LogFileName=baseline.trx" --results-directory "$GITHUB_WORKSPACE/runner-metadata/address-input/baseline"
+          result=$?
+          set -e
+          python3 -B scripts/verify_employee_address_input_proof.py verify baseline runner-metadata/address-input/baseline "$result" | tee runner-metadata/address-input/baseline-receipt.json
+      - name: Restore and build candidate Release with zero warnings and errors
+        timeout-minutes: 9
+        run: |
+          export GITHUB_ACTIONS=false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/candidate-restore-admission.json
+          timeout --signal=TERM --kill-after=15s 180s dotnet restore Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -nodeReuse:false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/candidate-build-admission.json
+          timeout --signal=TERM --kill-after=15s 300s dotnet build Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/address-input/candidate-build.log
+      - name: Require actual candidate reader, binding, HTTP and cache proof
+        timeout-minutes: 12
+        run: |
+          export GITHUB_ACTIONS=false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/candidate-test-admission.json
+          timeout --signal=TERM --kill-after=15s 660s dotnet test Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~Legacy.Maliev.EmployeeService.Tests.AddressInput" --logger "trx;LogFileName=candidate.trx" --results-directory "$GITHUB_WORKSPACE/runner-metadata/address-input/candidate"
+          python3 -B scripts/verify_employee_address_input_proof.py verify candidate runner-metadata/address-input/candidate 0 | tee runner-metadata/address-input/candidate-receipt.json
+      - name: Always recheck exact candidate and untouched native baseline source
+        if: always()
+        run: |
+          baseline="$RUNNER_TEMP/employee-address-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_address_input_proof.py final-source "$baseline" | tee runner-metadata/address-input/final-source.json
+      - name: Always require settled authoritative native census
+        if: always()
+        timeout-minutes: 2
+        run: |
+          sleep 5
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/address-input/final-native-census.json
+      - name: Always release the exact disposable baseline directory
+        if: always()
+        run: |
+          baseline="$RUNNER_TEMP/employee-address-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_address_input_proof.py cleanup-baseline "$baseline" | tee runner-metadata/address-input/cleanup.json
+      - name: Preserve separate bounded proof evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: employee-address-input-${{ github.sha }}
+          path: runner-metadata/address-input
+          if-no-files-found: warn
+          retention-days: 7
+
+  signature-input-proof:
+    name: signature-input-public269-native118-candidate481
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      MalievWorkspaceRoot: ${{ github.workspace }}/.dependencies
+      GITHUB_ACTIONS: 'false'
+      MSBUILDDISABLENODEREUSE: '1'
+      DOTNET_CLI_DO_NOT_USE_MSBUILD_SERVER: '1'
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+    steps:
+      - name: Check out exact proposed source and frozen baseline object
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out frozen Defaults
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: MALIEV-Co-Ltd/Legacy.Maliev.ServiceDefaults
+          ref: c40a7f82cea347b949444dcd7fb730f2b8dc3c0e
+          path: .dependencies/Legacy.Maliev.ServiceDefaults
+          persist-credentials: false
+      - name: Check out frozen Contracts
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: MALIEV-Co-Ltd/Legacy.Maliev.CompatibilityContracts
+          ref: 78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7
+          path: .dependencies/Legacy.Maliev.CompatibilityContracts
+          persist-credentials: false
+      - name: Check complete candidate source and proof refusal controls
+        run: |
+          mkdir -p runner-metadata/signature-input
+          python3 -B scripts/verify_employee_signature_input_proof.py source | tee runner-metadata/signature-input/source.json
+          python3 -B scripts/test_employee_signature_input_proof.py
+      - name: Compose exact current-native baseline outside the checkout
+        run: |
+          baseline="$RUNNER_TEMP/employee-signature-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          test ! -e "$baseline"
+          test "$(git rev-parse a8728b1e7d020695680a23f93438f3cf6b9790e9^{tree})" = 1098af62c1f3aeb3837565ddb0a2a43d99727af5
+          mkdir "$baseline"
+          git archive a8728b1e7d020695680a23f93438f3cf6b9790e9 | tar -x -C "$baseline"
+          python3 -B scripts/verify_employee_signature_input_proof.py prepare-baseline "$baseline" | tee runner-metadata/signature-input/baseline-source.json
+      - name: Set up .NET
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with:
+          dotnet-version: 10.0.x
+      - name: Restore and build untouched current-native baseline Release
+        timeout-minutes: 9
+        run: |
+          export GITHUB_ACTIONS=false
+          baseline="$RUNNER_TEMP/employee-signature-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/baseline-restore-admission.json
+          timeout --signal=TERM --kill-after=15s 180s dotnet restore "$baseline/Legacy.Maliev.EmployeeService.slnx" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -nodeReuse:false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/baseline-build-admission.json
+          timeout --signal=TERM --kill-after=15s 300s dotnet build "$baseline/Legacy.Maliev.EmployeeService.slnx" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/signature-input/baseline-build.log
+      - name: Characterize actual public readers and fresh current native MVC first
+        timeout-minutes: 6
+        run: |
+          export GITHUB_ACTIONS=false
+          baseline="$RUNNER_TEMP/employee-signature-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/characterizer-admission.json
+          timeout --signal=TERM --kill-after=15s 300s dotnet test "$baseline/Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeSignatureInputOracleTests|FullyQualifiedName~EmployeeSignatureInputBindingTests.CurrentNativeBaseline_IgnoresIgnoredMetadata" --logger "trx;LogFileName=characterizer.trx" --results-directory "$GITHUB_WORKSPACE/runner-metadata/signature-input/characterizer"
+          python3 -B scripts/verify_employee_signature_input_proof.py verify characterizer runner-metadata/signature-input/characterizer 0 | tee runner-metadata/signature-input/characterizer-receipt.json
+      - name: Measure exact untouched current-native missing-validation RED
+        timeout-minutes: 6
+        run: |
+          export GITHUB_ACTIONS=false
+          baseline="$RUNNER_TEMP/employee-signature-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/baseline-test-admission.json
+          set +e
+          timeout --signal=TERM --kill-after=15s 300s dotnet test "$baseline/Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj" -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~EmployeeSignatureInputBindingTests.CandidateMatchesSource" --logger "trx;LogFileName=baseline.trx" --results-directory "$GITHUB_WORKSPACE/runner-metadata/signature-input/baseline"
+          result=$?
+          set -e
+          python3 -B scripts/verify_employee_signature_input_proof.py verify baseline runner-metadata/signature-input/baseline "$result" | tee runner-metadata/signature-input/baseline-receipt.json
+      - name: Restore and build candidate Release with zero warnings and errors
+        timeout-minutes: 9
+        run: |
+          export GITHUB_ACTIONS=false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/candidate-restore-admission.json
+          timeout --signal=TERM --kill-after=15s 180s dotnet restore Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -nodeReuse:false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/candidate-build-admission.json
+          timeout --signal=TERM --kill-after=15s 300s dotnet build Legacy.Maliev.EmployeeService.slnx -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-restore --warnaserror -nodeReuse:false -p:UseSharedCompilation=false | tee runner-metadata/signature-input/candidate-build.log
+      - name: Require actual candidate reader, binding, HTTP and cache proof
+        timeout-minutes: 12
+        run: |
+          export GITHUB_ACTIONS=false
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/candidate-test-admission.json
+          timeout --signal=TERM --kill-after=15s 660s dotnet test Legacy.Maliev.EmployeeService.Tests/Legacy.Maliev.EmployeeService.Tests.csproj -p:UseLocalMalievDependencies=true -p:MalievWorkspaceRoot="$MalievWorkspaceRoot" -c Release --no-build --no-restore --filter "FullyQualifiedName~Legacy.Maliev.EmployeeService.Tests.SignatureInput" --logger "trx;LogFileName=candidate.trx" --results-directory "$GITHUB_WORKSPACE/runner-metadata/signature-input/candidate"
+          python3 -B scripts/verify_employee_signature_input_proof.py verify candidate runner-metadata/signature-input/candidate 0 | tee runner-metadata/signature-input/candidate-receipt.json
+      - name: Always recheck exact candidate and untouched native baseline source
+        if: always()
+        run: |
+          baseline="$RUNNER_TEMP/employee-signature-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_signature_input_proof.py final-source "$baseline" | tee runner-metadata/signature-input/final-source.json
+      - name: Always require settled authoritative native census
+        if: always()
+        timeout-minutes: 2
+        run: |
+          sleep 5
+          python3 -B scripts/verify_employee_pagination_focused.py guard | tee runner-metadata/signature-input/final-native-census.json
+      - name: Always release the exact disposable baseline directory
+        if: always()
+        run: |
+          baseline="$RUNNER_TEMP/employee-signature-input-native-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          python3 -B scripts/verify_employee_signature_input_proof.py cleanup-baseline "$baseline" | tee runner-metadata/signature-input/cleanup.json
+      - name: Preserve separate bounded proof evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: employee-signature-input-${{ github.sha }}
+          path: runner-metadata/signature-input
+          if-no-files-found: warn
+          retention-days: 7
