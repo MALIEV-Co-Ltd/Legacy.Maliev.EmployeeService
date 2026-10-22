@@ -125,7 +125,7 @@ jobs:
           python3 -B scripts/verify_employee_address_input_proof.py cleanup-baseline "$baseline" | tee runner-metadata/address-input/cleanup.json
       - name: Preserve separate bounded proof evidence
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: employee-address-input-${{ github.sha }}
           path: runner-metadata/address-input
@@ -243,7 +243,7 @@ jobs:
           python3 -B scripts/verify_employee_signature_input_proof.py cleanup-baseline "$baseline" | tee runner-metadata/signature-input/cleanup.json
       - name: Preserve separate bounded proof evidence
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: employee-signature-input-${{ github.sha }}
           path: runner-metadata/signature-input
