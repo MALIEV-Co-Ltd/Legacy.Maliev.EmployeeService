@@ -844,7 +844,7 @@
     {
       "path": ".github/workflows/_build-and-test.yml",
       "bytes": 2174,
-      "blob": "73010a448f78253ce9b56a33ca7cc7a7b1254eac"
+      "blob": "cebf77c6cbd72e27aa90195c20c55ac2e6cece09"
     },
     {
       "path": ".github/workflows/ci-develop.yml",
@@ -864,37 +864,37 @@
     {
       "path": ".github/workflows/employee-address-input-focused.yml",
       "bytes": 18443,
-      "blob": "75e8f484ba74f0750e0e0cf78f043b2eed982eaf"
+      "blob": "0e53cea6c8cf0ed231c009d4142bfa9df9a6485c"
     },
     {
       "path": ".github/workflows/employee-authority-hosted-preflight.yml",
       "bytes": 11650,
-      "blob": "35f12fa2a78e952e8f8ebcafdf2b5940abca97fc"
+      "blob": "c2eb8e7fb3b7b01b3efe1320275274336ffa1987"
     },
     {
       "path": ".github/workflows/employee-metadata-focused.yml",
       "bytes": 8337,
-      "blob": "6778968d332815f1cdce5244cdc41816b3354838"
+      "blob": "d679d78d1056d7845cd49c10f4e6602b7ba776dd"
     },
     {
       "path": ".github/workflows/employee-owned-receipts.yml",
       "bytes": 6450,
-      "blob": "74c6842e9d897bcea120f342d7a0dacbeb589e55"
+      "blob": "e8538bfd199cdf7453fc5f96be62247a5a6cc466"
     },
     {
       "path": ".github/workflows/employee-pagination-focused.yml",
       "bytes": 3843,
-      "blob": "c07ea8ac9ea3e91324e7f0b88cba21a2125cedbb"
+      "blob": "c936418c46a29d71bc527fa8adfd32c0ea177539"
     },
     {
       "path": ".github/workflows/employee-qualification-controller.yml",
       "bytes": 3252,
-      "blob": "e5b849fe57bf7f80fd94b99db096adf63234c741"
+      "blob": "43f195bd959d7fa259d8dbfc172ecdbcc34c8da4"
     },
     {
       "path": ".github/workflows/employee-source-intake.yml",
       "bytes": 3056,
-      "blob": "f11eb189127461008dec41aa4fac19f08b3cd29a"
+      "blob": "b99628653b3fadf6888cf4214ea31a2dcb633f54"
     },
     {
       "path": ".github/workflows/pr-validation.yml",
@@ -917,159 +917,9 @@
       "blob": "942a549b0b11e10981dd9823433824b9865e6684"
     },
     {
-      "path": "deploy/base/deployment.yaml",
-      "bytes": 1985,
-      "blob": "0d67140c2473ac056e7c106d64c8ad68234017b4"
-    },
-    {
-      "path": "deploy/base/kustomization.yaml",
-      "bytes": 375,
-      "blob": "6a693dbe647ba19cf1393c355a175c19f3f50d22"
-    },
-    {
-      "path": "deploy/base/network-policy.yaml",
-      "bytes": 828,
-      "blob": "f883ec7384e6d0749b37febd7b8eb29ac4a1d4e0"
-    },
-    {
-      "path": "deploy/base/service-account.yaml",
-      "bytes": 140,
-      "blob": "a2ad4e30f2b5f20e6e3ca7d760c24cfe210b074d"
-    },
-    {
-      "path": "deploy/base/service.yaml",
-      "bytes": 246,
-      "blob": "30f07e52e22f429167116e3b9558aacd114df571"
-    },
-    {
-      "path": "deploy/README.md",
-      "bytes": 2382,
-      "blob": "2e6388d2ce05c31cbe2b7de5514d3cff838d549d"
-    },
-    {
       "path": "Directory.Build.props",
       "bytes": 515,
-      "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
-    },
-    {
-      "path": "docs/administrative-conditional-edits.md",
-      "bytes": 5454,
-      "blob": "afdfe143b06bfbc49e83bfb9e673dcd61bfe64f9"
-    },
-    {
-      "path": "docs/coupled-home-address-edits.md",
-      "bytes": 3514,
-      "blob": "939e9b5742285c3e9700dae05c02147b5f5b96f0"
-    },
-    {
-      "path": "docs/employee-actual-scaffold-proof-20261006.md",
-      "bytes": 2926,
-      "blob": "b0faeb18a45df62d6b1682cd6e1c7fd7339dbf9b"
-    },
-    {
-      "path": "docs/employee-address-input-proof.md",
-      "bytes": 5236,
-      "blob": "44dec997f6dd7b724026c932e32374820db916ef"
-    },
-    {
-      "path": "docs/employee-administrative-email-literal-source-20261011.md",
-      "bytes": 2331,
-      "blob": "70166a03527f5f0fd7ab1f168b7007902cc9826e"
-    },
-    {
-      "path": "docs/employee-authority-readonly-preflight.md",
-      "bytes": 4015,
-      "blob": "abd59fd079e53809c0f6923472a1f506db53ed9a"
-    },
-    {
-      "path": "docs/employee-directory-parity-design-20261001.md",
-      "bytes": 12392,
-      "blob": "283df12696a46f8d5c72732a75dbd652646386d6"
-    },
-    {
-      "path": "docs/employee-fixture-compatibility.md",
-      "bytes": 9176,
-      "blob": "b2d494089932c916a5b73553c4ef663873e9c190"
-    },
-    {
-      "path": "docs/employee-linux-custody.md",
-      "bytes": 5708,
-      "blob": "3938357df60ca69e3e18bdb38ab147721bf47542"
-    },
-    {
-      "path": "docs/employee-metadata-proof.md",
-      "bytes": 8235,
-      "blob": "1a1f02f1049c9867f57b13872031dd516860889f"
-    },
-    {
-      "path": "docs/employee-no-sdk-controller.md",
-      "bytes": 2157,
-      "blob": "d3c64a813015ab066521f798a9ee7b2356fec963"
-    },
-    {
-      "path": "docs/employee-owned-receipts.md",
-      "bytes": 3887,
-      "blob": "e09daaaa2a1cfab1341dfc1f2b79bbea5e119e99"
-    },
-    {
-      "path": "docs/employee-owner-source-intake.md",
-      "bytes": 3863,
-      "blob": "a4d949e49c7eea01e1fc26e33e596e6cf2732809"
-    },
-    {
-      "path": "docs/employee-qualification-controller.md",
-      "bytes": 3013,
-      "blob": "b47289d31341592410e00b075eb6b019c0eb86c7"
-    },
-    {
-      "path": "docs/employee-route-acceptance-design-20261001.md",
-      "bytes": 16633,
-      "blob": "1abd2284af5b44d22e5b85ca2b62baf55f3195ee"
-    },
-    {
-      "path": "docs/employee-self-profile-null-phone-20261001.md",
-      "bytes": 10090,
-      "blob": "36db0948a5d1ba04cbd14a0b8d268ef4b15d41d8"
-    },
-    {
-      "path": "docs/employee-signature-bucket-literal-source-20261011.md",
-      "bytes": 2290,
-      "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
-    },
-    {
-      "path": "docs/employee-signature-input-proof.md",
-      "blob": "0d785576739657579c652b3d0cbb9f0aab64b1e7",
-      "bytes": 2850
-    },
-    {
-      "path": "docs/employee-significant-search-source-20261006.md",
-      "bytes": 1928,
-      "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
-    },
-    {
-      "path": "docs/employee-stored-search-field-proof-20261006.md",
-      "bytes": 2165,
-      "blob": "0a31b6b98ee95b353b69ff3e5b4a113cf3f8c879"
-    },
-    {
-      "path": "docs/original-native-logging-source-cohort.json",
-      "bytes": 10973,
-      "blob": "6164594c18838fa1f4864146bc7302a0e0d65118"
-    },
-    {
-      "path": "docs/original-native-logging-source-cohort.md",
-      "bytes": 759,
-      "blob": "3596485a0e20fb922bffc68579fc7a9e2062763b"
-    },
-    {
-      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
-      "bytes": 119,
-      "blob": "0c208ae9181e5e5717e47ec1bd59368aebc6066e"
-    },
-    {
-      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.json",
-      "bytes": 398,
-      "blob": "b057873ee272efdfc5311a0179a6214f4e1768b7"
+      "blob": "da83d69d946c60539143c7009ffa5adc953f76ad"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
@@ -1123,8 +973,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 3008,
-      "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
+      "bytes": 3185,
+      "blob": "caaa14009746e9006004980563ebb273e2242757"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -1175,6 +1025,16 @@
       "path": "Legacy.Maliev.EmployeeService.Api/Serialization/EmployeeSignatureInputJsonOptions.cs",
       "blob": "23b506e53b1550b12fb2623bf3ab82158cd5f9db",
       "bytes": 4057
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.Development.json",
+      "bytes": 119,
+      "blob": "0c208ae9181e5e5717e47ec1bd59368aebc6066e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Api/appsettings.json",
+      "bytes": 398,
+      "blob": "b057873ee272efdfc5311a0179a6214f4e1768b7"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Application/Interfaces/IEmployeeBoundaries.cs",
@@ -1229,12 +1089,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
       "bytes": 1170,
-      "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
-    },
-    {
-      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
-      "bytes": 7037,
-      "blob": "93f998ba11d4b97069a25b7f1415b9f46147ada4"
+      "blob": "e8e53e8abf9dc3344124a4e2e82c1f03b8fd6e81"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
@@ -1242,14 +1097,19 @@
       "blob": "f82ed9ac464b97ae061bc417d53b6bd83d24feb3"
     },
     {
-      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
-      "bytes": 5889,
-      "blob": "fc15921ce75bf1be80334eb4744da5879ec87828"
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.cs",
+      "bytes": 7037,
+      "blob": "93f998ba11d4b97069a25b7f1415b9f46147ada4"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.Designer.cs",
       "bytes": 9858,
       "blob": "d3b2652c3b8dc1c379254e120eef00948ab5fc5e"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260807141323_AlignUtcTimestampColumns.cs",
+      "bytes": 5889,
+      "blob": "fc15921ce75bf1be80334eb4744da5879ec87828"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/EmployeeDbContextModelSnapshot.cs",
@@ -1270,11 +1130,6 @@
       "path": "Legacy.Maliev.EmployeeService.Domain/Legacy.Maliev.EmployeeService.Domain.csproj",
       "bytes": 327,
       "blob": "51addf44ecf979d69d9d77527d402f14c06a4fa5"
-    },
-    {
-      "path": "Legacy.Maliev.EmployeeService.slnx",
-      "bytes": 531,
-      "blob": "bbe22dd2cdaeba7edcf0e2778d522e81f91a0e2a"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/AddressInput/EmployeeAddressInputBindingTests.cs",
@@ -1444,7 +1299,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
       "bytes": 26237,
-      "blob": "de3666bf2716b65b452449cf715cc9bd17d69a0d"
+      "blob": "f3d9f67c3da4a080a36e902451197c8f3d228f55"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
@@ -1613,8 +1468,158 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
-      "bytes": 22225,
-      "blob": "2c3fbba3b8f251e561f298ad80bac4c1a40ac9cf"
+      "bytes": 22393,
+      "blob": "660f29f031bb7592a2f08910e3711c9eb4e5e50d"
+    },
+    {
+      "path": "Legacy.Maliev.EmployeeService.slnx",
+      "bytes": 531,
+      "blob": "bbe22dd2cdaeba7edcf0e2778d522e81f91a0e2a"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6516,
+      "blob": "d37ca7d3fc67b60ae56d127370087847c63fa75e"
+    },
+    {
+      "path": "deploy/README.md",
+      "bytes": 2382,
+      "blob": "2e6388d2ce05c31cbe2b7de5514d3cff838d549d"
+    },
+    {
+      "path": "deploy/base/deployment.yaml",
+      "bytes": 1985,
+      "blob": "0d67140c2473ac056e7c106d64c8ad68234017b4"
+    },
+    {
+      "path": "deploy/base/kustomization.yaml",
+      "bytes": 375,
+      "blob": "6a693dbe647ba19cf1393c355a175c19f3f50d22"
+    },
+    {
+      "path": "deploy/base/network-policy.yaml",
+      "bytes": 828,
+      "blob": "f883ec7384e6d0749b37febd7b8eb29ac4a1d4e0"
+    },
+    {
+      "path": "deploy/base/service-account.yaml",
+      "bytes": 140,
+      "blob": "a2ad4e30f2b5f20e6e3ca7d760c24cfe210b074d"
+    },
+    {
+      "path": "deploy/base/service.yaml",
+      "bytes": 246,
+      "blob": "30f07e52e22f429167116e3b9558aacd114df571"
+    },
+    {
+      "path": "docs/administrative-conditional-edits.md",
+      "bytes": 5454,
+      "blob": "afdfe143b06bfbc49e83bfb9e673dcd61bfe64f9"
+    },
+    {
+      "path": "docs/coupled-home-address-edits.md",
+      "bytes": 3514,
+      "blob": "939e9b5742285c3e9700dae05c02147b5f5b96f0"
+    },
+    {
+      "path": "docs/employee-actual-scaffold-proof-20261006.md",
+      "bytes": 2926,
+      "blob": "b0faeb18a45df62d6b1682cd6e1c7fd7339dbf9b"
+    },
+    {
+      "path": "docs/employee-address-input-proof.md",
+      "bytes": 5236,
+      "blob": "44dec997f6dd7b724026c932e32374820db916ef"
+    },
+    {
+      "path": "docs/employee-administrative-email-literal-source-20261011.md",
+      "bytes": 2331,
+      "blob": "70166a03527f5f0fd7ab1f168b7007902cc9826e"
+    },
+    {
+      "path": "docs/employee-authority-readonly-preflight.md",
+      "bytes": 4015,
+      "blob": "abd59fd079e53809c0f6923472a1f506db53ed9a"
+    },
+    {
+      "path": "docs/employee-directory-parity-design-20261001.md",
+      "bytes": 12392,
+      "blob": "283df12696a46f8d5c72732a75dbd652646386d6"
+    },
+    {
+      "path": "docs/employee-fixture-compatibility.md",
+      "bytes": 9176,
+      "blob": "b2d494089932c916a5b73553c4ef663873e9c190"
+    },
+    {
+      "path": "docs/employee-linux-custody.md",
+      "bytes": 5708,
+      "blob": "3938357df60ca69e3e18bdb38ab147721bf47542"
+    },
+    {
+      "path": "docs/employee-metadata-proof.md",
+      "bytes": 8235,
+      "blob": "1a1f02f1049c9867f57b13872031dd516860889f"
+    },
+    {
+      "path": "docs/employee-no-sdk-controller.md",
+      "bytes": 2157,
+      "blob": "d3c64a813015ab066521f798a9ee7b2356fec963"
+    },
+    {
+      "path": "docs/employee-owned-receipts.md",
+      "bytes": 3887,
+      "blob": "e09daaaa2a1cfab1341dfc1f2b79bbea5e119e99"
+    },
+    {
+      "path": "docs/employee-owner-source-intake.md",
+      "bytes": 3863,
+      "blob": "a4d949e49c7eea01e1fc26e33e596e6cf2732809"
+    },
+    {
+      "path": "docs/employee-qualification-controller.md",
+      "bytes": 3013,
+      "blob": "b47289d31341592410e00b075eb6b019c0eb86c7"
+    },
+    {
+      "path": "docs/employee-route-acceptance-design-20261001.md",
+      "bytes": 16633,
+      "blob": "1abd2284af5b44d22e5b85ca2b62baf55f3195ee"
+    },
+    {
+      "path": "docs/employee-self-profile-null-phone-20261001.md",
+      "bytes": 10090,
+      "blob": "36db0948a5d1ba04cbd14a0b8d268ef4b15d41d8"
+    },
+    {
+      "path": "docs/employee-signature-bucket-literal-source-20261011.md",
+      "bytes": 2290,
+      "blob": "9fac083de5955cb1b7dab8e9fdb2023c2fe4539f"
+    },
+    {
+      "path": "docs/employee-signature-input-proof.md",
+      "blob": "0d785576739657579c652b3d0cbb9f0aab64b1e7",
+      "bytes": 2850
+    },
+    {
+      "path": "docs/employee-significant-search-source-20261006.md",
+      "bytes": 1928,
+      "blob": "782432c89953bf94d25a039869783dd40f18b7ae"
+    },
+    {
+      "path": "docs/employee-stored-search-field-proof-20261006.md",
+      "bytes": 2165,
+      "blob": "0a31b6b98ee95b353b69ff3e5b4a113cf3f8c879"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.json",
+      "bytes": 10973,
+      "blob": "6164594c18838fa1f4864146bc7302a0e0d65118"
+    },
+    {
+      "path": "docs/original-native-logging-source-cohort.md",
+      "bytes": 759,
+      "blob": "3596485a0e20fb922bffc68579fc7a9e2062763b"
     },
     {
       "path": "nuget.config",
@@ -1622,9 +1627,54 @@
       "blob": "765346e5343d46ac83654843869dc06b65b2bdc4"
     },
     {
-      "path": "README.md",
-      "bytes": 6516,
-      "blob": "d37ca7d3fc67b60ae56d127370087847c63fa75e"
+      "path": "scripts/employee-address-input-proof.json",
+      "bytes": 254408,
+      "blob": "408eb6e8a5022c57ad4e11221de78eb717595789"
+    },
+    {
+      "path": "scripts/employee-authority-hosted-requirements.txt",
+      "bytes": 751,
+      "blob": "09d54b198c80f95237d59756cc4a25d75a5e29c8"
+    },
+    {
+      "path": "scripts/employee-metadata-roster.json",
+      "bytes": 143021,
+      "blob": "4932749bf6d83ddf3b56dada38986e1e7fefe67c"
+    },
+    {
+      "path": "scripts/employee-pagination-focused-manifest.json",
+      "bytes": 89005,
+      "blob": "dc95e553f8887fe29a9013a505d09f57d7c95c03"
+    },
+    {
+      "path": "scripts/employee-signature-input-proof.json",
+      "blob": "45bd70de06821f3273692204dd4d700a43d28a2a",
+      "bytes": 208593
+    },
+    {
+      "path": "scripts/employee-source-packet/baseline.zip",
+      "bytes": 178090,
+      "blob": "cdaede4e7e7f684043910394d862eab0a986f95c"
+    },
+    {
+      "path": "scripts/employee-source-packet/candidate.zip",
+      "bytes": 178143,
+      "blob": "6de816d32edeb0998c9915817946f9cc91bf182d"
+    },
+    {
+      "path": "scripts/employee-source-packet/dependencies.zip",
+      "bytes": 261264,
+      "blob": "b0aad7d0d6c52f553cc449dbf5847c895c4b034a"
+    },
+    {
+      "path": "scripts/employee-source-policy.json",
+      "bytes": 200627,
+      "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68"
+    },
+    {
+      "path": "scripts/employee_artifact_transport_profile.py",
+      "bytes": 9396,
+      "blob": "227a4ff556f4acc1139f6798936ca354fe7e4273"
     },
     {
       "path": "scripts/employee_authority.py",
@@ -1687,51 +1737,6 @@
       "blob": "8b061ce57af4d64de69ed1445f0dd3aeb0b81045"
     },
     {
-      "path": "scripts/employee-address-input-proof.json",
-      "bytes": 254408,
-      "blob": "408eb6e8a5022c57ad4e11221de78eb717595789"
-    },
-    {
-      "path": "scripts/employee-authority-hosted-requirements.txt",
-      "bytes": 751,
-      "blob": "09d54b198c80f95237d59756cc4a25d75a5e29c8"
-    },
-    {
-      "path": "scripts/employee-metadata-roster.json",
-      "bytes": 143021,
-      "blob": "4932749bf6d83ddf3b56dada38986e1e7fefe67c"
-    },
-    {
-      "path": "scripts/employee-pagination-focused-manifest.json",
-      "bytes": 76414,
-      "blob": "d856be3d5bc42e7d122208884aca51a159f9345c"
-    },
-    {
-      "path": "scripts/employee-signature-input-proof.json",
-      "blob": "45bd70de06821f3273692204dd4d700a43d28a2a",
-      "bytes": 208593
-    },
-    {
-      "path": "scripts/employee-source-packet/baseline.zip",
-      "bytes": 178090,
-      "blob": "cdaede4e7e7f684043910394d862eab0a986f95c"
-    },
-    {
-      "path": "scripts/employee-source-packet/candidate.zip",
-      "bytes": 178143,
-      "blob": "6de816d32edeb0998c9915817946f9cc91bf182d"
-    },
-    {
-      "path": "scripts/employee-source-packet/dependencies.zip",
-      "bytes": 261264,
-      "blob": "b0aad7d0d6c52f553cc449dbf5847c895c4b034a"
-    },
-    {
-      "path": "scripts/employee-source-policy.json",
-      "bytes": 200627,
-      "blob": "67794ba553ec5478f8aa56ba2b37435f9381ac68"
-    },
-    {
       "path": "scripts/sealed_source_capsule.py",
       "bytes": 12296,
       "blob": "cab6997ff2af48bdd4ac7e9240cd12d01e5b3190"
@@ -1778,8 +1783,8 @@
     },
     {
       "path": "scripts/test_employee_metadata_proof.py",
-      "bytes": 37512,
-      "blob": "9adc7255e54c511bbc37c03038b158d53e20a9e6"
+      "bytes": 44851,
+      "blob": "e4685baccfbe3c198eca7f043216f7616a432de9"
     },
     {
       "path": "scripts/test_employee_no_sdk_controller.py",
@@ -1793,8 +1798,8 @@
     },
     {
       "path": "scripts/test_employee_pagination_focused_validator.py",
-      "bytes": 15781,
-      "blob": "1c1cf0f06897817e6451216feec3446087e6cb4c"
+      "bytes": 16288,
+      "blob": "b45fb421e0073eda89f22b9eddd373e89b39eb05"
     },
     {
       "path": "scripts/test_employee_phase_contract.py",
@@ -1817,29 +1822,44 @@
       "blob": "46992796020f0a8fca4ecc375559605388000d20"
     },
     {
-      "path": "scripts/verify_employee_address_input_proof.py",
-      "bytes": 22091,
-      "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
+      "path": "scripts/transport-predecessors/employee-metadata-before-artifact7.json",
+      "bytes": 166836,
+      "blob": "25c8cdfc529260865733c371eec24a54cdc65db7"
     },
     {
-      "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 28032,
-      "blob": "1a664ffa546585f3b71ae77cb55ea17e50f2ac3c"
+      "path": "scripts/transport-predecessors/employee-pagination-before-artifact7.json",
+      "bytes": 76414,
+      "blob": "d856be3d5bc42e7d122208884aca51a159f9345c"
     },
     {
-      "path": "scripts/verify_employee_pagination_focused.py",
-      "bytes": 9668,
-      "blob": "183ea34fb4ce95806faf3cf8585d6776d6a8010c"
-    },
-    {
-      "path": "scripts/verify_employee_signature_input_proof.py",
-      "blob": "a82e3c565be68e2c345ae212515059ce08d0c481",
-      "bytes": 8904
+      "path": "scripts/transport-predecessors/workflow-contract-before-artifact7.cs.txt",
+      "bytes": 22225,
+      "blob": "2c3fbba3b8f251e561f298ad80bac4c1a40ac9cf"
     },
     {
       "path": "scripts/verify-runner-coverage.py",
       "bytes": 2073,
       "blob": "6aae67d556e087177a75a80478abe37943c717a5"
+    },
+    {
+      "path": "scripts/verify_employee_address_input_proof.py",
+      "bytes": 22100,
+      "blob": "82cb49ddf77c2d90bf940cb65b95c2d079ff5e30"
+    },
+    {
+      "path": "scripts/verify_employee_metadata_proof.py",
+      "bytes": 28239,
+      "blob": "91e5bd995956de831a78de8f0bdb4a60ce19202c"
+    },
+    {
+      "path": "scripts/verify_employee_pagination_focused.py",
+      "bytes": 9822,
+      "blob": "b122e90617e1a5371c9f14d4e9ad8f54057fb202"
+    },
+    {
+      "path": "scripts/verify_employee_signature_input_proof.py",
+      "blob": "a82e3c565be68e2c345ae212515059ce08d0c481",
+      "bytes": 8904
     },
     {
       "path": "tooling/Test-EmployeeScaffoldContract.ps1",
@@ -4342,5 +4362,455 @@
     },
     "regression": "Existing test_prepare_restores_exact_pre_xml_project_without_disabling_candidate_documentation reaches actual prepare_baseline, verify_source and source_inventory under patched fixture ROOT/CUSTODY; all existing86 Python test declarations and assertions remain unchanged. Execution NOT RUN in this source-only lane.",
     "preserves": "All baseline161 bindings, all6 overlay paths/5 C# bytes, exact1701B historical project including Newtonsoft13, candidate1765B positive XML and7compiled-output cases, selected49/metadata442, dependency/sourcepolicy/grants/thresholds, workflows and all prior witnesses unchanged."
+  },
+  "artifactTransportSuccessor": {
+    "profile": "employee-artifact-v7.0.2-20261026",
+    "predecessor": {
+      "source": "scripts/employee-metadata-source-successor.json",
+      "archivePath": "scripts/transport-predecessors/employee-metadata-before-artifact7.json",
+      "commit": "c36fb17585dd1d5f3a59f06636ec377fe8c60556",
+      "bytes": 166836,
+      "sha256": "8a3e3b4023fa9c7b3c30b7ab592b34bded58a3cadca1c7ec2f90ebae967ffbe4",
+      "gitBlob": "25c8cdfc529260865733c371eec24a54cdc65db7"
+    },
+    "changedBindings": [
+      {
+        "path": ".github/workflows/_build-and-test.yml",
+        "before": {
+          "path": ".github/workflows/_build-and-test.yml",
+          "bytes": 2174,
+          "blob": "73010a448f78253ce9b56a33ca7cc7a7b1254eac"
+        },
+        "after": {
+          "path": ".github/workflows/_build-and-test.yml",
+          "bytes": 2174,
+          "blob": "cebf77c6cbd72e27aa90195c20c55ac2e6cece09"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-address-input-focused.yml",
+        "before": {
+          "path": ".github/workflows/employee-address-input-focused.yml",
+          "bytes": 18443,
+          "blob": "75e8f484ba74f0750e0e0cf78f043b2eed982eaf"
+        },
+        "after": {
+          "path": ".github/workflows/employee-address-input-focused.yml",
+          "bytes": 18443,
+          "blob": "0e53cea6c8cf0ed231c009d4142bfa9df9a6485c"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-authority-hosted-preflight.yml",
+        "before": {
+          "path": ".github/workflows/employee-authority-hosted-preflight.yml",
+          "bytes": 11650,
+          "blob": "35f12fa2a78e952e8f8ebcafdf2b5940abca97fc"
+        },
+        "after": {
+          "path": ".github/workflows/employee-authority-hosted-preflight.yml",
+          "bytes": 11650,
+          "blob": "c2eb8e7fb3b7b01b3efe1320275274336ffa1987"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-metadata-focused.yml",
+        "before": {
+          "path": ".github/workflows/employee-metadata-focused.yml",
+          "bytes": 8337,
+          "blob": "6778968d332815f1cdce5244cdc41816b3354838"
+        },
+        "after": {
+          "path": ".github/workflows/employee-metadata-focused.yml",
+          "bytes": 8337,
+          "blob": "d679d78d1056d7845cd49c10f4e6602b7ba776dd"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-owned-receipts.yml",
+        "before": {
+          "path": ".github/workflows/employee-owned-receipts.yml",
+          "bytes": 6450,
+          "blob": "74c6842e9d897bcea120f342d7a0dacbeb589e55"
+        },
+        "after": {
+          "path": ".github/workflows/employee-owned-receipts.yml",
+          "bytes": 6450,
+          "blob": "e8538bfd199cdf7453fc5f96be62247a5a6cc466"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-pagination-focused.yml",
+        "before": {
+          "path": ".github/workflows/employee-pagination-focused.yml",
+          "bytes": 3843,
+          "blob": "c07ea8ac9ea3e91324e7f0b88cba21a2125cedbb"
+        },
+        "after": {
+          "path": ".github/workflows/employee-pagination-focused.yml",
+          "bytes": 3843,
+          "blob": "c936418c46a29d71bc527fa8adfd32c0ea177539"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-qualification-controller.yml",
+        "before": {
+          "path": ".github/workflows/employee-qualification-controller.yml",
+          "bytes": 3252,
+          "blob": "e5b849fe57bf7f80fd94b99db096adf63234c741"
+        },
+        "after": {
+          "path": ".github/workflows/employee-qualification-controller.yml",
+          "bytes": 3252,
+          "blob": "43f195bd959d7fa259d8dbfc172ecdbcc34c8da4"
+        }
+      },
+      {
+        "path": ".github/workflows/employee-source-intake.yml",
+        "before": {
+          "path": ".github/workflows/employee-source-intake.yml",
+          "bytes": 3056,
+          "blob": "f11eb189127461008dec41aa4fac19f08b3cd29a"
+        },
+        "after": {
+          "path": ".github/workflows/employee-source-intake.yml",
+          "bytes": 3056,
+          "blob": "b99628653b3fadf6888cf4214ea31a2dcb633f54"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22225,
+          "blob": "2c3fbba3b8f251e561f298ad80bac4c1a40ac9cf"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "blob": "45f046f70f50c7fcfef01e5895476339bd41feed"
+        }
+      },
+      {
+        "path": "scripts/employee-pagination-focused-manifest.json",
+        "before": {
+          "path": "scripts/employee-pagination-focused-manifest.json",
+          "bytes": 76414,
+          "blob": "d856be3d5bc42e7d122208884aca51a159f9345c"
+        },
+        "after": {
+          "path": "scripts/employee-pagination-focused-manifest.json",
+          "bytes": 81339,
+          "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+        }
+      },
+      {
+        "path": "scripts/test_employee_metadata_proof.py",
+        "before": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 37512,
+          "blob": "9adc7255e54c511bbc37c03038b158d53e20a9e6"
+        },
+        "after": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 44724,
+          "blob": "f5bed6b3a0c3df0feb80d3ecfe83725506cc33c9"
+        }
+      },
+      {
+        "path": "scripts/test_employee_pagination_focused_validator.py",
+        "before": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 15781,
+          "blob": "1c1cf0f06897817e6451216feec3446087e6cb4c"
+        },
+        "after": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16161,
+          "blob": "f3ae2ddcfc020883f7dc05a414db8292904089db"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_metadata_proof.py",
+        "before": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28032,
+          "blob": "1a664ffa546585f3b71ae77cb55ea17e50f2ac3c"
+        },
+        "after": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28228,
+          "blob": "ca97645ef6d3441123726b7689ed1f6bc3eb2b3f"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_pagination_focused.py",
+        "before": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9668,
+          "blob": "183ea34fb4ce95806faf3cf8585d6776d6a8010c"
+        },
+        "after": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9830,
+          "blob": "475804f75dbbe49b07bec93b35465198cbd9bc1f"
+        }
+      }
+    ],
+    "addedBindings": [
+      {
+        "path": "scripts/employee_artifact_transport_profile.py",
+        "bytes": 9396,
+        "blob": "227a4ff556f4acc1139f6798936ca354fe7e4273"
+      },
+      {
+        "path": "scripts/transport-predecessors/employee-metadata-before-artifact7.json",
+        "bytes": 166836,
+        "blob": "25c8cdfc529260865733c371eec24a54cdc65db7"
+      },
+      {
+        "path": "scripts/transport-predecessors/employee-pagination-before-artifact7.json",
+        "bytes": 76414,
+        "blob": "d856be3d5bc42e7d122208884aca51a159f9345c"
+      },
+      {
+        "path": "scripts/transport-predecessors/workflow-contract-before-artifact7.cs.txt",
+        "bytes": 22225,
+        "blob": "2c3fbba3b8f251e561f298ad80bac4c1a40ac9cf"
+      }
+    ],
+    "independentReviewScopeSha256": "340880addc4eb8e260c2eeb56549c1ddf08164365f632b5dd84a3febf9235f57"
+  },
+  "dependencySourceSuccessor": {
+    "profile": "employee-ef13-main5f",
+    "predecessorCommit": "5f15cd29dabaf25e542039f6e39e15a8213e6327",
+    "predecessorManifest": {
+      "path": "scripts/employee-metadata-source-successor.json",
+      "bytes": 175392,
+      "sha256": "10550cd1c29de6279e5daa0669bf9a8bdc18a5dd9f04962c82dfe542e4fce77c",
+      "blob": "7fca9132e3f8507e5712cd95e3094d14846b77fc"
+    },
+    "changedBindings": [
+      {
+        "path": "Directory.Build.props",
+        "before": {
+          "path": "Directory.Build.props",
+          "bytes": 515,
+          "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+        },
+        "after": {
+          "path": "Directory.Build.props",
+          "bytes": 515,
+          "blob": "da83d69d946c60539143c7009ffa5adc953f76ad"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 3008,
+          "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 3185,
+          "blob": "caaa14009746e9006004980563ebb273e2242757"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+          "bytes": 1170,
+          "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+          "bytes": 1170,
+          "blob": "e8e53e8abf9dc3344124a4e2e82c1f03b8fd6e81"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+          "bytes": 26237,
+          "blob": "de3666bf2716b65b452449cf715cc9bd17d69a0d"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+          "bytes": 26237,
+          "blob": "f3d9f67c3da4a080a36e902451197c8f3d228f55"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "blob": "45f046f70f50c7fcfef01e5895476339bd41feed"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "blob": "660f29f031bb7592a2f08910e3711c9eb4e5e50d"
+        }
+      },
+      {
+        "path": "scripts/employee-pagination-focused-manifest.json",
+        "before": {
+          "path": "scripts/employee-pagination-focused-manifest.json",
+          "bytes": 81339,
+          "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+        },
+        "after": {
+          "path": "scripts/employee-pagination-focused-manifest.json",
+          "bytes": 89005,
+          "blob": "dc95e553f8887fe29a9013a505d09f57d7c95c03"
+        }
+      },
+      {
+        "path": "scripts/test_employee_metadata_proof.py",
+        "before": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 44724,
+          "blob": "f5bed6b3a0c3df0feb80d3ecfe83725506cc33c9"
+        },
+        "after": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 44851,
+          "blob": "e4685baccfbe3c198eca7f043216f7616a432de9"
+        }
+      },
+      {
+        "path": "scripts/test_employee_pagination_focused_validator.py",
+        "before": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16161,
+          "blob": "f3ae2ddcfc020883f7dc05a414db8292904089db"
+        },
+        "after": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16288,
+          "blob": "b45fb421e0073eda89f22b9eddd373e89b39eb05"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_address_input_proof.py",
+        "before": {
+          "path": "scripts/verify_employee_address_input_proof.py",
+          "bytes": 22091,
+          "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
+        },
+        "after": {
+          "path": "scripts/verify_employee_address_input_proof.py",
+          "bytes": 22100,
+          "blob": "82cb49ddf77c2d90bf940cb65b95c2d079ff5e30"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_metadata_proof.py",
+        "before": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28228,
+          "blob": "ca97645ef6d3441123726b7689ed1f6bc3eb2b3f"
+        },
+        "after": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28239,
+          "blob": "91e5bd995956de831a78de8f0bdb4a60ce19202c"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_pagination_focused.py",
+        "before": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9830,
+          "blob": "475804f75dbbe49b07bec93b35465198cbd9bc1f"
+        },
+        "after": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9822,
+          "blob": "b122e90617e1a5371c9f14d4e9ad8f54057fb202"
+        }
+      }
+    ],
+    "additionalInputs": [
+      {
+        "path": "scripts/dependency-predecessors/main5f-00.bin",
+        "bytes": 515,
+        "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-01.bin",
+        "bytes": 3008,
+        "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-02.bin",
+        "bytes": 1170,
+        "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-03.bin",
+        "bytes": 26237,
+        "blob": "de3666bf2716b65b452449cf715cc9bd17d69a0d"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-04.bin",
+        "bytes": 22393,
+        "blob": "45f046f70f50c7fcfef01e5895476339bd41feed"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-05.bin",
+        "bytes": 175392,
+        "blob": "7fca9132e3f8507e5712cd95e3094d14846b77fc"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-06.bin",
+        "bytes": 81339,
+        "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-07.bin",
+        "bytes": 9396,
+        "blob": "227a4ff556f4acc1139f6798936ca354fe7e4273"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-08.bin",
+        "bytes": 44724,
+        "blob": "f5bed6b3a0c3df0feb80d3ecfe83725506cc33c9"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-09.bin",
+        "bytes": 16161,
+        "blob": "f3ae2ddcfc020883f7dc05a414db8292904089db"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-10.bin",
+        "bytes": 22091,
+        "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-11.bin",
+        "bytes": 28228,
+        "blob": "ca97645ef6d3441123726b7689ed1f6bc3eb2b3f"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-12.bin",
+        "bytes": 9830,
+        "blob": "475804f75dbbe49b07bec93b35465198cbd9bc1f"
+      },
+      {
+        "path": "scripts/employee_dependency_profile.py",
+        "bytes": 33549,
+        "blob": "509e90f6fd2cf3578c59217baf69ed08de2dc1e8"
+      },
+      {
+        "path": "scripts/test_employee_dependency_profile.py",
+        "bytes": 13833,
+        "blob": "c50d7f360f9612b761832fc1721abec5e24c43f6"
+      }
+    ]
   }
 }

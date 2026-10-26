@@ -312,7 +312,7 @@ def final_source(value):
     outputs = shared.generated_outputs(custody)
     own = shared.CUSTODY.relative_to(ROOT).as_posix()
     exclusions = (".git", ".dependencies", ".metadata-baseline", "runner-metadata", own) + outputs
-    shared.source_inventory(ROOT, custody["candidate"], exclusions, shared.checkout_contracts(custody))
+    shared.source_inventory(ROOT, shared.expanded_rows(custody), exclusions, shared.checkout_contracts(custody))
     candidate = {row["path"]: row for row in custody["candidate"]}
     shared.source_inventory(destination, baseline_rows(plan, candidate), outputs, shared.checkout_contracts(custody))
     return {"phase": "final-source", "candidateSuccessorSha256": before["candidateSuccessorSha256"],

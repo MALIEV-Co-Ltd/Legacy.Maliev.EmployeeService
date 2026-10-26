@@ -2,6 +2,7 @@
 from __future__ import annotations
 import collections,hashlib,json,os,re,subprocess,sys,uuid,xml.etree.ElementTree as E
 from pathlib import Path
+from employee_dependency_profile import authenticate_pagination
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'scripts/employee-pagination-focused-manifest.json'
 def need(value,reason):
@@ -47,6 +48,7 @@ def unknown_task_observation(directory):
 def guard():
     need(sys.platform=='linux' and os.environ.get('GITHUB_REPOSITORY')=='MALIEV-Co-Ltd/Legacy.Maliev.EmployeeService','Exact hosted Employee repository required')
     manifest=json.loads(MANIFEST.read_bytes())
+    authenticate_pagination(ROOT,manifest)
     mem=dict(re.findall(r'^(\w+):\s+(\d+) kB$',Path('/proc/meminfo').read_text(),re.M))
     print(json.dumps({'mode':'physical-memory','physicalMemFreeKiB':int(mem['MemFree'])}),flush=True)
     need(int(mem['MemFree'])>=4194304,'Fresh physical MemFree4GiB required before native phase')
@@ -104,7 +106,9 @@ def validate_trx(raw,manifest):
     for info in doc.findall('.//t:RunInfo',NS):need(info.get('outcome') in {'Passed','Completed','Information'},'Bad or missing RunInfo outcome')
     return {'selectedCount':49,'summaryOutcome':summary.get('outcome'),'executionBijection':True,'all13NonpassingCountersZero':True}
 def verify():
-    manifest=json.loads(MANIFEST.read_bytes());folder=ROOT/'runner-focused';files=list(folder.rglob('*.trx'));need(len(files)==1,'One original focused TRX required')
+    manifest=json.loads(MANIFEST.read_bytes())
+    authenticate_pagination(ROOT,manifest)
+    folder=ROOT/'runner-focused';files=list(folder.rglob('*.trx'));need(len(files)==1,'One original focused TRX required')
     raw=files[0].read_bytes();structure=validate_trx(raw,manifest)
     build=(folder/'build.log').read_text();need('Build succeeded.' in build and re.search(r'0 Warning\(s\)',build) and re.search(r'0 Error\(s\)',build) and not re.search(r'\b[1-9]\d* (?:Warning|Error)\(s\)',build),'Actual focused strict Release0WE required')
     result={'actualFocusedPassed':49,'failed':0,'skipped':0,'trxSha256':hashlib.sha256(raw).hexdigest(),'original49IdentitiesExact':True,'strictTrxStructure':structure,'behaviorHead':manifest['behaviorHead'],'githubSha':os.environ.get('GITHUB_SHA'),'runId':os.environ.get('GITHUB_RUN_ID'),'strictRelease0WE':True,'full437AcceptedByThisFocusedRun':False,'consumerAccepted':False,'mutantsExecuted':False}

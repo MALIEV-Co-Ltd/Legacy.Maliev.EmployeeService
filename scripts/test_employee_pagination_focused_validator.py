@@ -1,7 +1,10 @@
 """Pure in-memory parser controls. No SDK, testhost, Docker or focused proof."""
 import copy,importlib.util,json,unittest,uuid,xml.etree.ElementTree as E
 from pathlib import Path
-HERE=Path(__file__).resolve().parent
+import employee_artifact_transport_profile as transport_profile
+from employee_dependency_profile import historical_scripts
+from test_employee_dependency_profile import DependencyProfileControls
+HERE=historical_scripts(__file__)
 spec=importlib.util.spec_from_file_location('validator',HERE/'verify_employee_pagination_focused.py');v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
 MANIFEST=json.loads((HERE/'employee-pagination-focused-manifest.json').read_bytes())
 URI=v.NS['t']
@@ -171,7 +174,9 @@ class FocusedManifestSuccessorControls(unittest.TestCase):
         self.assertEqual('f48b9f526fad1a3b385fbe0c5aef02283f97f153',successor['predecessorManifestGitBlob'])
         self.assertEqual('bcfe3eb9fed95c92060611798165e68f08ecbdbe088d634f198dc8b8c4c98740',hashlib.sha256(json.dumps(successor['predecessorCodePins'],separators=(',',':')).encode()).hexdigest())
         self.assertEqual(44,len(successor['changedPins']))
-        current={row['path']:row for row in MANIFEST['codePins']}
+        # The XML proof remains bound to its authenticated historical profile.
+        historical_profile=transport_profile.predecessor(HERE.parent,transport_profile.PAGINATION)
+        current={row['path']:row for row in historical_profile['codePins']}
         historical={row['path']:row for row in successor['predecessorCodePins']}
         changed={row['postimage']['path']:row for row in successor['changedPins']}
         self.assertEqual(44,len(changed))
@@ -179,6 +184,8 @@ class FocusedManifestSuccessorControls(unittest.TestCase):
             self.assertEqual(historical[path],row['preimage'])
             self.assertEqual(current[path],row['postimage'])
             raw=(HERE.parent/path).read_bytes()
+            if path==transport_profile.WORKFLOW_TEST:
+                raw=transport_profile.predecessor_bytes(HERE.parent,path)
             v.need(len(raw)==row['postimage']['bytes'] and hashlib.sha256(raw).hexdigest()==row['postimage']['sha256'],'Frozen behavior/dependency/workflow code drift')
             for altered in (raw+b' unreviewed drift',raw[:-1]):
                 with self.assertRaises(ValueError):

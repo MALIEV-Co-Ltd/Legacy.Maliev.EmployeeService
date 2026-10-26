@@ -105,7 +105,7 @@ jobs:
           python3 -B -c 'import json, os; from pathlib import Path; Path(os.environ["RUNNER_TEMP"], "employee-owned-receipts-scope.txt").write_text(json.dumps({"controlsOutcome": os.environ["CONTROL_OUTCOME"], "cleanupMechanism": "unittest cleanup closes descriptors and temporary directories; failure or timeout is not cleanup proof", "sdkStarted": False, "providerStarted": False, "rootWorkerStarted": False, "systemdQualification": False}) + "\n")'
       - name: Preserve source evidence
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
           name: employee-owned-receipts-${{ github.sha }}-${{ github.run_attempt }}
           path: |
