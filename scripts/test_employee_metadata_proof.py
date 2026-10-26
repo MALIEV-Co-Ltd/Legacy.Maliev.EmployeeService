@@ -11,7 +11,9 @@ import uuid
 from unittest import mock
 import xml.etree.ElementTree as ET
 
-HERE = Path(__file__).resolve().parent
+from employee_dependency_profile import historical_scripts
+from test_employee_dependency_profile import DependencyProfileControls
+HERE = historical_scripts(__file__)
 spec = importlib.util.spec_from_file_location("metadata_proof", HERE / "verify_employee_metadata_proof.py")
 v = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(v)

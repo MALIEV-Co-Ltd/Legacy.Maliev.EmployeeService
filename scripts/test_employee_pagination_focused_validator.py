@@ -2,7 +2,9 @@
 import copy,importlib.util,json,unittest,uuid,xml.etree.ElementTree as E
 from pathlib import Path
 import employee_artifact_transport_profile as transport_profile
-HERE=Path(__file__).resolve().parent
+from employee_dependency_profile import historical_scripts
+from test_employee_dependency_profile import DependencyProfileControls
+HERE=historical_scripts(__file__)
 spec=importlib.util.spec_from_file_location('validator',HERE/'verify_employee_pagination_focused.py');v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
 MANIFEST=json.loads((HERE/'employee-pagination-focused-manifest.json').read_bytes())
 URI=v.NS['t']

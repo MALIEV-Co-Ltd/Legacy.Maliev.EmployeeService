@@ -919,7 +919,7 @@
     {
       "path": "Directory.Build.props",
       "bytes": 515,
-      "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+      "blob": "da83d69d946c60539143c7009ffa5adc953f76ad"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
@@ -973,8 +973,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 3008,
-      "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
+      "bytes": 3185,
+      "blob": "caaa14009746e9006004980563ebb273e2242757"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -1089,7 +1089,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
       "bytes": 1170,
-      "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+      "blob": "e8e53e8abf9dc3344124a4e2e82c1f03b8fd6e81"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
@@ -1299,7 +1299,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
       "bytes": 26237,
-      "blob": "de3666bf2716b65b452449cf715cc9bd17d69a0d"
+      "blob": "f3d9f67c3da4a080a36e902451197c8f3d228f55"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
@@ -1469,7 +1469,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
       "bytes": 22393,
-      "blob": "45f046f70f50c7fcfef01e5895476339bd41feed"
+      "blob": "660f29f031bb7592a2f08910e3711c9eb4e5e50d"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.slnx",
@@ -1643,8 +1643,8 @@
     },
     {
       "path": "scripts/employee-pagination-focused-manifest.json",
-      "bytes": 81339,
-      "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+      "bytes": 89005,
+      "blob": "dc95e553f8887fe29a9013a505d09f57d7c95c03"
     },
     {
       "path": "scripts/employee-signature-input-proof.json",
@@ -1783,8 +1783,8 @@
     },
     {
       "path": "scripts/test_employee_metadata_proof.py",
-      "bytes": 44724,
-      "blob": "f5bed6b3a0c3df0feb80d3ecfe83725506cc33c9"
+      "bytes": 44851,
+      "blob": "e4685baccfbe3c198eca7f043216f7616a432de9"
     },
     {
       "path": "scripts/test_employee_no_sdk_controller.py",
@@ -1798,8 +1798,8 @@
     },
     {
       "path": "scripts/test_employee_pagination_focused_validator.py",
-      "bytes": 16161,
-      "blob": "f3ae2ddcfc020883f7dc05a414db8292904089db"
+      "bytes": 16288,
+      "blob": "b45fb421e0073eda89f22b9eddd373e89b39eb05"
     },
     {
       "path": "scripts/test_employee_phase_contract.py",
@@ -1843,18 +1843,18 @@
     },
     {
       "path": "scripts/verify_employee_address_input_proof.py",
-      "bytes": 22091,
-      "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
+      "bytes": 22100,
+      "blob": "82cb49ddf77c2d90bf940cb65b95c2d079ff5e30"
     },
     {
       "path": "scripts/verify_employee_metadata_proof.py",
-      "bytes": 28228,
-      "blob": "ca97645ef6d3441123726b7689ed1f6bc3eb2b3f"
+      "bytes": 28239,
+      "blob": "91e5bd995956de831a78de8f0bdb4a60ce19202c"
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
-      "bytes": 9830,
-      "blob": "475804f75dbbe49b07bec93b35465198cbd9bc1f"
+      "bytes": 9822,
+      "blob": "b122e90617e1a5371c9f14d4e9ad8f54057fb202"
     },
     {
       "path": "scripts/verify_employee_signature_input_proof.py",
@@ -4580,5 +4580,237 @@
       }
     ],
     "independentReviewScopeSha256": "340880addc4eb8e260c2eeb56549c1ddf08164365f632b5dd84a3febf9235f57"
+  },
+  "dependencySourceSuccessor": {
+    "profile": "employee-ef13-main5f",
+    "predecessorCommit": "5f15cd29dabaf25e542039f6e39e15a8213e6327",
+    "predecessorManifest": {
+      "path": "scripts/employee-metadata-source-successor.json",
+      "bytes": 175392,
+      "sha256": "10550cd1c29de6279e5daa0669bf9a8bdc18a5dd9f04962c82dfe542e4fce77c",
+      "blob": "7fca9132e3f8507e5712cd95e3094d14846b77fc"
+    },
+    "changedBindings": [
+      {
+        "path": "Directory.Build.props",
+        "before": {
+          "path": "Directory.Build.props",
+          "bytes": 515,
+          "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+        },
+        "after": {
+          "path": "Directory.Build.props",
+          "bytes": 515,
+          "blob": "da83d69d946c60539143c7009ffa5adc953f76ad"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 3008,
+          "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 3185,
+          "blob": "caaa14009746e9006004980563ebb273e2242757"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+          "bytes": 1170,
+          "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+          "bytes": 1170,
+          "blob": "e8e53e8abf9dc3344124a4e2e82c1f03b8fd6e81"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+          "bytes": 26237,
+          "blob": "de3666bf2716b65b452449cf715cc9bd17d69a0d"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+          "bytes": 26237,
+          "blob": "f3d9f67c3da4a080a36e902451197c8f3d228f55"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "blob": "45f046f70f50c7fcfef01e5895476339bd41feed"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "blob": "660f29f031bb7592a2f08910e3711c9eb4e5e50d"
+        }
+      },
+      {
+        "path": "scripts/employee-pagination-focused-manifest.json",
+        "before": {
+          "path": "scripts/employee-pagination-focused-manifest.json",
+          "bytes": 81339,
+          "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+        },
+        "after": {
+          "path": "scripts/employee-pagination-focused-manifest.json",
+          "bytes": 89005,
+          "blob": "dc95e553f8887fe29a9013a505d09f57d7c95c03"
+        }
+      },
+      {
+        "path": "scripts/test_employee_metadata_proof.py",
+        "before": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 44724,
+          "blob": "f5bed6b3a0c3df0feb80d3ecfe83725506cc33c9"
+        },
+        "after": {
+          "path": "scripts/test_employee_metadata_proof.py",
+          "bytes": 44851,
+          "blob": "e4685baccfbe3c198eca7f043216f7616a432de9"
+        }
+      },
+      {
+        "path": "scripts/test_employee_pagination_focused_validator.py",
+        "before": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16161,
+          "blob": "f3ae2ddcfc020883f7dc05a414db8292904089db"
+        },
+        "after": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16288,
+          "blob": "b45fb421e0073eda89f22b9eddd373e89b39eb05"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_address_input_proof.py",
+        "before": {
+          "path": "scripts/verify_employee_address_input_proof.py",
+          "bytes": 22091,
+          "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
+        },
+        "after": {
+          "path": "scripts/verify_employee_address_input_proof.py",
+          "bytes": 22100,
+          "blob": "82cb49ddf77c2d90bf940cb65b95c2d079ff5e30"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_metadata_proof.py",
+        "before": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28228,
+          "blob": "ca97645ef6d3441123726b7689ed1f6bc3eb2b3f"
+        },
+        "after": {
+          "path": "scripts/verify_employee_metadata_proof.py",
+          "bytes": 28239,
+          "blob": "91e5bd995956de831a78de8f0bdb4a60ce19202c"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_pagination_focused.py",
+        "before": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9830,
+          "blob": "475804f75dbbe49b07bec93b35465198cbd9bc1f"
+        },
+        "after": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9822,
+          "blob": "b122e90617e1a5371c9f14d4e9ad8f54057fb202"
+        }
+      }
+    ],
+    "additionalInputs": [
+      {
+        "path": "scripts/dependency-predecessors/main5f-00.bin",
+        "bytes": 515,
+        "blob": "b47c8d23651f11ea8366bb63f4520fb8de6c6df3"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-01.bin",
+        "bytes": 3008,
+        "blob": "4198649b29c8b5260e37cd03ff312a8db3cfff2b"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-02.bin",
+        "bytes": 1170,
+        "blob": "2a670ed11a288fc73f65344cedcb48055afe7fe2"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-03.bin",
+        "bytes": 26237,
+        "blob": "de3666bf2716b65b452449cf715cc9bd17d69a0d"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-04.bin",
+        "bytes": 22393,
+        "blob": "45f046f70f50c7fcfef01e5895476339bd41feed"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-05.bin",
+        "bytes": 175392,
+        "blob": "7fca9132e3f8507e5712cd95e3094d14846b77fc"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-06.bin",
+        "bytes": 81339,
+        "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-07.bin",
+        "bytes": 9396,
+        "blob": "227a4ff556f4acc1139f6798936ca354fe7e4273"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-08.bin",
+        "bytes": 44724,
+        "blob": "f5bed6b3a0c3df0feb80d3ecfe83725506cc33c9"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-09.bin",
+        "bytes": 16161,
+        "blob": "f3ae2ddcfc020883f7dc05a414db8292904089db"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-10.bin",
+        "bytes": 22091,
+        "blob": "6a9dfa44bd61e3f76098147e1c72aed570dbfb58"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-11.bin",
+        "bytes": 28228,
+        "blob": "ca97645ef6d3441123726b7689ed1f6bc3eb2b3f"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-12.bin",
+        "bytes": 9830,
+        "blob": "475804f75dbbe49b07bec93b35465198cbd9bc1f"
+      },
+      {
+        "path": "scripts/employee_dependency_profile.py",
+        "bytes": 33549,
+        "blob": "509e90f6fd2cf3578c59217baf69ed08de2dc1e8"
+      },
+      {
+        "path": "scripts/test_employee_dependency_profile.py",
+        "bytes": 13833,
+        "blob": "c50d7f360f9612b761832fc1721abec5e24c43f6"
+      }
+    ]
   }
 }

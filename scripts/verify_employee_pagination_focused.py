@@ -2,7 +2,7 @@
 from __future__ import annotations
 import collections,hashlib,json,os,re,subprocess,sys,uuid,xml.etree.ElementTree as E
 from pathlib import Path
-from employee_artifact_transport_profile import authenticate_pagination
+from employee_dependency_profile import authenticate_pagination
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'scripts/employee-pagination-focused-manifest.json'
 def need(value,reason):

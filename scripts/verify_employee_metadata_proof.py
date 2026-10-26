@@ -4,7 +4,7 @@ import collections
 import hashlib
 import json
 import itertools
-from employee_artifact_transport_profile import authenticate_metadata
+from employee_dependency_profile import authenticate_metadata, expanded_rows
 import os
 from pathlib import Path
 import re
@@ -156,7 +156,7 @@ def verify_source(root=ROOT, baseline=None):
     own = CUSTODY.relative_to(ROOT).as_posix()
     # The enclosing immutable packet anchors this manifest, avoiding self-hash cycles.
     excluded = (".git", ".dependencies", ".metadata-baseline", "runner-metadata", own)
-    count = source_inventory(root, manifest["candidate"], excluded, checkout_contracts(manifest))
+    count = source_inventory(root, expanded_rows(manifest), excluded, checkout_contracts(manifest))
     if baseline is not None:
         source_inventory(baseline, manifest["baseline"], (".git",), checkout_contracts(manifest))
     return {"kind": "ordinary-source-only", "sourceBytes": count,
@@ -249,7 +249,7 @@ def verify_final_source():
          and baseline_before["overlayPaths"] == copy_paths
          and all(baseline_before[key] is value for key, value in GRANTS.items()), "Initial baseline provenance changed")
     excluded = (".git", ".dependencies", ".metadata-baseline", "runner-metadata", own) + outputs
-    candidate_bytes = source_inventory(ROOT, manifest["candidate"], excluded, checkout_contracts(manifest))
+    candidate_bytes = source_inventory(ROOT, expanded_rows(manifest), excluded, checkout_contracts(manifest))
     candidate = {row["path"]: row for row in manifest["candidate"]}
     baseline_rows = {row["path"]: row for row in manifest["baseline"]}
     for name in copy_paths:

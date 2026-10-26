@@ -215,7 +215,7 @@
     {
       "path": "Directory.Build.props",
       "bytes": 515,
-      "sha256": "b03b93e505f9bd0f5d396c5041d9b35d6cfccb454384ba8151e55e05edf45083"
+      "sha256": "e67e4d1fcc79cd080b065e8abb8b7b88898462e22389a1c1de7232b305f2bf79"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Authorization/EmployeePermissions.cs",
@@ -259,8 +259,8 @@
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
-      "bytes": 3008,
-      "sha256": "07326d6bfcc3501cbc1fbd7838b31c85191bfc3f297179fb4677aea8c8a6106a"
+      "bytes": 3185,
+      "sha256": "50bdfb2c763f644e5706d8e76bf74e264919a78380c3447005077db9d11fcf1d"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Api/Logging/EmployeeDiagnosticConsoleFormatter.cs",
@@ -330,7 +330,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
       "bytes": 1170,
-      "sha256": "9a2a6618927467a2abf194f72e5adc91a12c8d0c3842b2b4b720ccea330c89a3"
+      "sha256": "f44dec95237a218847ff3f2e6368b8f74da340cfee96180ff4d9a23dda0460df"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Data/Migrations/20260715042547_InitialPostgresCompatibility.Designer.cs",
@@ -510,7 +510,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
       "bytes": 26237,
-      "sha256": "b865e2d071daecc8fadf2714d08efa95d1a041f1081efd1277522f649daeb07f"
+      "sha256": "72be4a6c10406a11c6461a989ee702b94586ae8724dceaf05d1f6c21b5bbf665"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeSelfProfileNullablePhoneTests.cs",
@@ -590,7 +590,7 @@
     {
       "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
       "bytes": 22393,
-      "sha256": "d868ac9911bab66380edd31fa2c3693bf62094fbe83390539e9838dec9c607cb"
+      "sha256": "85e735a18abbe0df1944b55cad52fbac0115f84cdcb8f4e853ae4bd1c094175f"
     },
     {
       "path": "Legacy.Maliev.EmployeeService.slnx",
@@ -619,8 +619,8 @@
     },
     {
       "path": "scripts/test_employee_pagination_focused_validator.py",
-      "bytes": 16161,
-      "sha256": "b2500a824600e88cd3c5a16eec78570ec2ba5df151443da826f3ddb3b34084d9"
+      "bytes": 16288,
+      "sha256": "27f244d5ea9d0980fcb0b1e8cff9af5ef125e033c6e49e755157757fd5ce84f4"
     },
     {
       "path": "scripts/transport-predecessors/employee-metadata-before-artifact7.json",
@@ -639,8 +639,8 @@
     },
     {
       "path": "scripts/verify_employee_pagination_focused.py",
-      "bytes": 9830,
-      "sha256": "d1c28a01d050e9fbaefcef7d0450892a39233cdfb251be82f5f99fbcdf9bbb21"
+      "bytes": 9822,
+      "sha256": "64efa0311fe97911a2fc4ecbb03316f412de4ee434ab9fc79e48aef1421d8c0b"
     }
   ],
   "dependencyPins": [
@@ -1838,5 +1838,200 @@
       }
     ],
     "independentReviewScopeSha256": "b80a6512bff9c45b072099c021448e62ec5d19aaf68ebfc5366738896241560f"
+  },
+  "dependencySourceSuccessor": {
+    "profile": "employee-ef13-main5f",
+    "predecessorCommit": "5f15cd29dabaf25e542039f6e39e15a8213e6327",
+    "predecessorManifest": {
+      "path": "scripts/employee-pagination-focused-manifest.json",
+      "bytes": 81339,
+      "sha256": "78abbc26b74b8854cff5dbc13cb71607619067c8e0b7253be19fde589e017b32",
+      "blob": "4cb4073a1269f883f6c396056a6adbd88202e144"
+    },
+    "changedBindings": [
+      {
+        "path": "Directory.Build.props",
+        "before": {
+          "path": "Directory.Build.props",
+          "bytes": 515,
+          "sha256": "b03b93e505f9bd0f5d396c5041d9b35d6cfccb454384ba8151e55e05edf45083"
+        },
+        "after": {
+          "path": "Directory.Build.props",
+          "bytes": 515,
+          "sha256": "e67e4d1fcc79cd080b065e8abb8b7b88898462e22389a1c1de7232b305f2bf79"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 3008,
+          "sha256": "07326d6bfcc3501cbc1fbd7838b31c85191bfc3f297179fb4677aea8c8a6106a"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeService.Api.csproj",
+          "bytes": 3185,
+          "sha256": "50bdfb2c763f644e5706d8e76bf74e264919a78380c3447005077db9d11fcf1d"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+          "bytes": 1170,
+          "sha256": "9a2a6618927467a2abf194f72e5adc91a12c8d0c3842b2b4b720ccea330c89a3"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Data/Legacy.Maliev.EmployeeService.Data.csproj",
+          "bytes": 1170,
+          "sha256": "f44dec95237a218847ff3f2e6368b8f74da340cfee96180ff4d9a23dda0460df"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+          "bytes": 26237,
+          "sha256": "b865e2d071daecc8fadf2714d08efa95d1a041f1081efd1277522f649daeb07f"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/EmployeeScaffoldRuntimeProof.cs",
+          "bytes": 26237,
+          "sha256": "72be4a6c10406a11c6461a989ee702b94586ae8724dceaf05d1f6c21b5bbf665"
+        }
+      },
+      {
+        "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+        "before": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "sha256": "d868ac9911bab66380edd31fa2c3693bf62094fbe83390539e9838dec9c607cb"
+        },
+        "after": {
+          "path": "Legacy.Maliev.EmployeeService.Tests/Workflows/WorkflowContractTests.cs",
+          "bytes": 22393,
+          "sha256": "85e735a18abbe0df1944b55cad52fbac0115f84cdcb8f4e853ae4bd1c094175f"
+        }
+      },
+      {
+        "path": "scripts/test_employee_pagination_focused_validator.py",
+        "before": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16161,
+          "sha256": "b2500a824600e88cd3c5a16eec78570ec2ba5df151443da826f3ddb3b34084d9"
+        },
+        "after": {
+          "path": "scripts/test_employee_pagination_focused_validator.py",
+          "bytes": 16288,
+          "sha256": "27f244d5ea9d0980fcb0b1e8cff9af5ef125e033c6e49e755157757fd5ce84f4"
+        }
+      },
+      {
+        "path": "scripts/verify_employee_pagination_focused.py",
+        "before": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9830,
+          "sha256": "d1c28a01d050e9fbaefcef7d0450892a39233cdfb251be82f5f99fbcdf9bbb21"
+        },
+        "after": {
+          "path": "scripts/verify_employee_pagination_focused.py",
+          "bytes": 9822,
+          "sha256": "64efa0311fe97911a2fc4ecbb03316f412de4ee434ab9fc79e48aef1421d8c0b"
+        }
+      }
+    ],
+    "additionalInputs": [
+      {
+        "path": "scripts/dependency-predecessors/main5f-00.bin",
+        "bytes": 515,
+        "sha256": "b03b93e505f9bd0f5d396c5041d9b35d6cfccb454384ba8151e55e05edf45083"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-01.bin",
+        "bytes": 3008,
+        "sha256": "07326d6bfcc3501cbc1fbd7838b31c85191bfc3f297179fb4677aea8c8a6106a"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-02.bin",
+        "bytes": 1170,
+        "sha256": "9a2a6618927467a2abf194f72e5adc91a12c8d0c3842b2b4b720ccea330c89a3"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-03.bin",
+        "bytes": 26237,
+        "sha256": "b865e2d071daecc8fadf2714d08efa95d1a041f1081efd1277522f649daeb07f"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-04.bin",
+        "bytes": 22393,
+        "sha256": "d868ac9911bab66380edd31fa2c3693bf62094fbe83390539e9838dec9c607cb"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-05.bin",
+        "bytes": 175392,
+        "sha256": "10550cd1c29de6279e5daa0669bf9a8bdc18a5dd9f04962c82dfe542e4fce77c"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-06.bin",
+        "bytes": 81339,
+        "sha256": "78abbc26b74b8854cff5dbc13cb71607619067c8e0b7253be19fde589e017b32"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-07.bin",
+        "bytes": 9396,
+        "sha256": "f9b6397773af87a557fb2162f74b7799c983e3b6121dc3946605ff9aab37c152"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-08.bin",
+        "bytes": 44724,
+        "sha256": "321f05bb6d9461bba41a52561aae12a8e384f9cba4cedd9b56731552f0bf603c"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-09.bin",
+        "bytes": 16161,
+        "sha256": "b2500a824600e88cd3c5a16eec78570ec2ba5df151443da826f3ddb3b34084d9"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-10.bin",
+        "bytes": 22091,
+        "sha256": "18040dc2f18178ca9d9508ac948b066e2b6bda94e8eb838d48da3dda5e5316c0"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-11.bin",
+        "bytes": 28228,
+        "sha256": "2bc98b97de2b8a9622a38222635442e8958699252737168640b1fe254eb4fdb8"
+      },
+      {
+        "path": "scripts/dependency-predecessors/main5f-12.bin",
+        "bytes": 9830,
+        "sha256": "d1c28a01d050e9fbaefcef7d0450892a39233cdfb251be82f5f99fbcdf9bbb21"
+      },
+      {
+        "path": "scripts/employee_dependency_profile.py",
+        "bytes": 33549,
+        "sha256": "6113db137bb6bb5d1b74f0ddbae64d6b53b7fd8b5c07b8ce80569ba62532beb0"
+      },
+      {
+        "path": "scripts/test_employee_dependency_profile.py",
+        "bytes": 13833,
+        "sha256": "6e56c5f69dba1eb34bb2327769d2cd58eb04dc11e6aa74a794fdafe360b7d4b7"
+      },
+      {
+        "path": "scripts/test_employee_metadata_proof.py",
+        "bytes": 44851,
+        "sha256": "00e0425ed56d99a28a0ad8db3871d44450dcc10b2161b0e481d42203f552db5b"
+      },
+      {
+        "path": "scripts/verify_employee_address_input_proof.py",
+        "bytes": 22100,
+        "sha256": "617882a3825ec108f55d920383c247fd41870844a35eb74b74b250fb27a9cacf"
+      },
+      {
+        "path": "scripts/verify_employee_metadata_proof.py",
+        "bytes": 28239,
+        "sha256": "8b5153693f71495ee61db8f4791e899f74e52166f5251d8c0178db46c5cb2194"
+      }
+    ]
   }
 }
