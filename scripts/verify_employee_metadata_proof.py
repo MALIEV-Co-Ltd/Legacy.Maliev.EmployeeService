@@ -4,6 +4,7 @@ import collections
 import hashlib
 import json
 import itertools
+from employee_artifact_transport_profile import authenticate_metadata
 import os
 from pathlib import Path
 import re
@@ -150,6 +151,7 @@ def source_inventory(root, rows, excluded=(), checkout=()):
 def verify_source(root=ROOT, baseline=None):
     manifest_data = bounded_read(CUSTODY)
     manifest = object_json(manifest_data)
+    authenticate_metadata(root, manifest)
     need(manifest["schemaVersion"] == 1 and manifest["grants"] == GRANTS, "Source-only successor required")
     own = CUSTODY.relative_to(ROOT).as_posix()
     # The enclosing immutable packet anchors this manifest, avoiding self-hash cycles.
@@ -196,6 +198,7 @@ def prepare_baseline(destination):
     need(destination == ROOT / ".metadata-baseline", "Exact disposable baseline path required")
     verify_source(root=ROOT, baseline=destination)
     manifest = object_json(bounded_read(CUSTODY))
+    authenticate_metadata(ROOT, manifest)
     original = {row["path"]: row for row in manifest["baseline"]}
     candidate = {row["path"]: row for row in manifest["candidate"]}
     copy_paths = manifest["baselineTestOverlay"]
@@ -227,6 +230,7 @@ def verify_final_source():
     """Always-run read-only check; compare both trees to pre-build provenance."""
     manifest_data = bounded_read(CUSTODY)
     manifest = object_json(manifest_data)
+    authenticate_metadata(ROOT, manifest)
     need(manifest["schemaVersion"] == 1 and manifest["grants"] == GRANTS, "Source-only successor required")
     own = CUSTODY.relative_to(ROOT).as_posix()
     outputs = generated_outputs(manifest)

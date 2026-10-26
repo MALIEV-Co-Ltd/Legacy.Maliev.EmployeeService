@@ -1,8 +1,10 @@
 """Synthetic controls only. They establish parser behavior, never .NET acceptance."""
 import copy
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
+import employee_artifact_transport_profile as transport_profile
 import tempfile
 import unittest
 import uuid
@@ -488,6 +490,8 @@ class FinalSourceControls(unittest.TestCase):
         self.addCleanup(mock.patch.stopall)
         mock.patch.object(v, "ROOT", self.root).start()
         mock.patch.object(v, "CUSTODY", custody).start()
+        # These nine controls exercise the original synthetic inventories only.
+        mock.patch.object(v, "authenticate_metadata", return_value=None).start()
     def test_final_source_matches_initial_provenance(self):
         result = v.verify_final_source()
         self.assertEqual(result["baselineProgram"], "exact original binding")
@@ -657,6 +661,132 @@ class TypedGitProvenanceControls(unittest.TestCase):
         self.assertNotIn("employee_gitleaks_provenance", workflow)
         self.assertIn("Legacy.Maliev.Workflows/actions/dotnet-validate@e3a6093324a24968876782153286f52db8b29fd8", workflow)
         self.assertFalse((HERE / "employee_gitleaks_provenance.py").exists())
+
+
+
+class CurrentArtifactTransportControls(unittest.TestCase):
+    def fixture_root(self):
+        temporary = tempfile.TemporaryDirectory(prefix="employee-transport-control-")
+        owner = Path(temporary.name).resolve()
+        parent = Path(tempfile.gettempdir()).resolve()
+        self.assertEqual(owner.parent, parent)
+        birth = owner.stat()
+        def close():
+            self.assertEqual(owner.parent, parent)
+            self.assertFalse(owner.is_symlink())
+            current = owner.stat()
+            self.assertEqual((current.st_dev, current.st_ino), (birth.st_dev, birth.st_ino))
+            temporary.cleanup()
+            self.assertFalse(owner.exists())
+        self.addCleanup(close)
+        root = owner / "source"
+        root.mkdir()
+        manifest = transport_profile.object_json(transport_profile.read(HERE.parent, transport_profile.METADATA))
+        for name in [row["path"] for row in manifest["candidate"]] + [transport_profile.METADATA]:
+            target = root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(v.bounded_read(HERE.parent / name))
+        return root, manifest
+
+    def resign(self, manifest):
+        profile = manifest[transport_profile.FIELD]
+        scope = {key: value for key, value in profile.items() if key != "independentReviewScopeSha256"}
+        profile["independentReviewScopeSha256"] = hashlib.sha256(
+            json.dumps(scope, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+    def update_binding(self, manifest, name, raw):
+        before = copy.deepcopy(next(row for row in manifest["candidate"] if row["path"] == name))
+        after = {"path": name, "bytes": len(raw), "blob": v.git_blob(raw)}
+        next(row for row in manifest["candidate"] if row["path"] == name).update(after)
+        delta = manifest[transport_profile.FIELD]["changedBindings"]
+        found = next((row for row in delta if row["path"] == name), None)
+        if found is None:
+            delta.append({"path": name, "before": before, "after": after})
+            delta.sort(key=lambda row: row["path"])
+        else:
+            found["after"] = after
+        self.resign(manifest)
+
+    def test_reviewed_current_profile_preserves_original_source_and_false_grants(self):
+        manifest = transport_profile.object_json(transport_profile.read(HERE.parent, transport_profile.METADATA))
+        page = transport_profile.object_json(transport_profile.read(HERE.parent, transport_profile.PAGINATION))
+        historical = transport_profile.authenticate_metadata(HERE.parent, manifest)
+        previous_page = transport_profile.authenticate_pagination(HERE.parent, page)
+        self.assertEqual(161, len(historical["baseline"]))
+        self.assertEqual(historical["baseline"], manifest["baseline"])
+        self.assertEqual(6, len(manifest["baselineTestOverlay"]))
+        self.assertEqual(v.GRANTS, manifest["grants"])
+        self.assertEqual(49, page["requiredFocusedCount"])
+        self.assertEqual(previous_page["selected"], page["selected"])
+        self.assertEqual(previous_page["dependencyPins"], page["dependencyPins"])
+        self.assertEqual(previous_page["employee90XmlDocumentationSuccessor"], page["employee90XmlDocumentationSuccessor"])
+
+    def test_stale_metadata_and_pagination_profiles_are_refused(self):
+        for source, authenticate in [(transport_profile.METADATA, transport_profile.authenticate_metadata),
+                                     (transport_profile.PAGINATION, transport_profile.authenticate_pagination)]:
+            with self.subTest(source=source):
+                previous = transport_profile.predecessor(HERE.parent, source)
+                with self.assertRaisesRegex(ValueError, "reviewed profile"):
+                    authenticate(HERE.parent, previous)
+
+    def test_changed_predecessor_bytes_are_refused(self):
+        root, manifest = self.fixture_root()
+        archive = root / transport_profile.ARCHIVES[transport_profile.METADATA][0]
+        archive.write_bytes(archive.read_bytes() + b" ")
+        with self.assertRaisesRegex(ValueError, "immutable predecessor"):
+            transport_profile.authenticate_metadata(root, manifest)
+
+    def test_mixed_current_and_historical_pagination_binding_is_refused(self):
+        root, manifest = self.fixture_root()
+        old = transport_profile.predecessor_bytes(root, transport_profile.PAGINATION)
+        (root / transport_profile.PAGINATION).write_bytes(old)
+        with self.assertRaisesRegex(ValueError, "current source binding"):
+            transport_profile.authenticate_metadata(root, manifest)
+
+    def test_resealed_undeclared_runtime_change_is_refused(self):
+        root, manifest = self.fixture_root()
+        name = "Legacy.Maliev.EmployeeService.Api/Program.cs"
+        path = root / name
+        raw = path.read_bytes() + b"\n// unreviewed runtime change\n"
+        path.write_bytes(raw)
+        self.update_binding(manifest, name, raw)
+        with self.assertRaisesRegex(ValueError, "undeclared"):
+            transport_profile.authenticate_metadata(root, manifest)
+
+    def test_resealed_nonartifact_workflow_change_is_refused(self):
+        root, manifest = self.fixture_root()
+        name = ".github/workflows/_build-and-test.yml"
+        path = root / name
+        raw = path.read_bytes() + b"\n# undeclared transport change\n"
+        path.write_bytes(raw)
+        self.update_binding(manifest, name, raw)
+        with self.assertRaisesRegex(ValueError, "exceed exact artifact"):
+            transport_profile.authenticate_metadata(root, manifest)
+
+    def test_partial_artifact_upgrade_is_refused(self):
+        root, manifest = self.fixture_root()
+        name = ".github/workflows/employee-address-input-focused.yml"
+        path = root / name
+        raw = path.read_bytes()
+        new_action = b"cf430e030ddbb5b0abf93d22962f4752f3646cd9"
+        old_action = b"043fb46d1a93c77aae656e7c1c64a875d1fc6a0a"
+        self.assertEqual(2, raw.count(new_action))
+        raw = raw.replace(new_action, old_action, 1)
+        path.write_bytes(raw)
+        self.update_binding(manifest, name, raw)
+        with self.assertRaisesRegex(ValueError, "[Tt]ransport"):
+            transport_profile.authenticate_metadata(root, manifest)
+
+    def test_transport_profile_cannot_grant_sdk_or_change_historical_witnesses(self):
+        root, manifest = self.fixture_root()
+        for key, value in [("grants", dict(v.GRANTS, sdkGranted=True)), ("grants", dict(v.GRANTS, sdkGranted=0)),
+                           ("schemaVersion", True), ("baseCommit", "f" * 40),
+                           ("baseline", manifest["baseline"][:-1]), ("baselineTestOverlay", [])]:
+            with self.subTest(key=key):
+                changed = copy.deepcopy(manifest)
+                changed[key] = value
+                with self.assertRaisesRegex(ValueError, "historical field"):
+                    transport_profile.authenticate_metadata(root, changed)
 
 if __name__ == "__main__":
     unittest.main()
