@@ -2,8 +2,12 @@ using Legacy.Maliev.EmployeeService.Tests.AddressInput;
 
 namespace Legacy.Maliev.EmployeeService.Tests.SignatureInput;
 
+/// <summary>Checks public Newtonsoft.Json 13 source-shaped signature comparisons against the address scalar reader corpus.</summary>
 public sealed class EmployeeSignatureInputOracleTests
 {
+    /// <summary>Checks source-shaped signature identity and date values agree with the public typed-reader address comparator.</summary>
+    /// <param name="propertyName">The signature identity or audit field whose converted value and date kind are compared.</param>
+    /// <param name="caseId">The scalar case selecting the raw token and expected comparator acceptance.</param>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.FieldCases), MemberType = typeof(EmployeeSignatureInputCases))]
     public void MutableSource_UsesPublicTypedReader(string propertyName, string caseId)
@@ -25,6 +29,9 @@ public sealed class EmployeeSignatureInputOracleTests
         Assert.Equal("literal ไทย.png", signature.ObjectName);
     }
 
+    /// <summary>Checks source-shaped signature occurrence ordering preserves ignored nulls, converted values, date kinds, and errors.</summary>
+    /// <param name="propertyName">The identity or audit property repeated in both source-shaped projections.</param>
+    /// <param name="orderId">The sequence identifier selecting replacement, null handling, mixed casing, or unsupported occurrences.</param>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.OrderCases), MemberType = typeof(EmployeeSignatureInputCases))]
     public void MutableSource_PreservesOrderedNullAndErrors(string propertyName, string orderId)

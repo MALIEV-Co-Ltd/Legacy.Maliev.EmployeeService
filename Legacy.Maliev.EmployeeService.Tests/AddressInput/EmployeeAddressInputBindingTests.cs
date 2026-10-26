@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 
 namespace Legacy.Maliev.EmployeeService.Tests.AddressInput;
 
+/// <summary>Compares candidate address metadata validation with source-shaped reference cases while preserving native serialization.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -12,6 +14,9 @@ public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixt
     private JsonSerializerOptions Options => fixture.Factory.Services
         .GetRequiredService<IOptions<Microsoft.AspNetCore.Mvc.JsonOptions>>().Value.JsonSerializerOptions;
 
+    /// <summary>Checks scalar address metadata acceptance and candidate error paths without granting ignored fields write authority.</summary>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="caseId">The key selecting the scalar representation and expected acceptance from the address input case table.</param>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.FieldCases), MemberType = typeof(EmployeeAddressInputCases))]
     public void CandidateMatchesSource(string propertyName, string caseId)
@@ -34,6 +39,9 @@ public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixt
         }
     }
 
+    /// <summary>Checks that duplicate address metadata occurrences retain source-shaped validation order.</summary>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="orderId">The key selecting the ordered duplicate-value scenario and its expected acceptance.</param>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.OrderCases), MemberType = typeof(EmployeeAddressInputCases))]
     public void CandidateOrdersMatchSource(string propertyName, string orderId)
@@ -55,6 +63,9 @@ public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixt
         }
     }
 
+    /// <summary>Checks that fresh native options ignore address metadata without mutating registered resolver state.</summary>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="caseId">The key selecting the scalar representation and expected acceptance from the address input case table.</param>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.FieldCases), MemberType = typeof(EmployeeAddressInputCases))]
     public void CurrentNativeBaseline_IgnoresIgnoredMetadata(string propertyName, string caseId)
@@ -73,6 +84,9 @@ public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixt
         for (var index = 0; index < chain.Length; index++) Assert.Same(chain[index], Options.TypeInfoResolverChain[index]);
     }
 
+    /// <summary>Checks that malformed JSON retains the native property error path under candidate binding.</summary>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="json">The unfinished JSON body whose syntax error must retain the selected property path.</param>
     [Theory]
     [InlineData("Id", "{\"Building\":\"literal\",\"Id\":")]
     [InlineData("Id", "{\"Id\":\"unfinished")]
@@ -87,6 +101,9 @@ public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixt
         Assert.Equal(expected.Path, actual.Path);
     }
 
+    /// <summary>Checks case-insensitive recognition of ignored address metadata during candidate validation.</summary>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="caseId">The key selecting the scalar representation and expected acceptance from the address input case table.</param>
     [Theory]
     [InlineData("id", "quoted_padded")]
     [InlineData("ID", "object")]
@@ -97,6 +114,7 @@ public sealed class EmployeeAddressInputBindingTests(EmployeeRouteAcceptanceFixt
     public void PropertySpelling_RemainsCaseInsensitive(string propertyName, string caseId)
         => CandidateMatchesSource(propertyName, caseId);
 
+    /// <summary>Checks scoped virtual metadata registration without adding writable identity fields or changing native output.</summary>
     [Fact]
     public void RegistrationScopeAndWriterRemainNative()
     {

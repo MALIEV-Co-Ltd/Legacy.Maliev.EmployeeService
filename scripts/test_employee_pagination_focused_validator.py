@@ -147,13 +147,14 @@ class FocusedManifestSuccessorControls(unittest.TestCase):
 
     def test_reviewed_address_and_direct_test_are_frozen(self):
         import hashlib
-        pins={row['path']:row for row in MANIFEST['codePins']}
+        pins={row['path']:row for row in MANIFEST['employee90XmlDocumentationSuccessor']['predecessorCodePins']}
+        current={row['path']:row for row in MANIFEST['codePins']}
         for path,expected in [('Legacy.Maliev.EmployeeService.Api/Controllers/AddressesController.cs','2291633e7ede2a9922d52e9864216d2fa269393d75b74b1c874da1177d419ffb'),
                               ('Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs','8f507065b68da5e33ce024d7078aa058fbbf848584eb5d181f9785a24c865b06')]:
             raw=(HERE.parent/path).read_bytes()
             self.assertEqual(expected,pins[path]['sha256'])
-            self.assertEqual(len(raw),pins[path]['bytes'])
-            self.assertEqual(expected,hashlib.sha256(raw).hexdigest())
+            self.assertEqual(len(raw),current[path]['bytes'])
+            self.assertEqual(current[path]['sha256'],hashlib.sha256(raw).hexdigest())
 
     def test_stale_address_pin_and_unreviewed_bytes_are_refused(self):
         import hashlib
@@ -162,6 +163,32 @@ class FocusedManifestSuccessorControls(unittest.TestCase):
                               ('2291633e7ede2a9922d52e9864216d2fa269393d75b74b1c874da1177d419ffb',raw+b' unreviewed drift')]:
             with self.assertRaises(ValueError):
                 v.need(hashlib.sha256(data).hexdigest()==expected,'Frozen behavior/dependency/workflow code drift')
+
+
+    def test_documentation_successor_preserves_complete_predecessor_and_exact_current_members(self):
+        import hashlib
+        successor=MANIFEST['employee90XmlDocumentationSuccessor']
+        self.assertEqual('f48b9f526fad1a3b385fbe0c5aef02283f97f153',successor['predecessorManifestGitBlob'])
+        self.assertEqual('bcfe3eb9fed95c92060611798165e68f08ecbdbe088d634f198dc8b8c4c98740',hashlib.sha256(json.dumps(successor['predecessorCodePins'],separators=(',',':')).encode()).hexdigest())
+        self.assertEqual(44,len(successor['changedPins']))
+        current={row['path']:row for row in MANIFEST['codePins']}
+        historical={row['path']:row for row in successor['predecessorCodePins']}
+        changed={row['postimage']['path']:row for row in successor['changedPins']}
+        self.assertEqual(44,len(changed))
+        for path,row in changed.items():
+            self.assertEqual(historical[path],row['preimage'])
+            self.assertEqual(current[path],row['postimage'])
+            raw=(HERE.parent/path).read_bytes()
+            v.need(len(raw)==row['postimage']['bytes'] and hashlib.sha256(raw).hexdigest()==row['postimage']['sha256'],'Frozen behavior/dependency/workflow code drift')
+            for altered in (raw+b' unreviewed drift',raw[:-1]):
+                with self.assertRaises(ValueError):
+                    v.need(len(altered)==row['postimage']['bytes'] and hashlib.sha256(altered).hexdigest()==row['postimage']['sha256'],'Frozen behavior/dependency/workflow code drift')
+            with self.assertRaises(ValueError):
+                v.need(len(raw)==row['preimage']['bytes'] and hashlib.sha256(raw).hexdigest()==row['preimage']['sha256'],'Frozen behavior/dependency/workflow code drift')
+        self.assertEqual('5e773597933f385a5cdfee8f446a13cdf7062e430fb0bdb43533617cf7d3c019',current['Legacy.Maliev.EmployeeService.Tests/Controllers/EmployeeOriginalAddressNullControllerTests.cs']['sha256'])
+        for path,row in historical.items():
+            if path not in changed and path!='scripts/test_employee_pagination_focused_validator.py':
+                self.assertEqual(row,current[path])
 
 if __name__=='__main__':
     import sys

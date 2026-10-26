@@ -6,13 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes signature persistence tests sharing the employee database and metadata rows.</summary>
 [CollectionDefinition("Employee signature persistence", DisableParallelization = true)]
 public sealed class EmployeeSignaturePersistenceCollection;
 
+/// <summary>Checks signature metadata capacity, literal object identities, and scalar owner reassignment through HTTP.</summary>
+/// <param name="fixture">The shared route fixture supplying PostgreSQL, signed resource-scoped clients, and controlled IAM transport for signature metadata persistence.</param>
 [Collection("Employee signature persistence")]
 public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that a 50-character bucket persists and a 51-character bucket rolls back with sanitized failure output.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <returns>A task that completes after asserting bucket capacity, rollback, and absence of private metadata or provider details in the error.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -37,6 +43,9 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that a long signature object name round-trips as stored metadata through query or body input and readback.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <returns>A task that completes after asserting exact long object-name storage and readback and unchanged unrelated employee metadata.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -61,6 +70,9 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that signature ownership can move to the original scalar employee identifier without requiring a matching employee row.</summary>
+    /// <param name="employeeId">The zero or maximum Int32 owner identifier assigned to the existing signature although no matching employee exists.</param>
+    /// <returns>A task that completes after asserting reassigned metadata, retained signature identity and creation time, and old and new owner-route readbacks.</returns>
     [Theory]
     [InlineData(0)]
     [InlineData(int.MaxValue)]
@@ -96,6 +108,9 @@ public sealed class EmployeeSignaturePersistenceHttpTests(EmployeeRouteAcceptanc
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that significant object-name padding survives query and body writes with unchanged stored identity.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <returns>A task that completes after asserting exact object-name persistence and readback, timestamps, response casing, and unchanged unrelated rows.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

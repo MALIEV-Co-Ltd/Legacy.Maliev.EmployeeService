@@ -9,13 +9,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Serializes administrative persistence tests that share employee database and cache state.</summary>
 [CollectionDefinition("Employee administrative persistence", DisableParallelization = true)]
 public sealed class EmployeeAdministrativePersistenceCollection;
 
+/// <summary>Verifies administrative field length boundaries through authenticated HTTP, PostgreSQL, and Redis.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee administrative persistence")]
 public sealed class EmployeeAdministrativePersistenceHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that 256-character administrative values persist and 257-character failures preserve data and caches atomically.</summary>
+    /// <param name="field">The administrative FirstName, LastName, Email, or PhoneNumber field whose storage limit is exercised.</param>
+    /// <param name="update">Whether to PUT employee 17 rather than POST a new employee.</param>
+    /// <returns>A task that completes after verifying that 256-character administrative values persist and 257-character failures preserve data and caches atomically.</returns>
     [Theory]
     [InlineData("FirstName", false)]
     [InlineData("LastName", false)]

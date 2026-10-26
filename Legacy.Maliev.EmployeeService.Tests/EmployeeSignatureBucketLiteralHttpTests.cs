@@ -9,10 +9,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks literal signature bucket padding, whitespace-only metadata, capacity failures, and authority boundaries.</summary>
+/// <param name="fixture">The shared route fixture supplying PostgreSQL, signed resource-scoped clients, and controlled IAM transport for signature metadata persistence.</param>
 [Collection("Employee signature persistence")]
 public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks that significant bucket padding and object-name characters survive signature creation and update without unrelated graph changes.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <param name="bucket">The literal padded bucket name expected unchanged in stored metadata and readback.</param>
+    /// <returns>A task that completes after asserting literal metadata, timestamps, response casing, location behavior, and unrelated graph preservation.</returns>
     [Theory]
     [InlineData(false, "  synthetic-bucket  ")]
     [InlineData(true, "  synthetic-bucket  ")]
@@ -67,6 +73,9 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that all 50 padded bucket characters persist and a 51-character bucket fails without trimming or graph changes.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <returns>A task that completes after asserting accepted bucket capacity, sanitized oversized-write failure, and unchanged graph.</returns>
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
@@ -96,6 +105,11 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that padded signature writes retain authority checks and cannot mutate the graph when denied.</summary>
+    /// <param name="update">Whether to update existing signature metadata with a JSON PUT body instead of creating it through POST query parameters.</param>
+    /// <param name="authority">The authentication or permission scenario used to construct the request client.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response for the selected actor.</param>
+    /// <returns>A task that completes after asserting the authority refusal and unchanged graph including row versions.</returns>
     [Theory]
     [InlineData(false, "anonymous", HttpStatusCode.Unauthorized)]
     [InlineData(true, "anonymous", HttpStatusCode.Unauthorized)]
@@ -114,6 +128,8 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Provides whitespace-only signature metadata cases across JSON grammar, media, and encoding variants.</summary>
+    /// <returns>Theory rows containing the metadata field, exact whitespace value, and wire-format scenario.</returns>
     public static IEnumerable<object[]> WhitespaceOnlyMetadataCases()
     {
         foreach (var field in new[] { "Bucket", "ObjectName" })
@@ -128,6 +144,11 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         }
     }
 
+    /// <summary>Checks that whitespace-only PUT metadata matches the public source-shaped reader and remains literal in storage and readback.</summary>
+    /// <param name="field">The signature metadata field, Bucket or ObjectName, receiving whitespace-only text.</param>
+    /// <param name="value">The exact whitespace text expected to remain unchanged after body reading and persistence.</param>
+    /// <param name="wire">The JSON grammar, encoding, or media scenario used to construct the submitted request body.</param>
+    /// <returns>A task that completes after comparing the public reader projection and asserting literal persisted metadata, readback, and unchanged unrelated rows.</returns>
     [Theory]
     [MemberData(nameof(WhitespaceOnlyMetadataCases))]
     public async Task WhitespaceOnlyMetadata_PutMatchesSourceReaderAndPreservesLiteralStorage(
@@ -193,6 +214,10 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that whitespace-only signature query parameters retain MVC rejection before a POST can write metadata.</summary>
+    /// <param name="field">The Bucket or ObjectName query parameter assigned whitespace-only text.</param>
+    /// <param name="value">The exact space, tab, nonbreaking space, or em-space value submitted in that query parameter.</param>
+    /// <returns>A task that completes after asserting a bad-request response and unchanged graph.</returns>
     [Theory]
     [InlineData("Bucket", " ")]
     [InlineData("ObjectName", " ")]
@@ -215,6 +240,10 @@ public sealed class EmployeeSignatureBucketLiteralHttpTests(EmployeeRouteAccepta
         fixture.IamTransportEvidence.AssertHealthy();
     }
 
+    /// <summary>Checks that whitespace-only signature PUT bodies still require valid authentication and write permission.</summary>
+    /// <param name="authority">The authentication or permission scenario used to construct the request client.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response for the selected actor.</param>
+    /// <returns>A task that completes after asserting authority refusal and unchanged graph.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("wrong-signature", HttpStatusCode.Unauthorized)]

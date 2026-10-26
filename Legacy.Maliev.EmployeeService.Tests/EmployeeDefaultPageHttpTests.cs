@@ -8,11 +8,17 @@ using Microsoft.Extensions.Hosting;
 
 namespace Legacy.Maliev.EmployeeService.Tests;
 
+/// <summary>Checks default employee directory page size, explicit page edges, filtered cohorts, and authority requirements.</summary>
+/// <param name="fixture">The directory fixture providing isolated PostgreSQL and Redis state, a production host, and signed directory clients.</param>
 public sealed class EmployeeDefaultPageHttpTests(EmployeeDirectoryParityFixture fixture)
     : IClassFixture<EmployeeDirectoryParityFixture>
 {
     private const string Needle = "employee-default-match";
 
+    /// <summary>Checks that omitted or empty size returns the entire matching cohort while explicit paging and invalid-size outcomes retain their contracts.</summary>
+    /// <param name="matches">The number of seeded employees matching the synthetic directory search text.</param>
+    /// <param name="distractors">The number of seeded employees excluded by that search but included in unfiltered requests.</param>
+    /// <returns>A task that completes after asserting exact identifiers, response projections, paging metadata, edge-case statuses, and an unchanged stored graph.</returns>
     [Theory]
     [InlineData(60, 100)]
     [InlineData(100, 900)]
@@ -127,6 +133,10 @@ public sealed class EmployeeDefaultPageHttpTests(EmployeeDirectoryParityFixture 
         Assert.Equal(before, await SnapshotAsync(cancellation));
     }
 
+    /// <summary>Checks that omitted, empty, and explicit page sizes retain directory authentication and permission checks.</summary>
+    /// <param name="authority">The anonymous, missing-permission, wrong-signature, or expired-token scenario used for directory requests.</param>
+    /// <param name="expected">The expected unauthorized or forbidden status across the tested query variants.</param>
+    /// <returns>A task that completes after asserting authority refusals and unchanged directory storage.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("missing-permission", HttpStatusCode.Forbidden)]

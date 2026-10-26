@@ -16,12 +16,18 @@ using Microsoft.Extensions.Options;
 
 namespace Legacy.Maliev.EmployeeService.Tests.OriginalInput;
 
+/// <summary>Checks source-shaped body projection ownership, validation suppression scope, and native formatter delegation.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
     private IServiceProvider Services => fixture.Factory.Services;
 
+    /// <summary>Checks that successful audited projections do not add inferred required validation absent from source-shaped models.</summary>
+    /// <param name="kind">The projected body selector: employee, address, or signature.</param>
+    /// <param name="nativeInvalid">Whether the current native DTO validation is expected to reject the empty object before audited projection.</param>
+    /// <returns>A task that completes after verifying that successful audited projections do not add inferred required validation absent from source-shaped models.</returns>
     [Theory]
     [InlineData("employee", true)]
     [InlineData("address", false)]
@@ -62,6 +68,10 @@ public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixt
         Assert.False(candidate.HttpContext.Items.ContainsKey(EmployeeOriginalBodyNative.ProjectionKey));
     }
 
+    /// <summary>Checks that failed or no-value binding neither suppresses validation nor retains a projection ownership marker.</summary>
+    /// <param name="json">The null, empty, malformed, or otherwise non-binding request body.</param>
+    /// <param name="contentType">The request media type, including a case with an unsupported charset.</param>
+    /// <returns>A task that completes after verifying that failed or no-value binding neither suppresses validation nor retains a projection ownership marker.</returns>
     [Theory]
     [InlineData("null", "application/json")]
     [InlineData("", "application/json")]
@@ -77,6 +87,8 @@ public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixt
         Assert.False(result.HttpContext.Items.ContainsKey(EmployeeOriginalBodyNative.ProjectionKey));
     }
 
+    /// <summary>Checks that a successful body projection preserves preexisting model-state errors.</summary>
+    /// <returns>A task that completes after verifying that a successful body projection preserves preexisting model-state errors.</returns>
     [Fact]
     public async Task SuccessfulProjection_DoesNotRemovePreexistingErrors()
     {
@@ -90,6 +102,8 @@ public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixt
         Assert.Equal("retained", Assert.Single(result.ModelState["fixed"]!.Errors).ErrorMessage);
     }
 
+    /// <summary>Checks stale projection markers are removed before a foreign formatter and foreign success is validated normally.</summary>
+    /// <returns>A task that completes after verifying stale projection markers are removed before a foreign formatter and foreign success is validated normally.</returns>
     [Fact]
     public async Task StaleMarkerIsRemovedBeforeForeignFormatter_AndForeignSuccessIsValidatedNormally()
     {
@@ -105,6 +119,8 @@ public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixt
         Assert.False(result.ModelState.IsValid);
     }
 
+    /// <summary>Checks that transport exceptions escape while finally cleanup removes the private projection marker.</summary>
+    /// <returns>A task that completes after verifying that transport exceptions escape while finally cleanup removes the private projection marker.</returns>
     [Fact]
     public async Task ExceptionFinallyRemovesPrivateMarkerWithoutSwallowingTransportFailure()
     {
@@ -127,6 +143,7 @@ public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixt
         Assert.False(action.HttpContext.Items.ContainsKey(EmployeeOriginalBodyNative.ProjectionKey));
     }
 
+    /// <summary>Checks the body-provider wrapper preserves provider order, wraps the actual delegate, and retains native null delegation.</summary>
     [Fact]
     public void RegistrationWrapsActualBodyProviderInPlace_AndRetainsForeignOrderAndNullDelegation()
     {
@@ -170,6 +187,7 @@ public sealed class EmployeeOriginalBodyBindingTests(EmployeeRouteAcceptanceFixt
         Assert.Single(native.InputFormatters, item => item.GetType().FullName == EmployeeOriginalBodyNative.FormatterName);
     }
 
+    /// <summary>Checks that validation suppression is confined to audited attribute-free DTOs and their action parameters.</summary>
     [Fact]
     public void SuppressionIsBoundToAuditedAttributeFreeTypesAndActionParameters()
     {

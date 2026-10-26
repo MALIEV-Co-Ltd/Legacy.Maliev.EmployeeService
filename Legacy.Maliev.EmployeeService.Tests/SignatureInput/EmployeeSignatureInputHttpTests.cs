@@ -8,10 +8,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests.SignatureInput;
 
+/// <summary>Checks signature HTTP input validation, write-authority boundaries, and unchanged unrelated rows and caches.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeSignatureInputHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks signature scalar validation occurs before writes while valid identity and audit inputs gain no write authority.</summary>
+    /// <param name="propertyName">The signature identity or audit member supplied in the request body.</param>
+    /// <param name="caseId">The scalar case selecting a token and expected acceptance for the HTTP request.</param>
+    /// <returns>A task that completes after verifying signature scalar validation occurs before writes while valid identity and audit inputs gain no write authority.</returns>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.HttpCases), MemberType = typeof(EmployeeSignatureInputCases))]
     public async Task HttpScalar_ValidatesBeforeWritesWithoutInputAuthority(string propertyName, string caseId)
@@ -20,12 +26,18 @@ public sealed class EmployeeSignatureInputHttpTests(EmployeeRouteAcceptanceFixtu
         await AssertRequestAsync(EmployeeSignatureInputCases.Payload(propertyName, planned.Json), planned.Accepted);
     }
 
+    /// <summary>Checks repeated signature body members cannot hide a malformed earlier occurrence.</summary>
+    /// <param name="propertyName">The signature identity or audit member repeated in the request.</param>
+    /// <param name="orderId">The occurrence-order scenario selecting valid replacement, ignored nulls, or a retained malformed input.</param>
+    /// <returns>A task that completes after verifying repeated signature body members cannot hide a malformed earlier occurrence.</returns>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.HttpOrders), MemberType = typeof(EmployeeSignatureInputCases))]
     public async Task HttpOrders_DoNotHideMalformedEarlierOccurrences(string propertyName, string orderId)
         => await AssertRequestAsync(EmployeeSignatureInputCases.Ordered(propertyName, orderId),
             EmployeeSignatureInputCases.OrderAccepted(orderId));
 
+    /// <summary>Checks that valid body identity and audit values cannot replace the stored signature identity or server dates.</summary>
+    /// <returns>A task that completes after verifying that valid body identity and audit values cannot replace the stored signature identity or server dates.</returns>
     [Fact]
     public async Task ValidBodyIdentityAndAudit_HaveNoWriteAuthority()
     {
@@ -35,6 +47,10 @@ public sealed class EmployeeSignatureInputHttpTests(EmployeeRouteAcceptanceFixtu
             true, seed);
     }
 
+    /// <summary>Checks that rejected actors leave signatures, audit values, and employee caches unchanged.</summary>
+    /// <param name="authority">The rejected caller scenario: anonymous or missing-permission.</param>
+    /// <param name="expected">The expected unauthorized or forbidden response.</param>
+    /// <returns>A task that completes after verifying that rejected actors leave signatures, audit values, and employee caches unchanged.</returns>
     [Theory]
     [InlineData("anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("missing-permission", HttpStatusCode.Forbidden)]
@@ -50,6 +66,8 @@ public sealed class EmployeeSignatureInputHttpTests(EmployeeRouteAcceptanceFixtu
         await AssertCachesAsync(seed, false);
     }
 
+    /// <summary>Checks that signature creation from query values does not acquire JSON body metadata validation.</summary>
+    /// <returns>A task that completes after verifying that signature creation from query values does not acquire JSON body metadata validation.</returns>
     [Fact]
     public async Task PostQuery_DoesNotAcquireJsonBodyValidation()
     {

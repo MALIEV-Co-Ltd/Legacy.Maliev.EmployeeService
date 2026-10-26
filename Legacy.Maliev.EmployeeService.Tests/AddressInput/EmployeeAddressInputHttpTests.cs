@@ -8,10 +8,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Legacy.Maliev.EmployeeService.Tests.AddressInput;
 
+/// <summary>Verifies address body validation, authorization, conditional writes, audits, and cache effects through HTTP.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeAddressInputHttpTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
 {
+    /// <summary>Checks scalar metadata validation before address writes while preserving server ownership of ignored fields.</summary>
+    /// <param name="verb">The post or put operation selecting address creation or update.</param>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="caseId">The key selecting the scalar representation and expected acceptance from the address input case table.</param>
+    /// <returns>A task that completes after verifying scalar metadata validation before address writes while preserving server ownership of ignored fields.</returns>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.HttpCases), MemberType = typeof(EmployeeAddressInputCases))]
     public async Task HttpScalar_ValidatesBeforeWritesWithoutInputAuthority(string verb, string propertyName, string caseId)
@@ -20,12 +27,20 @@ public sealed class EmployeeAddressInputHttpTests(EmployeeRouteAcceptanceFixture
         await AssertRequestAsync(verb, EmployeeAddressInputCases.Payload(propertyName, planned.Json), planned.Accepted);
     }
 
+    /// <summary>Checks that later valid address metadata cannot hide earlier invalid occurrences through HTTP.</summary>
+    /// <param name="verb">The post or put operation selecting address creation or update.</param>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <param name="orderId">The key selecting the ordered duplicate-value scenario and its expected acceptance.</param>
+    /// <returns>A task that completes after verifying that later valid address metadata cannot hide earlier invalid occurrences through HTTP.</returns>
     [Theory]
     [MemberData(nameof(EmployeeAddressInputCases.HttpOrders), MemberType = typeof(EmployeeAddressInputCases))]
     public async Task HttpOrders_DoNotHideMalformedEarlierOccurrences(string verb, string propertyName, string orderId)
         => await AssertRequestAsync(verb, EmployeeAddressInputCases.Ordered(propertyName, orderId),
             EmployeeAddressInputCases.OrderAccepted(orderId));
 
+    /// <summary>Checks that supplied address identity and timestamps cannot override server-owned values.</summary>
+    /// <param name="verb">The post or put operation selecting address creation or update.</param>
+    /// <returns>A task that completes after verifying that supplied address identity and timestamps cannot override server-owned values.</returns>
     [Theory]
     [InlineData("post")]
     [InlineData("put")]
@@ -37,6 +52,11 @@ public sealed class EmployeeAddressInputHttpTests(EmployeeRouteAcceptanceFixture
         await AssertRequestAsync(verb, body, true, seed);
     }
 
+    /// <summary>Checks that denied address actors leave persisted fields, audits, and caches unchanged.</summary>
+    /// <param name="verb">The post or put operation selecting address creation or update.</param>
+    /// <param name="authority">The anonymous or missing-permission authority scenario used to verify rejection before mutation.</param>
+    /// <param name="expected">The expected Unauthorized or Forbidden response for the selected request authority.</param>
+    /// <returns>A task that completes after verifying that denied address actors leave persisted fields, audits, and caches unchanged.</returns>
     [Theory]
     [InlineData("post", "anonymous", HttpStatusCode.Unauthorized)]
     [InlineData("put", "anonymous", HttpStatusCode.Unauthorized)]
@@ -54,6 +74,10 @@ public sealed class EmployeeAddressInputHttpTests(EmployeeRouteAcceptanceFixture
         await AssertCachesAsync(seed, false);
     }
 
+    /// <summary>Checks conditional address statuses and fresh server audits while preserving state on failed preconditions.</summary>
+    /// <param name="condition">The If-Match scenario: missing, malformed, stale, or current.</param>
+    /// <param name="expected">The expected 428, 400, 412, or 204 status for the selected If-Match scenario.</param>
+    /// <returns>A task that completes after verifying conditional address statuses and fresh server audits while preserving state on failed preconditions.</returns>
     [Theory]
     [InlineData("missing", HttpStatusCode.PreconditionRequired)]
     [InlineData("malformed", HttpStatusCode.BadRequest)]
@@ -104,6 +128,9 @@ public sealed class EmployeeAddressInputHttpTests(EmployeeRouteAcceptanceFixture
         }
     }
 
+    /// <summary>Checks that malformed address metadata leaves persisted data, caches, and ETags unchanged.</summary>
+    /// <param name="propertyName">The ignored address metadata property to exercise: Id, CreatedDate, or ModifiedDate, including case variants.</param>
+    /// <returns>A task that completes after verifying that malformed address metadata leaves persisted data, caches, and ETags unchanged.</returns>
     [Theory]
     [InlineData("Id")]
     [InlineData("CreatedDate")]

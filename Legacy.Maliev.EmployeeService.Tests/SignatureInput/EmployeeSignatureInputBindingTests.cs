@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 
 namespace Legacy.Maliev.EmployeeService.Tests.SignatureInput;
 
+/// <summary>Checks signature identity and audit input validation against the public source-shaped comparator and current native baseline.</summary>
+/// <param name="fixture">The shared production Employee host, PostgreSQL, Redis, and controlled authorization fixture used by these assertions.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -12,6 +14,9 @@ public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFi
     private JsonSerializerOptions Options => fixture.Factory.Services
         .GetRequiredService<IOptions<Microsoft.AspNetCore.Mvc.JsonOptions>>().Value.JsonSerializerOptions;
 
+    /// <summary>Checks signature identity and audit scalars against public Newtonsoft.Json 13 acceptance without granting input write authority.</summary>
+    /// <param name="propertyName">The signature identity or audit JSON member whose scalar is validated.</param>
+    /// <param name="caseId">The scalar corpus identifier selecting the token and expected public-comparator acceptance.</param>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.FieldCases), MemberType = typeof(EmployeeSignatureInputCases))]
     public void CandidateMatchesSource(string propertyName, string caseId)
@@ -34,6 +39,9 @@ public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFi
         }
     }
 
+    /// <summary>Checks repeated signature identity or audit occurrences preserve comparator acceptance and earlier malformed failures.</summary>
+    /// <param name="propertyName">The identity or audit member repeated in the signature payload.</param>
+    /// <param name="orderId">The sequence identifier controlling valid replacements, nulls, errors, or mixed member casing.</param>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.OrderCases), MemberType = typeof(EmployeeSignatureInputCases))]
     public void CandidateOrdersMatchSource(string propertyName, string orderId)
@@ -55,6 +63,9 @@ public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFi
         }
     }
 
+    /// <summary>Checks that the current native baseline ignores identity and audit members while leaving shared serializer metadata unchanged.</summary>
+    /// <param name="propertyName">The ignored signature identity or audit member inserted into the payload.</param>
+    /// <param name="caseId">The scalar case identifier whose token must remain ignored by the native baseline.</param>
     [Theory]
     [MemberData(nameof(EmployeeSignatureInputCases.FieldCases), MemberType = typeof(EmployeeSignatureInputCases))]
     public void CurrentNativeBaseline_IgnoresIgnoredMetadata(string propertyName, string caseId)
@@ -73,6 +84,9 @@ public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFi
         for (var index = 0; index < chain.Length; index++) Assert.Same(chain[index], Options.TypeInfoResolverChain[index]);
     }
 
+    /// <summary>Checks that malformed signature JSON retains the current native failing member path.</summary>
+    /// <param name="propertyName">The member expected in the JSON error path.</param>
+    /// <param name="json">The malformed or unfinished signature JSON payload sent to both binders.</param>
     [Theory]
     [InlineData("Id", "{\"Bucket\":\"literal\",\"Id\":")]
     [InlineData("Id", "{\"Id\":\"unfinished")]
@@ -87,6 +101,9 @@ public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFi
         Assert.Equal(expected.Path, actual.Path);
     }
 
+    /// <summary>Checks that signature identity and audit member names remain case-insensitive.</summary>
+    /// <param name="propertyName">The lowercase or uppercase spelling of the signature identity or audit member.</param>
+    /// <param name="caseId">The scalar corpus case used with the alternate property spelling.</param>
     [Theory]
     [InlineData("id", "quoted_padded")]
     [InlineData("ID", "object")]
@@ -97,6 +114,7 @@ public sealed class EmployeeSignatureInputBindingTests(EmployeeRouteAcceptanceFi
     public void PropertySpelling_RemainsCaseInsensitive(string propertyName, string caseId)
         => CandidateMatchesSource(propertyName, caseId);
 
+    /// <summary>Checks that signature validation metadata is request-scoped and leaves native writers and unrelated DTOs unchanged.</summary>
     [Fact]
     public void RegistrationScopeAndWriterRemainNative()
     {

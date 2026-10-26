@@ -18,6 +18,8 @@ using Microsoft.Extensions.Options;
 
 namespace Legacy.Maliev.EmployeeService.Tests.OriginalInput;
 
+/// <summary>Verifies original-body formatter selection, native serializer isolation, served schemas, and private diagnostics.</summary>
+/// <param name="fixture">The shared Employee route fixture supplying the production application factory, PostgreSQL contexts, Redis, and controlled IAM request authority.</param>
 [Collection("Employee scaffold runtime")]
 public sealed class EmployeeOriginalBodyBoundaryTests(EmployeeRouteAcceptanceFixture fixture)
     : IClassFixture<EmployeeRouteAcceptanceFixture>
@@ -25,6 +27,7 @@ public sealed class EmployeeOriginalBodyBoundaryTests(EmployeeRouteAcceptanceFix
     private const string FormatterName = EmployeeOriginalBodyNative.FormatterName;
     private const string FormatterCategory = "Microsoft.AspNetCore.Mvc.Formatters.NewtonsoftJsonInputFormatter";
 
+    /// <summary>Checks formatter selection for exactly employee, address, and signature bodies without reordering native readers or writers.</summary>
     [Fact]
     public void Selection_IsExactlyThreeDtoBodiesAndPreservesNativeFormatterOrder()
     {
@@ -51,6 +54,8 @@ public sealed class EmployeeOriginalBodyBoundaryTests(EmployeeRouteAcceptanceFix
             Assert.False(owned.CanRead(Context(type, metadata)));
     }
 
+    /// <summary>Checks that native option construction and owned body reads preserve serializer callbacks, converters, metadata, and writers.</summary>
+    /// <returns>A task that completes after verifying that native option construction and owned body reads preserve serializer callbacks, converters, metadata, and writers.</returns>
     [Fact]
     public async Task FreshNativeOptionsAndOwnedRead_LeaveJsonCallbacksReadersAndWritersUnchanged()
     {
@@ -111,6 +116,10 @@ public sealed class EmployeeOriginalBodyBoundaryTests(EmployeeRouteAcceptanceFix
         Assert.Throws<JsonException>(() => JsonSerializer.Deserialize<UpsertAddressRequest>("{\"Building\":123}", minimal));
     }
 
+    /// <summary>Checks native DTO schema and request-media preservation in the served OpenAPI document.</summary>
+    /// <param name="kind">The employee, address, or signature body kind selecting the request DTO.</param>
+    /// <param name="schemaName">The corresponding UpsertEmployeeRequest, UpsertAddressRequest, or UpsertSignatureImageFileRequest schema name.</param>
+    /// <returns>A task that completes after verifying native DTO schema and request-media preservation in the served OpenAPI document.</returns>
     [Theory]
     [InlineData("employee", "UpsertEmployeeRequest")]
     [InlineData("address", "UpsertAddressRequest")]
@@ -135,6 +144,8 @@ public sealed class EmployeeOriginalBodyBoundaryTests(EmployeeRouteAcceptanceFix
         Assert.Equal(nativeMedia, RequestMedia(actual, schemaName));
     }
 
+    /// <summary>Checks nonempty debug formatter diagnostics without exposing input paths, values, charset names, or exception objects.</summary>
+    /// <returns>A task that completes after verifying nonempty debug formatter diagnostics without exposing input paths, values, charset names, or exception objects.</returns>
     [Fact]
     public async Task ActualFormatterDiagnostics_AreNonemptyAndExcludePrivatePathsValuesCharsetsAndExceptions()
     {

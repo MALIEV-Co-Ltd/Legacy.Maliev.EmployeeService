@@ -27,6 +27,7 @@ namespace Legacy.Maliev.EmployeeService.Tests;
 
 // Normal Production JWT/permission middleware + real PG18/Redis. ONLY the remote
 // IAM primary HTTP transport is controlled: this is not deployed IAM/grant proof.
+/// <summary>Owns PostgreSQL, Redis, signing keys, and HTTP hosts that exercise production JWT and permission middleware with only the remote IAM transport controlled.</summary>
 public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
 {
     private const string Issuer = "https://employee-route.example.invalid";
@@ -37,10 +38,14 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
     private readonly RSA key = RSA.Create(2048);
     private readonly RSA wrongKey = RSA.Create(2048);
     private readonly string liveCredential = Guid.NewGuid().ToString("N");
+    /// <summary>The synthetic principal-to-authority expectations checked by the controlled IAM HTTP transport.</summary>
     public ConcurrentDictionary<string, RouteAuthority> Authorities { get; } = new();
     internal IamTransportContractEvidence IamTransportEvidence { get; } = new();
+    /// <summary>The production test host configured with fixture database, Redis, JWT settings, and the controlled IAM transport.</summary>
     public WebApplicationFactory<Program> Factory { get; private set; } = null!;
 
+    /// <summary>Starts fixture containers, migrates the employee database, and prepares the production route host.</summary>
+    /// <returns>A task that completes when PostgreSQL, Redis, migrations, and the default host factory are ready.</returns>
     public async Task InitializeAsync()
     {
         await postgres.StartAsync(); await redis.StartAsync();
@@ -48,12 +53,22 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
         Factory = NewFactory(withIam: true);
     }
 
+    /// <summary>Creates an independently disposable context connected to the fixture PostgreSQL database.</summary>
+    /// <returns>A caller-owned employee database context using the fixture connection.</returns>
     public EmployeeDbContext CreateContext() => new(new DbContextOptionsBuilder<EmployeeDbContext>()
         .UseNpgsql(postgres.GetConnectionString()).Options);
 
+    /// <summary>Creates a production host factory with optional controlled remote IAM transport registration.</summary>
+    /// <param name="withIam">Whether to register the real IAM client with the fixture-controlled primary HTTP transport.</param>
+    /// <returns>A caller-owned production host factory sharing the fixture database, cache, and signing settings.</returns>
     public WebApplicationFactory<Program> NewFactory(bool withIam) => new RouteFactory(this, withIam);
+    /// <summary>Creates a Testing host factory for documentation checks without the controlled IAM client registration.</summary>
+    /// <returns>A caller-owned documentation host factory in the Testing environment.</returns>
     public WebApplicationFactory<Program> DocumentationFactory() => new RouteFactory(this, false, "Testing");
 
+    /// <summary>Wraps the actual distributed cache with scheduling controls for first-publication races and optional cache failures.</summary>
+    /// <param name="schedule">The cache key, publication signals, and read or removal failure controls applied around actual Redis operations.</param>
+    /// <returns>A caller-owned production host factory using the scheduled Redis wrapper.</returns>
     public WebApplicationFactory<Program> CacheRaceFactory(CachePublishSchedule schedule) => NewFactory(true)
         .WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
         {
@@ -68,10 +83,22 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
             });
         }));
 
+    /// <summary>Adds a reader interceptor that pauses the first employee database result for a controlled read race.</summary>
+    /// <param name="schedule">The first-read entry and release signals and read counter shared with the database interceptor.</param>
+    /// <returns>A caller-owned production host factory containing the scheduled database reader interceptor.</returns>
     public WebApplicationFactory<Program> DatabaseRaceFactory(DatabaseReadSchedule schedule) => NewFactory(true)
         .WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
             services.ConfigureDbContext<EmployeeDbContext>(options => options.AddInterceptors(new ScheduledDatabaseReader(schedule)))));
 
+    /// <summary>Creates an HTTP client with a synthetic signed identity and matching controlled IAM expectations for permission checks.</summary>
+    /// <param name="permission">The primary permission identifier expected in the IAM request and normally included in the signed token.</param>
+    /// <param name="resource">The resource path expected by the controlled IAM transport for the primary permission.</param>
+    /// <param name="authority">The token scenario, including anonymous, missing-permission, expired, wrong-issuer, wrong-audience, or wrong-signature.</param>
+    /// <param name="decision">The controlled forced-live IAM outcome: allow, deny, unavailable, or malformed response.</param>
+    /// <param name="factory">An optional alternate host factory; null uses the fixture default host.</param>
+    /// <param name="additionalPermissions">Optional additional permission identifiers mapped to their expected resource paths for multi-permission actions.</param>
+    /// <param name="permissionClaims">Optional explicit signed permission claims overriding the default primary and additional permission roster.</param>
+    /// <returns>A caller-owned HTTP client targeting the selected host with the requested token and registered IAM expectations.</returns>
     public HttpClient Client(string permission, string resource = "global", string authority = "valid",
         string decision = "allow", WebApplicationFactory<Program>? factory = null,
         IReadOnlyDictionary<string, string>? additionalPermissions = null, string[]? permissionClaims = null)
@@ -97,6 +124,8 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
         return client;
     }
 
+    /// <summary>Releases the fixture host, signing keys, and containers, then verifies controlled IAM transport evidence.</summary>
+    /// <returns>A task that completes after owned resources are disposed and IAM transport contract assertions succeed.</returns>
     public async Task DisposeAsync()
     {
         if (Factory is not null) await Factory.DisposeAsync();
@@ -184,10 +213,14 @@ public sealed class EmployeeRouteAcceptanceFixture : IAsyncLifetime
     }
 }
 
+/// <summary>Coordinates a pause after the first employee database read so tests can control competing operations.</summary>
 public sealed class DatabaseReadSchedule
 {
+    /// <summary>Signals that the first employee database reader has produced a result and reached the scheduled pause.</summary>
     public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    /// <summary>Allows the paused employee database result to continue to its caller.</summary>
     public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    /// <summary>Counts employee reader results observed by the scheduled interceptor.</summary>
     public int Reads;
 }
 
@@ -207,15 +240,25 @@ internal sealed class ScheduledDatabaseReader(DatabaseReadSchedule schedule) : D
 }
 
 // Scheduling only; every cache operation still reaches the actual Redis adapter.
+/// <summary>Coordinates first publication of one employee cache key while preserving actual Redis operations.</summary>
+/// <param name="key">The exact distributed cache key whose first asynchronous publication is paused.</param>
 public sealed class CachePublishSchedule(string key)
 {
+    /// <summary>The exact cache key selected for the first-publication pause.</summary>
     public string Key { get; } = key;
+    /// <summary>Signals that the selected key reached its first asynchronous cache publication.</summary>
     public TaskCompletionSource Entered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    /// <summary>Releases the selected key publication so its actual Redis write can proceed.</summary>
     public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    /// <summary>Counts matching-key asynchronous publication attempts observed by the wrapper.</summary>
     public int Publications;
+    /// <summary>Controls whether asynchronous cache reads fail before reaching Redis.</summary>
     public bool DenyReads { get; init; }
+    /// <summary>Controls whether asynchronous cache removals fail before reaching Redis.</summary>
     public bool DenyRemovals { get; init; }
+    /// <summary>Counts asynchronous cache read attempts observed by the wrapper.</summary>
     public int ReadAttempts;
+    /// <summary>Counts asynchronous cache removal attempts observed by the wrapper.</summary>
     public int RemoveAttempts;
 }
 
@@ -247,13 +290,24 @@ internal sealed class ScheduledRedisCache(IDistributedCache actual, CachePublish
     }
 }
 
+/// <summary>Describes expected permission and resource checks and the controlled live IAM response for one synthetic principal.</summary>
+/// <param name="permission">The primary permission identifier expected in controlled IAM requests.</param>
+/// <param name="resource">The expected resource path for the primary permission.</param>
+/// <param name="decision">The controlled forced-live IAM outcome selecting allow, denial, unavailable service, or malformed response.</param>
 public sealed class RouteAuthority(string permission, string resource, string decision)
 {
+    /// <summary>Optional expected resource paths keyed by additional permission identifiers for actions requiring several permissions.</summary>
     public IReadOnlyDictionary<string, string>? AdditionalResources { get; init; }
+    /// <summary>The synthetic resolved principal identifier returned in controlled IAM response payloads.</summary>
     public Guid ResolvedPrincipalId { get; } = Guid.NewGuid();
+    /// <summary>The primary permission identifier expected for this synthetic principal.</summary>
     public string Permission { get; } = permission;
+    /// <summary>The expected resource path for the primary permission check.</summary>
     public string Resource { get; } = resource;
+    /// <summary>The selected controlled forced-live response outcome.</summary>
     public string Decision { get; } = decision;
+    /// <summary>Counts all controlled IAM HTTP permission requests observed for this principal.</summary>
     public int Calls;
+    /// <summary>Counts controlled IAM permission requests that explicitly bypass the cache.</summary>
     public int LiveCalls;
 }

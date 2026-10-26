@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Data;
 
+/// <summary>Checks retained employee schema mappings, relationship names, and UTC wall-clock timestamp semantics.</summary>
 public sealed class EmployeeModelCompatibilityTests
 {
+    /// <summary>Checks legacy tables, identifier and relationship columns, field lengths, named employee relationships, and absence of a signature foreign key.</summary>
     [Fact]
     public void Model_PreservesLegacyTablesColumnsLengthsAndRelationships()
     {
@@ -32,6 +34,7 @@ public sealed class EmployeeModelCompatibilityTests
         Assert.Empty(signature.GetForeignKeys());
     }
 
+    /// <summary>Checks that all four entity types map creation and modification dates to UTC wall-clock timestamps with UTC SQL defaults.</summary>
     [Fact]
     public void Model_UsesUtcWallClockTimestampContractForAllDateColumns()
     {
@@ -56,6 +59,7 @@ public sealed class EmployeeModelCompatibilityTests
         }
     }
 
+    /// <summary>Checks that timestamp migration SQL explicitly interprets existing creation and modification values as UTC.</summary>
     [Fact]
     public void TimestampMigration_ConvertsExistingValuesExplicitlyAsUtc()
     {
