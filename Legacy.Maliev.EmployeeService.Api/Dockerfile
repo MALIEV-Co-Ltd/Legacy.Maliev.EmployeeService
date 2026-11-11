@@ -13,7 +13,7 @@ RUN dotnet publish Legacy.Maliev.EmployeeService.Api/Legacy.Maliev.EmployeeServi
     -p:UseLocalMalievDependencies=true \
     -p:MalievWorkspaceRoot=/dependencies
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:11.0-alpine AS runtime
 WORKDIR /app
 ENV ASPNETCORE_HTTP_PORTS=8080 \
     DOTNET_EnableDiagnostics=0
