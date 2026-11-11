@@ -61,7 +61,7 @@ jobs:
           git archive b34700f3d65b5055bc9991a1fd6656b5e3259e87 | tar -x -C "$baseline"
           python3 -B scripts/verify_employee_address_input_proof.py prepare-baseline "$baseline" | tee runner-metadata/address-input/baseline-source.json
       - name: Set up .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73
         with:
           dotnet-version: 10.0.x
       - name: Restore and build untouched current-native baseline Release
@@ -179,7 +179,7 @@ jobs:
           git archive a8728b1e7d020695680a23f93438f3cf6b9790e9 | tar -x -C "$baseline"
           python3 -B scripts/verify_employee_signature_input_proof.py prepare-baseline "$baseline" | tee runner-metadata/signature-input/baseline-source.json
       - name: Set up .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73
         with:
           dotnet-version: 10.0.x
       - name: Restore and build untouched current-native baseline Release
