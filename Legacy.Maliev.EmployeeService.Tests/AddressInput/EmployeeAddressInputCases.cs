@@ -10,7 +10,7 @@ using StjSerializer = System.Text.Json.JsonSerializer;
 
 namespace Legacy.Maliev.EmployeeService.Tests.AddressInput;
 
-// Public 13.0.3/source-shaped projection only; not the historical resolved MVC8 binary.
+// Public 13.0.4/source-shaped projection only; not the historical resolved MVC8 binary.
 /// <summary>Defines address scalar cases and public Newtonsoft.Json 13 source-shaped comparators for request-binding tests.</summary>
 public static class EmployeeAddressInputCases
 {

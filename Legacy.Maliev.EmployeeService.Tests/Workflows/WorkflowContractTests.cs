@@ -23,6 +23,7 @@ public sealed class WorkflowContractTests
     {
         WorkflowContractValidator.Validate(Workflow);
         AssertMutationRejected("actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9", "actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a");
+        AssertMutationRejected("dotnet-version: 11.0.100", "dotnet-version: 10.0.401");
     }
 
     /// <summary>Checks rejection of changes to the scaffold guard shell, script path, or evidence destination.</summary>
@@ -51,8 +52,8 @@ public sealed class WorkflowContractTests
     public void BuildAndTest_RejectsCommentedDependencySha()
     {
         AssertMutationRejected(
-            "ref: c40a7f82cea347b949444dcd7fb730f2b8dc3c0e",
-            "ref: main # c40a7f82cea347b949444dcd7fb730f2b8dc3c0e");
+            "ref: 173d63218d9142b34075bca87f5c6d933bcbdfb6",
+            "ref: main # 173d63218d9142b34075bca87f5c6d933bcbdfb6");
     }
 
     /// <summary>Checks that the API references legacy ServiceDefaults without the retired Aspire project dependency.</summary>
@@ -86,7 +87,7 @@ public sealed class WorkflowContractTests
         var reference = Assert.Single(project.Descendants("PackageReference"),
             element => (string?)element.Attribute("Include") == "Microsoft.EntityFrameworkCore.Design");
         Assert.Equal("'$(EnableEmployeeScaffoldDesignTime)' == 'true'", reference.Attribute("Condition")?.Value);
-        Assert.Equal("10.0.13", reference.Attribute("Version")?.Value);
+        Assert.Equal("10.0.15", reference.Attribute("Version")?.Value);
         Assert.Equal("all", reference.Element("PrivateAssets")?.Value);
         Assert.Contains("Microsoft.EntityFrameworkCore.Design", DataProject, StringComparison.Ordinal);
     }
@@ -300,7 +301,7 @@ internal static partial class WorkflowContractValidator
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["repository"] = "MALIEV-Co-Ltd/Legacy.Maliev.ServiceDefaults",
-                ["ref"] = "c40a7f82cea347b949444dcd7fb730f2b8dc3c0e",
+                ["ref"] = "173d63218d9142b34075bca87f5c6d933bcbdfb6",
                 ["path"] = ".dependencies/Legacy.Maliev.ServiceDefaults",
                 ["persist-credentials"] = "false",
             });
@@ -310,7 +311,7 @@ internal static partial class WorkflowContractValidator
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
                 ["repository"] = "MALIEV-Co-Ltd/Legacy.Maliev.CompatibilityContracts",
-                ["ref"] = "78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7",
+                ["ref"] = "fe17b8cea8ace3eef5434f8b29c9038f5c975613",
                 ["path"] = ".dependencies/Legacy.Maliev.CompatibilityContracts",
                 ["persist-credentials"] = "false",
             });
@@ -319,6 +320,7 @@ internal static partial class WorkflowContractValidator
             SharedValidationAction,
             new Dictionary<string, string>(StringComparer.Ordinal)
             {
+                ["dotnet-version"] = "11.0.100",
                 ["solution"] = "Legacy.Maliev.EmployeeService.slnx",
                 ["use-local-maliev-dependencies"] = "true",
             });

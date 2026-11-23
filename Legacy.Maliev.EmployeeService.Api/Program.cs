@@ -35,7 +35,7 @@ static async Task RunHostAsync(string[] startupArgs)
     builder.AddStandardMiddleware(options => options.EnableRequestLogging = true);
     builder.AddStandardOpenApi(
         title: "Legacy MALIEV Employee Service API",
-        description: "Temporary .NET 10 compatibility service preserving legacy employee, address, role, and signature contracts.");
+        description: "Temporary .NET 11 compatibility service preserving legacy employee, address, role, and signature contracts.");
 
     builder.Services.AddOpenApi("v1", EmployeeOpenApi.Configure);
 

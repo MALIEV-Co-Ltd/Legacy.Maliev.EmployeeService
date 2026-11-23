@@ -70,19 +70,19 @@ public sealed class DeliveryContractTests
         Assert.DoesNotContain("kubectl apply", workflow, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <summary>Checks .NET 10 non-root image stages and immutable public dependency pins without copying local dependencies.</summary>
+    /// <summary>Checks .NET 11 non-root image stages and immutable public dependency pins without copying local dependencies.</summary>
     [Fact]
     public void Dockerfile_IsDotNet10NonRootAndPinsPublicLegacyDependencies()
     {
         var dockerfile = File.ReadAllText(Path.Combine(FindRoot(), "Legacy.Maliev.EmployeeService.Api", "Dockerfile"));
 
-        Assert.Contains("dotnet/sdk:10.0-alpine", dockerfile, StringComparison.Ordinal);
-        Assert.Contains("dotnet/aspnet:10.0-alpine", dockerfile, StringComparison.Ordinal);
+        Assert.Contains("dotnet/sdk:11.0-alpine", dockerfile, StringComparison.Ordinal);
+        Assert.Contains("dotnet/aspnet:11.0-alpine", dockerfile, StringComparison.Ordinal);
         Assert.Contains("USER $APP_UID", dockerfile, StringComparison.Ordinal);
         Assert.Contains("Legacy.Maliev.ServiceDefaults.git", dockerfile, StringComparison.Ordinal);
-        Assert.Contains("checkout c40a7f82cea347b949444dcd7fb730f2b8dc3c0e", dockerfile, StringComparison.Ordinal);
+        Assert.Contains("checkout 173d63218d9142b34075bca87f5c6d933bcbdfb6", dockerfile, StringComparison.Ordinal);
         Assert.Contains("Legacy.Maliev.CompatibilityContracts.git", dockerfile, StringComparison.Ordinal);
-        Assert.Contains("checkout 78e48ffc4ee000df0510cba5e7c7a3c4c4d539d7", dockerfile, StringComparison.Ordinal);
+        Assert.Contains("checkout fe17b8cea8ace3eef5434f8b29c9038f5c975613", dockerfile, StringComparison.Ordinal);
         Assert.DoesNotContain("COPY .dependencies/", dockerfile, StringComparison.Ordinal);
         Assert.DoesNotContain("MALIEV-Co-Ltd/Maliev.Aspire", dockerfile, StringComparison.Ordinal);
         Assert.DoesNotContain("MALIEV-Co-Ltd/Maliev.MessagingContracts", dockerfile, StringComparison.Ordinal);

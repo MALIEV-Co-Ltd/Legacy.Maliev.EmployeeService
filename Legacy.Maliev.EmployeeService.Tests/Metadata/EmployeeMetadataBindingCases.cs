@@ -3,8 +3,8 @@ using Newtonsoft.Json;
 
 namespace Legacy.Maliev.EmployeeService.Tests.Metadata;
 
-// Public 13.0.3 reader reference only; not a historical resolved-binary oracle.
-/// <summary>Provides literal metadata cases and public Newtonsoft 13.0.3 source-shaped projections, without historical binary or provider equivalence claims.</summary>
+// Public 13.0.4 reader reference only; not a historical resolved-binary oracle.
+/// <summary>Provides literal metadata cases and public Newtonsoft 13.0.4 source-shaped projections, without historical binary or provider equivalence claims.</summary>
 public static class EmployeeMetadataBindingCases
 {
     /// <summary>Lists the six consumed address text properties exercised by metadata binding cases.</summary>
